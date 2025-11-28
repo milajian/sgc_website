@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import heroMotorTransparent from "@/assets/hero-motor-transparent.png";
+import heroMotorHeader from "@/assets/hero-motor-header.png";
 export const Hero = () => {
   return <section className="relative py-[38px] flex items-center overflow-hidden bg-gradient-hero">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9nPjwvc3ZnPg==')] opacity-10 py-0 my-0" />
@@ -44,7 +44,7 @@ export const Hero = () => {
           animationDelay: "0.4s"
         }}>
             <img 
-              src={heroMotorTransparent} 
+              src={heroMotorHeader} 
               alt="PCB电机" 
               className="w-full max-w-md lg:max-w-lg animate-float-tech animate-fade-in-up" 
               loading="eager"
