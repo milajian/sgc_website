@@ -1,2 +1,0 @@
-:HL["/sgc_website/_next/static/chunks/703cd8d7c55ad039.css","style"]
-0:{"buildId":"QmpG0ee0pWevuvJ0rcc7r","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
