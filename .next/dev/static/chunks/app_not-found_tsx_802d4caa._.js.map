@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/jianjian/main/sgc_website/app/not-found.tsx"],"sourcesContent":["'use client'\n\nexport default function NotFound() {\n  return (\n    <div className=\"flex min-h-screen items-center justify-center bg-muted\">\n      <div className=\"text-center\">\n        <h1 className=\"mb-4 text-4xl font-bold\">404</h1>\n        <p className=\"mb-4 text-xl text-muted-foreground\">Oops! Page not found</p>\n        <a href=\"/sgc_website/\" className=\"text-primary underline hover:text-primary/90\">\n          Return to Home\n        </a>\n      </div>\n    </div>\n  );\n}\n\n"],"names":[],"mappings":";;;;;AAAA;;AAEe,SAAS;IACtB,qBACE,6LAAC;QAAI,WAAU;kBACb,cAAA,6LAAC;YAAI,WAAU;;8BACb,6LAAC;oBAAG,WAAU;8BAA0B;;;;;;8BACxC,6LAAC;oBAAE,WAAU;8BAAqC;;;;;;8BAClD,6LAAC;oBAAE,MAAK;oBAAgB,WAAU;8BAA+C;;;;;;;;;;;;;;;;;AAMzF;KAZwB"}}]
+}
