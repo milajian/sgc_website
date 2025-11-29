@@ -96,16 +96,18 @@ export const ProductJourney = () => {
           </div>
 
           {/* Manufacturing Timeline */}
-          <div className="mb-6">
-            <div className="flex items-center mb-3">
-              <div className="text-secondary-foreground px-6 py-2 rounded-full font-bold text-lg bg-[#1b8995]">
+          <div className="mb-8">
+            <div className="flex items-center mb-6">
+              <div className="text-white px-6 py-2 rounded-full font-bold text-lg bg-gradient-to-r from-primary to-accent shadow-lg shadow-primary/30">
                 PCB定子制造
               </div>
             </div>
 
             <div className="relative">
+              {/* Timeline connection line */}
+              <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/30 via-primary/50 to-primary/30 -translate-y-1/2 z-0" />
               
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-3 relative z-10">
                 {manufacturingTimeline.map((item, index) => <motion.div key={index} initial={{
                 opacity: 0,
                 y: 30
@@ -118,19 +120,25 @@ export const ProductJourney = () => {
                 duration: 0.5,
                 delay: index * 0.1
               }}>
-                    <Card className="p-6 h-full bg-gradient-to-br from-card to-muted/30 hover:shadow-xl hover:scale-105 transition-all border-primary/20 group">
+                    <Card className="p-6 h-full bg-gradient-to-br from-card to-muted/30 hover:shadow-xl hover:scale-105 transition-all border-primary/20 group min-h-[200px]">
                       <div className="flex flex-col h-full">
-                        <div className="flex items-center justify-center gap-3 mb-4">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/30 flex-shrink-0">
-                            <item.icon className="w-5 h-5 text-white" />
+                        {/* Icon - centered */}
+                        <div className="flex justify-center mb-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/30">
+                            <item.icon className="w-6 h-6 text-white" />
                           </div>
-                          <h4 className="text-lg font-bold text-foreground">{item.title}</h4>
-                          <div className="text-sm font-bold text-accent">{item.period}</div>
                         </div>
                         
-                        <ul className="space-y-2 text-sm text-muted-foreground flex flex-col items-center">
+                        {/* Title and Date */}
+                        <div className="text-center mb-4">
+                          <h4 className="text-lg font-bold text-foreground mb-1">{item.title}</h4>
+                          <div className="text-xs font-semibold text-accent">{item.period}</div>
+                        </div>
+                        
+                        {/* Achievements - centered */}
+                        <ul className="space-y-2 text-sm text-muted-foreground flex-1 max-w-[75%] mx-auto">
                           {item.achievements.map((achievement, i) => <li key={i} className="flex items-start">
-                              <span className="text-primary mr-2 flex-shrink-0">•</span>
+                              <span className="text-primary mr-2 flex-shrink-0 mt-0.5">•</span>
                               <span>{achievement}</span>
                             </li>)}
                         </ul>
@@ -141,16 +149,33 @@ export const ProductJourney = () => {
             </div>
           </div>
 
+          {/* Connection between sections */}
+          <div className="flex justify-center items-center mb-6">
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-0.5 h-6 bg-gradient-to-b from-primary to-accent" />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              <div className="w-0.5 h-6 bg-gradient-to-b from-accent to-primary" />
+            </div>
+          </div>
+
           {/* Design Evolution Section */}
           <div>
-            <div className="flex items-center mb-3">
-              <div className="text-accent-foreground px-6 py-2 rounded-full font-bold text-lg bg-[#1b8995]">
+            <div className="flex items-center mb-6">
+              <div className="text-white px-6 py-2 rounded-full font-bold text-lg bg-gradient-to-r from-accent to-primary shadow-lg shadow-accent/30">
                 PCB定子设计
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {designMilestones.map((milestone, index) => <motion.div key={index} initial={{
+            <div className="relative">
+              {/* Timeline connection line */}
+              <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-accent/30 via-accent/50 to-accent/30 -translate-y-1/2 z-0" />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-3 relative z-10">
+                {designMilestones.map((milestone, index) => <motion.div key={index} initial={{
               opacity: 0,
               scale: 0.9
             }} whileInView={{
@@ -162,25 +187,32 @@ export const ProductJourney = () => {
               duration: 0.5,
               delay: index * 0.1
             }}>
-                  <Card className="p-6 h-full bg-gradient-to-br from-card to-muted/30 hover:shadow-xl hover:scale-105 transition-all border-primary/20 group">
+                  <Card className="p-6 h-full bg-gradient-to-br from-card to-muted/30 hover:shadow-xl hover:scale-105 transition-all border-primary/20 group min-h-[200px]">
                     <div className="flex flex-col h-full">
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-primary/30 flex-shrink-0">
-                          <milestone.icon className="w-5 h-5 text-white" />
+                      {/* Icon - centered */}
+                      <div className="flex justify-center mb-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-accent/30">
+                          <milestone.icon className="w-6 h-6 text-white" />
                         </div>
-                        <h4 className="text-lg font-bold text-foreground">{milestone.title}</h4>
-                        <div className="text-sm font-bold text-accent">{milestone.period}</div>
                       </div>
                       
-                      <ul className="space-y-2 text-sm text-muted-foreground flex flex-col items-center">
+                      {/* Title and Date */}
+                      <div className="text-center mb-4">
+                        <h4 className="text-lg font-bold text-foreground mb-1">{milestone.title}</h4>
+                        <div className="text-xs font-semibold text-accent">{milestone.period}</div>
+                      </div>
+                      
+                      {/* Points - centered */}
+                      <ul className="space-y-2 text-sm text-muted-foreground flex-1 max-w-[75%] mx-auto">
                         {milestone.points.map((point, i) => <li key={i} className="flex items-start">
-                            <span className="text-primary mr-2 flex-shrink-0">•</span>
+                            <span className="text-primary mr-2 flex-shrink-0 mt-0.5">•</span>
                             <span>{point}</span>
                           </li>)}
                       </ul>
                     </div>
                   </Card>
                 </motion.div>)}
+              </div>
             </div>
           </div>
         </div>

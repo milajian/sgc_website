@@ -106,7 +106,7 @@ export const ProtectionThermalSlider = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [api, isAutoPlay]);
@@ -169,11 +169,11 @@ export const ProtectionThermalSlider = () => {
                 duration: 0.5,
                 delay: index * 0.1
               }}>
-                    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500">
+                    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500 min-h-[420px] flex flex-col">
                       {/* Shimmer Effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent shimmer" />
                       
-                      <div className="relative z-10 p-6 md:p-8">
+                      <div className="relative z-10 pt-6 pb-4 px-6 md:pt-8 md:pb-6 md:px-8 flex-1 flex flex-col">
                         {/* Top: Title and Subtitle */}
                         <motion.div initial={{
                       opacity: 0,
@@ -209,51 +209,51 @@ export const ProtectionThermalSlider = () => {
                     }} transition={{
                       duration: 0.6,
                       delay: 0.3
-                    }} className={`grid grid-cols-1 ${index === 0 ? 'md:grid-cols-3 gap-3' : 'md:grid-cols-3 gap-3'}`}>
+                    }} className={`grid grid-cols-1 ${index === 0 ? 'md:grid-cols-3 gap-3' : 'md:grid-cols-3 gap-3'} flex-1 min-h-[400px] items-stretch`}>
                           {slide.methods.map((method, methodIdx) => <div key={methodIdx} className="flex flex-col h-full">
                               {/* Method Card */}
-                              <div className="relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex flex-col min-h-[280px]">
+                              <div className="relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex flex-col h-full">
                                 {/* Icon for thermal slide (left-right layout) or Image for protection slide (top-bottom layout) */}
-                                {index === 1 && method.icon ? <div className="flex gap-3 p-3">
-                                    {/* Icon on the left */}
-                                    <div className="flex-shrink-0">
-                                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                        <method.icon className="w-6 h-6 text-primary" />
+                                {index === 1 && method.icon ? <div className="flex flex-col p-4 h-full">
+                                    {/* First row: Icon and Title */}
+                                    <div className="flex items-center justify-center gap-3 mb-3">
+                                      <div className="flex-shrink-0">
+                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                          <method.icon className="w-6 h-6 text-primary" />
+                                        </div>
                                       </div>
-                                    </div>
-                                    
-                                    {/* Content on the right */}
-                                    <div className="flex-1 min-w-0">
-                                      <h4 className="text-base font-bold text-foreground mb-2">
+                                      <h4 className="text-base font-bold text-foreground leading-tight">
                                         {method.name}
                                       </h4>
-                                      <ul className="space-y-1.5">
-                                        {method.description.map((desc, descIdx) => <li key={descIdx} className="text-xs text-muted-foreground flex items-start gap-2">
-                                            <span className="text-primary mt-0.5">•</span>
-                                            <span>{desc}</span>
-                                          </li>)}
-                                      </ul>
                                     </div>
+                                    
+                                    {/* Second row: Bullet points */}
+                                    <ul className="space-y-2 flex-1 pl-12 pr-4">
+                                      {method.description.map((desc, descIdx) => <li key={descIdx} className="text-sm text-muted-foreground flex items-start gap-2">
+                                          <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                                          <span>{desc}</span>
+                                        </li>)}
+                                    </ul>
                                   </div> : <>
                                     {/* Protection slide: top-bottom layout with image */}
-                                    <div className="relative h-[120px] flex items-center justify-center overflow-hidden">
+                                    <div className="relative h-[160px] flex items-center justify-center overflow-hidden bg-background/50">
                                       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-                                      {method.image && <img src={method.image} alt={method.name} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500 relative z-10" loading="lazy" />}
+                                      {method.image && <img src={method.image} alt={method.name} className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10" loading="lazy" />}
                                       <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     </div>
                                     
                                     {/* Method Details */}
                                     <div className="p-3 flex flex-col flex-1">
-                                      <h4 className="text-lg font-bold text-foreground mb-2 text-center">
+                                      <h4 className="text-lg font-bold text-foreground mb-3 text-center">
                                         {method.name}
                                       </h4>
-                                      <ul className="space-y-1.5 flex-1">
-                                        {method.description.map((desc, descIdx) => <li key={descIdx} className="text-xs text-muted-foreground flex items-start gap-2">
-                                            <span className="text-primary mt-0.5">•</span>
+                                      <ul className="space-y-2 pl-12 pr-4">
+                                        {method.description.map((desc, descIdx) => <li key={descIdx} className="text-sm text-muted-foreground flex items-start gap-2">
+                                            <span className="text-primary mt-0.5 flex-shrink-0">•</span>
                                             <span>{desc}</span>
                                           </li>)}
                                       </ul>
-                                      {method.cost && <div className="flex justify-between text-xs text-muted-foreground border-t border-border/30 pt-2 mt-2">
+                                      {method.cost && <div className="flex justify-between text-sm font-medium text-foreground border-t border-border/30 pt-2 mt-auto">
                                           <span><strong>成本:</strong> {method.cost}</span>
                                           <span><strong>周期:</strong> {method.delivery}</span>
                                         </div>}

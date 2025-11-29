@@ -2,6 +2,7 @@
 
 import { Hero } from "@/components/Hero";
 import { ProductLines } from "@/components/ProductLines";
+import { IncubationAchievements } from "@/components/IncubationAchievements";
 import { PCBMotorSlider } from "@/components/PCBMotorSlider";
 import { ProductJourney } from "@/components/ProductJourney";
 import { CompanyInfo } from "@/components/CompanyInfo";
@@ -19,6 +20,7 @@ export default function Home() {
       <main className="pt-20">
         <Hero />
         <ProductLines />
+        <IncubationAchievements />
         <PCBMotorSlider />
         <PCBMotorAdvantages />
         <ApplicationScenes />

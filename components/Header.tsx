@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { scrollToSection } from "@/lib/scroll";
@@ -60,23 +60,14 @@ export const Header = () => {
               <NavigationMenuList className="gap-0 lg:gap-0.5 xl:gap-1">
                 {/* 产品介绍 */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
-                    产品介绍
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl">
-                    <ul className="w-[220px] p-2">
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <button
-                            onClick={() => scrollToSection('pcb-motor-intro')}
-                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                          >
-                            PCB电机产品介绍
-                          </button>
-                        </NavigationMenuLink>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink asChild>
+                    <button
+                      onClick={() => scrollToSection('pcb-motor-intro')}
+                      className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4"
+                    >
+                      产品介绍
+                    </button>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 {/* 市场布局和场景 */}
@@ -248,20 +239,17 @@ export const Header = () => {
                   <span className="sr-only">打开菜单</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col space-y-4 mt-8">
-                  <h2 className="text-lg font-semibold mb-4">导航菜单</h2>
+              <SheetContent side="right" className="w-[200px] sm:w-[220px]">
+                <div className="flex flex-col space-y-4 mt-8 overflow-y-auto max-h-[calc(100vh-4rem)] pb-8">
+                  <SheetTitle className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">导航菜单</SheetTitle>
                   
                   {/* 产品介绍 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">产品介绍</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('pcb-motor-intro')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB电机产品介绍
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleMobileNavClick('pcb-motor-intro')}
+                    className="text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
+                  >
+                    产品介绍
+                  </button>
 
                   {/* 市场布局和场景 */}
                   <div className="space-y-2">

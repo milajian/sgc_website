@@ -4,7 +4,7 @@ import { getImagePath } from "@/lib/image-path";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Feather, Zap, Droplet, DollarSign } from "lucide-react";
+import { ChevronLeft, ChevronRight, Feather, Zap, Droplet, DollarSign, Award } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface Advantage {
@@ -95,7 +95,7 @@ export const PCBMotorAdvantages = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [api, isAutoPlay]);
@@ -113,21 +113,36 @@ export const PCBMotorAdvantages = () => {
       <div className="container mx-auto px-6 relative">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 relative inline-block">
-              PCB电机优势
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
-            </h2>
-            <p className="text-xl text-muted-foreground mt-6">
+          <div className="text-center mb-12">
+            <motion.div 
+              className="flex items-center justify-center gap-3 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Award className="w-8 h-8 text-primary" />
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                PCB电机优势
+              </h2>
+            </motion.div>
+            <motion.p 
+              className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               突破传统电机限制，引领电机技术革新
-            </p>
-          </motion.div>
+            </motion.p>
+            <motion.div 
+              className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
+              initial={{ width: 0 }}
+              whileInView={{ width: 96 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            />
+          </div>
 
           {/* Carousel */}
           <div className="relative max-w-6xl mx-auto">

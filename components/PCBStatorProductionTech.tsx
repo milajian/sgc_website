@@ -25,13 +25,13 @@ const processSteps = [
   {
     title: "激光钻孔、填孔",
     description: "激光精密加工",
-    items: ["高深径比激光钻孔", "高深径比激光盲孔填孔"],
+    items: ["高深径比激光钻孔", "激光盲孔填孔"],
     image: getImagePath("/assets/production-laser.png")
   },
   {
-    title: "检测与测试",
+    title: "测试",
     description: "全面质量检测",
-    items: ["厚铜线圈板开短路测试", "厚铜线圈板电感测试", "厚铜板耐电压测试", "可靠性测试"],
+    items: ["开短路测试", "电感测试", "耐电压测试", "可靠性测试"],
     image: getImagePath("/assets/production-testing.png")
   }
 ];
@@ -76,43 +76,94 @@ export const PCBStatorProductionTech = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Card className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm relative overflow-hidden px-8 pt-2 pb-8 md:px-12 md:pt-3 md:pb-12">
-            {/* Central Circle with Radial Layout */}
-            <div className="relative w-full max-w-5xl mx-auto pt-8" style={{ minHeight: '480px' }}>
+          <Card className="border-primary/20 bg-gradient-to-br from-background/80 to-primary/5 backdrop-blur-sm relative overflow-visible px-4 py-6 md:px-8 md:py-8 lg:px-12 lg:pt-3 lg:pb-12">
+            
+            {/* ===== 小屏幕：网格布局 ===== */}
+            <div className="lg:hidden">
+              {/* 中心标题 */}
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-primary to-accent shadow-xl shadow-primary/30 mx-auto">
+                  <div className="w-24 h-24 rounded-full bg-background flex flex-col items-center justify-center text-center p-2 border-4 border-primary/20">
+                    <p className="text-xs font-bold text-foreground leading-tight">
+                      轴向电机<br />
+                      PCB定子
+                    </p>
+                    <p className="text-sm font-bold text-primary mt-1">
+                      生产工艺
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 网格卡片 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {processSteps.map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  >
+                    <Card className="p-3 bg-background/95 border-primary/30 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300 group h-full">
+                      <div className="flex gap-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
+                              <div className="w-4 h-4 rounded-full bg-gradient-to-br from-primary to-accent" />
+                            </div>
+                            <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
+                              {item.title}
+                            </h4>
+                          </div>
+                          <ul className="space-y-1.5">
+                            {item.items.map((feature, featureIdx) => (
+                              <li key={featureIdx} className="flex items-start gap-1.5 text-xs">
+                                <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                                <span className="text-muted-foreground leading-tight">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-primary/20">
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                        </div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* ===== 大屏幕：环形布局 ===== */}
+            <div className="hidden lg:block relative w-full max-w-5xl mx-auto pt-8" style={{ minHeight: '420px' }}>
               {/* SVG Connection Lines */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
                 <defs>
                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
                   </linearGradient>
                 </defs>
-                {/* Line to 线路蚀刻 (left-bottom) */}
-                <line x1="50%" y1="65%" x2="8%" y2="72%" stroke="url(#lineGradient)" strokeWidth="2" />
-                {/* Line to 压合 (left-top) */}
-                <line x1="50%" y1="65%" x2="8%" y2="22%" stroke="url(#lineGradient)" strokeWidth="2" />
-                {/* Line to 钻孔 (center-top) */}
-                <line x1="50%" y1="65%" x2="50%" y2="15%" stroke="url(#lineGradient)" strokeWidth="2" />
-                {/* Line to 激光钻孔 (right-top) */}
-                <line x1="50%" y1="65%" x2="92%" y2="22%" stroke="url(#lineGradient)" strokeWidth="2" />
-                {/* Line to 检测与测试 (right-bottom) */}
-                <line x1="50%" y1="65%" x2="92%" y2="72%" stroke="url(#lineGradient)" strokeWidth="2" />
+                <line x1="50%" y1="60%" x2="12%" y2="72%" stroke="url(#lineGradient)" strokeWidth="2.5" />
+                <line x1="50%" y1="60%" x2="12%" y2="22%" stroke="url(#lineGradient)" strokeWidth="2.5" />
+                <line x1="50%" y1="60%" x2="50%" y2="12%" stroke="url(#lineGradient)" strokeWidth="2.5" />
+                <line x1="50%" y1="60%" x2="88%" y2="22%" stroke="url(#lineGradient)" strokeWidth="2.5" />
+                <line x1="50%" y1="60%" x2="88%" y2="72%" stroke="url(#lineGradient)" strokeWidth="2.5" />
               </svg>
               
               {/* Center Circle */}
-              <div className="absolute top-[65%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-56 h-56">
-                {/* Pulsing glow background behind circle */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-96 h-96">
+              <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-40 h-40">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-64 h-64">
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-3xl pulse-glow" />
                 </div>
-                
-                <div className="w-56 h-56 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30">
-                  <div className="w-52 h-52 rounded-full bg-background flex flex-col items-center justify-center text-center p-6 border-4 border-primary/20">
-                    <p className="text-xl font-bold text-foreground leading-tight">
+                <div className="w-40 h-40 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30">
+                  <div className="w-36 h-36 rounded-full bg-background flex flex-col items-center justify-center text-center p-3 border-4 border-primary/20">
+                    <p className="text-sm font-bold text-foreground leading-tight">
                       轴向电机<br />
                       PCB定子
                     </p>
-                    <p className="text-2xl font-bold text-primary mt-2">
+                    <p className="text-base font-bold text-primary mt-1">
                       生产工艺
                     </p>
                   </div>
@@ -122,11 +173,11 @@ export const PCBStatorProductionTech = () => {
               {/* Radial Process Cards */}
               {processSteps.map((item, idx) => {
                 const positions = [
-                  { top: '57%', left: '-2%' }, // 线路蚀刻 - 左下
-                  { top: '22%', left: '-2%' }, // 压合 - 左上
-                  { top: '9%', left: '35%', transform: 'translateX(-50%)' }, // 钻孔 - 正中顶部
-                  { top: '22%', right: '-2%' }, // 激光钻孔 - 右上
-                  { top: '57%', right: '-2%' } // 检测与测试 - 右下
+                  { top: '55%', left: '2%' },
+                  { top: '18%', left: '2%' },
+                  { top: '2%', left: 'calc(50% - 7rem)' },
+                  { top: '18%', right: '2%' },
+                  { top: '55%', right: '2%' }
                 ];
 
                 return (
@@ -139,9 +190,8 @@ export const PCBStatorProductionTech = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
                   >
-                    <Card className="w-64 p-4 bg-background/95 border-primary/30 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300 group">
+                    <Card className="w-56 p-3 bg-background/95 border-primary/30 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300 group overflow-visible">
                       <div className="flex gap-3">
-                        {/* Left: Text Content */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-3">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
@@ -151,7 +201,6 @@ export const PCBStatorProductionTech = () => {
                               {item.title}
                             </h4>
                           </div>
-                          
                           <ul className="space-y-1.5">
                             {item.items.map((feature, featureIdx) => (
                               <li key={featureIdx} className="flex items-start gap-1.5 text-xs">
@@ -161,9 +210,7 @@ export const PCBStatorProductionTech = () => {
                             ))}
                           </ul>
                         </div>
-                        
-                        {/* Right: Image */}
-                        <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 border-primary/20">
+                        <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-primary/20">
                           <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
                         </div>
                       </div>

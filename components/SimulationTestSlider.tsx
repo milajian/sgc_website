@@ -59,7 +59,7 @@ export const SimulationTestSlider = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [api, isAutoPlay]);

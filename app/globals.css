@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
@@ -8,105 +7,122 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 210 20% 15%;
-
+    /* 背景与前景 - 略带蓝调的白色背景 */
+    --background: 210 20% 98%;
+    --foreground: 210 55% 20%;
+    
+    /* 卡片 */
     --card: 0 0% 100%;
-    --card-foreground: 210 20% 15%;
-
+    --card-foreground: 210 55% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 15%;
-
-    --primary: 174 62% 47%;
+    --popover-foreground: 210 55% 20%;
+    
+    /* 主色 - Logo深蓝 #1E3A5F */
+    --primary: 210 55% 25%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 100% 15%;
+    
+    /* 次要色 - 主色暗调 */
+    --secondary: 210 60% 18%;
     --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215 16% 47%;
-
-    --accent: 174 82% 35%;
+    
+    /* 弱化元素 */
+    --muted: 210 30% 96%;
+    --muted-foreground: 210 20% 50%;
+    
+    /* 点缀色 - Logo青色 #2AA19B */
+    --accent: 175 60% 40%;
     --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
+    
+    /* 功能色 */
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 174 62% 47%;
-
+    
+    /* 边框与输入 */
+    --border: 210 30% 90%;
+    --input: 210 30% 90%;
+    --ring: 175 60% 40%;
+    
+    /* 圆角 */
     --radius: 0.75rem;
     
-    --gradient-hero: linear-gradient(135deg, hsl(174 62% 47%) 0%, hsl(210 100% 20%) 100%);
-    --gradient-accent: linear-gradient(180deg, hsl(174 82% 35% / 0.1) 0%, hsl(210 100% 15% / 0.05) 100%);
-    --shadow-glow: 0 0 40px hsl(174 62% 47% / 0.15);
-    --shadow-card: 0 10px 40px hsl(210 20% 15% / 0.08);
+    /* 渐变 - 深蓝到青色 */
+    --gradient-hero: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(175 60% 40%) 100%);
+    --gradient-accent: linear-gradient(180deg, hsl(175 60% 40% / 0.1) 0%, hsl(210 55% 25% / 0.05) 100%);
+    
+    /* 阴影 */
+    --shadow-glow: 0 0 40px hsl(175 60% 40% / 0.15);
+    --shadow-card: 0 10px 40px hsl(210 55% 20% / 0.08);
+    
+    /* 过渡 */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* 侧边栏 */
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 210 55% 20%;
+    --sidebar-primary: 210 55% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 175 60% 40%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 30% 90%;
+    --sidebar-ring: 175 60% 40%;
   }
 
   .dark {
-    --background: 210 30% 8%;
-    --foreground: 0 0% 98%;
-
-    --card: 210 25% 12%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 210 25% 12%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 174 62% 47%;
+    /* 背景与前景 - 深蓝色背景 */
+    --background: 210 40% 8%;
+    --foreground: 210 20% 95%;
+    
+    /* 卡片 */
+    --card: 210 35% 12%;
+    --card-foreground: 210 20% 95%;
+    --popover: 210 35% 12%;
+    --popover-foreground: 210 20% 95%;
+    
+    /* 主色 - 亮调深蓝用于暗色模式 */
+    --primary: 210 50% 45%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 100% 15%;
+    
+    /* 次要色 */
+    --secondary: 210 45% 25%;
     --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 25% 18%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 174 82% 35%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 63% 31%;
+    
+    /* 弱化元素 */
+    --muted: 210 30% 18%;
+    --muted-foreground: 210 20% 60%;
+    
+    /* 点缀色 - 亮调青色用于暗色模式 */
+    --accent: 175 55% 50%;
+    --accent-foreground: 210 40% 8%;
+    
+    /* 功能色 */
+    --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 98%;
-
-    --border: 210 25% 18%;
-    --input: 210 25% 18%;
-    --ring: 174 62% 47%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    
+    /* 边框与输入 */
+    --border: 210 30% 20%;
+    --input: 210 30% 20%;
+    --ring: 175 55% 50%;
+    
+    /* 侧边栏 */
+    --sidebar-background: 210 40% 8%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 210 50% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 175 55% 50%;
+    --sidebar-accent-foreground: 210 40% 8%;
+    --sidebar-border: 210 30% 20%;
+    --sidebar-ring: 175 55% 50%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "@/components/ui/carousel";
-import { ChevronLeft, ChevronRight, Zap, Battery, Cpu, TrendingDown } from "lucide-react";
+import { ChevronLeft, ChevronRight, Zap, Battery, Cpu, TrendingDown, CircuitBoard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
@@ -29,7 +29,7 @@ const slides = [
       "PCB定子线圈工艺实现精确控制",
       "适合高转矩低速应用场景"
     ],
-    image: getImagePath("/assets/motor-comparison.png"),
+    image: getImagePath("/assets/jingxiangzhouxiang.png"),
     icon: Zap,
     gradient: "from-teal-500/15 via-cyan-500/15 to-blue-500/15"
   },
@@ -44,7 +44,20 @@ const slides = [
     ],
     image: getImagePath("/assets/pcb-motor-two-structures.png"),
     icon: Cpu,
-    gradient: "from-blue-500/20 via-cyan-500/20 to-teal-500/20"
+    gradient: "from-blue-500/20 via-cyan-500/20 to-teal-500/20",
+    isSpecialLayout: true,
+    images: [
+      getImagePath("/assets/PCBdingzi.png"),
+      getImagePath("/assets/youtiexin.png"),
+      getImagePath("/assets/wutiexin.png")
+    ],
+    textLabels: {
+      mainTitle: "PCB定子轴向电机",
+      leftTitle: "有铁芯",
+      leftDesc: "硅钢或SMC材料铁芯",
+      rightTitle: "无铁芯",
+      rightDesc: "无需铁芯，重量/成本大幅度减少"
+    }
   },
   {
     title: "与传统电机对比",
@@ -74,7 +87,7 @@ export const PCBMotorSlider = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2000);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [api, isAutoPlay]);
@@ -96,21 +109,36 @@ export const PCBMotorSlider = () => {
       <div className="container mx-auto px-6 relative">
         <div className="max-w-7xl mx-auto">
           {/* Section Title */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-6"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 relative inline-block">
-              PCB电机产品介绍
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
-            </h2>
-            <p className="text-xl text-muted-foreground">
+          <div className="text-center mb-6">
+            <motion.div 
+              className="flex items-center justify-center gap-3 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <CircuitBoard className="w-8 h-8 text-primary" />
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                PCB电机产品介绍
+              </h2>
+            </motion.div>
+            <motion.p 
+              className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               突破传统，引领轴向磁通技术革新
-            </p>
-          </motion.div>
+            </motion.p>
+            <motion.div 
+              className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
+              initial={{ width: 0 }}
+              whileInView={{ width: 96 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            />
+          </div>
 
           <Carousel 
             setApi={setApi} 
@@ -216,7 +244,7 @@ export const PCBMotorSlider = () => {
                         </div>
                       </motion.div>
 
-                      {/* Right side - Image */}
+                      {/* Right side - Image or Special Layout */}
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -224,23 +252,95 @@ export const PCBMotorSlider = () => {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="flex items-center justify-center"
                       >
-                        <div className={`relative w-full ${index === 2 ? 'max-w-2xl' : 'max-w-xl'}`}>
-                          {/* Glowing backdrop */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl blur-3xl animate-pulse" />
-                          
-                          {/* Image container */}
-                          <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-4">
-                            <img 
-                              src={slide.image} 
-                              alt={slide.title}
-                              className="w-full h-auto object-contain"
-                            />
-                          </div>
+                        {slide.isSpecialLayout && slide.images && slide.textLabels ? (
+                          // Special layout for "PCB电机两种结构形式"
+                          <div className="relative w-full max-w-2xl">
+                            {/* Glowing backdrop */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl blur-3xl animate-pulse" />
+                            
+                            {/* Content container */}
+                            <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-4">
+                              {/* Top title bar */}
+                              <div className="bg-[#1e3a5f] py-3 px-6 rounded-lg mb-4">
+                                <h4 className="text-white text-xl font-bold text-center">
+                                  {slide.textLabels.mainTitle}
+                                </h4>
+                              </div>
+                              
+                              {/* Exploded view image */}
+                              <div className="flex justify-center mb-4">
+                                <img 
+                                  src={slide.images[0]} 
+                                  alt="PCB定子轴向电机结构"
+                                  className="w-full max-w-lg h-auto object-contain"
+                                  loading="lazy"
+                                />
+                              </div>
+                              
+                              {/* Two column comparison */}
+                              <div className="grid grid-cols-2 gap-4">
+                                {/* Left column - 有铁芯 */}
+                                <div className="flex flex-col items-center text-center space-y-2">
+                                  <h5 className="text-lg font-bold text-foreground">
+                                    {slide.textLabels.leftTitle}
+                                  </h5>
+                                  <div className="w-full flex justify-center">
+                                    <img 
+                                      src={slide.images[1]} 
+                                      alt="有铁芯结构"
+                                      className="w-full max-w-[200px] h-auto object-contain"
+                                      loading="lazy"
+                                    />
+                                  </div>
+                                  <p className="text-sm text-muted-foreground">
+                                    {slide.textLabels.leftDesc}
+                                  </p>
+                                </div>
+                                
+                                {/* Right column - 无铁芯 */}
+                                <div className="flex flex-col items-center text-center space-y-2">
+                                  <h5 className="text-lg font-bold text-foreground">
+                                    {slide.textLabels.rightTitle}
+                                  </h5>
+                                  <div className="w-full flex justify-center">
+                                    <img 
+                                      src={slide.images[2]} 
+                                      alt="无铁芯结构"
+                                      className="w-full max-w-[160px] h-auto object-contain"
+                                      loading="lazy"
+                                    />
+                                  </div>
+                                  <p className="text-sm text-muted-foreground">
+                                    {slide.textLabels.rightDesc}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
 
-                          {/* Circuit corner accents */}
-                          <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-lg" />
-                          <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-lg" />
-                        </div>
+                            {/* Circuit corner accents */}
+                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-lg" />
+                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-lg" />
+                          </div>
+                        ) : (
+                          // Default image layout
+                          <div className={`relative w-full max-w-xl`}>
+                            {/* Glowing backdrop */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl blur-3xl animate-pulse" />
+                            
+                            {/* Image container */}
+                            <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-4">
+                              <img 
+                                src={slide.image} 
+                                alt={slide.title}
+                                className="w-full h-auto object-contain"
+                              />
+                            </div>
+
+                            {/* Circuit corner accents */}
+                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-lg" />
+                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-lg" />
+                          </div>
+                        )}
                       </motion.div>
                         </>
                       )}
