@@ -108,15 +108,15 @@ export const IncubationAchievements = () => {
         }} className="w-full">
             <CarouselContent>
               {achievements.map((achievement, index) => <CarouselItem key={index}>
-                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-700 h-[420px]">
+                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-700 h-[420px] md:h-[400px] lg:h-[480px]">
                   {/* Shimmer effect - always active */}
                   <div className="absolute inset-0 opacity-100">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent shimmer-effect" />
                   </div>
 
                   {index === 2 ? (
-                    /* 埋嵌工艺产品 - 上下布局 */
-                    <div className="flex flex-col p-6 md:p-8 relative w-full h-full overflow-hidden">
+                    /* 埋嵌工艺产品 - 始终上下布局 */
+                    <div className="flex flex-col p-4 md:p-6 lg:p-8 relative w-full h-full overflow-hidden">
                       {/* 标题在上 */}
                       <motion.div 
                         initial={{ opacity: 0, y: -20 }}
@@ -125,62 +125,62 @@ export const IncubationAchievements = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="text-center mb-4 flex-shrink-0"
                       >
-                        <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
                           {achievement.name}
                         </h3>
                       </motion.div>
 
-                      {/* 图片在下 - 固定高度 */}
+                      {/* 图片在下 - 自适应容器 */}
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         whileInView={{ opacity: 1, scale: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.3 }}
-                        className="flex items-center justify-center flex-1 min-h-0"
+                        className="flex-1 flex items-center justify-center min-h-0"
                       >
-                        <div className="relative w-full max-w-4xl mx-auto h-[320px]">
+                        <div className="relative w-fit mx-auto">
                           {/* Glowing backdrop */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl scale-110 group-hover:scale-125 transition-transform duration-1000" />
                           
-                          {/* Image container */}
-                          <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700 flex items-center justify-center">
+                          {/* Image container - 自适应图片尺寸 */}
+                          <div className="relative rounded-xl lg:rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700">
                             {/* Inner border glow */}
-                            <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
+                            <div className="absolute inset-2 border border-primary/10 rounded-lg lg:rounded-xl pointer-events-none" />
                             
                             <img 
                               src={achievement.image} 
                               alt={achievement.name} 
-                              className="max-w-full max-h-full object-contain p-4"
+                              className="max-h-[340px] md:max-h-[300px] lg:max-h-[380px] w-auto object-contain p-4"
                               style={{ imageRendering: 'crisp-edges' }}
                               loading="lazy"
                             />
                           </div>
 
                           {/* Decorative dots in corners */}
-                          <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
                         </div>
                       </motion.div>
                     </div>
                   ) : (
-                    /* 其他卡片 - 左右布局 */
-                    <div className="grid md:grid-cols-[2fr_3fr] gap-6 p-6 md:p-10 relative items-center w-full h-full">
-                      {/* Left side - Text content */}
+                    /* 其他卡片 - 响应式布局：小屏上下，中屏及以上左右 */
+                    <div className="flex flex-col justify-center md:grid md:grid-cols-[2fr_3fr] gap-3 md:gap-4 lg:gap-8 p-4 md:p-5 lg:p-10 relative items-center w-full h-full">
+                      {/* Text content */}
                       <motion.div 
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: -20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="flex flex-col justify-center space-y-4 ml-6"
+                        className="flex flex-col justify-center items-center md:items-start space-y-2 md:space-y-2 lg:space-y-4 md:ml-4 lg:ml-8 w-full"
                       >
-                        <div className="space-y-3">
-                          <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                        <div className="space-y-1 md:space-y-1.5 lg:space-y-3 text-center md:text-left w-full">
+                          <h3 className="text-lg md:text-xl lg:text-3xl xl:text-4xl font-bold text-foreground leading-tight">
                             {achievement.name}
                           </h3>
                           {achievement.description && (
-                            <p className="text-base text-muted-foreground leading-relaxed">
+                            <p className="text-xs md:text-sm lg:text-lg text-muted-foreground leading-relaxed">
                               {achievement.description}
                             </p>
                           )}
@@ -188,20 +188,22 @@ export const IncubationAchievements = () => {
 
                         {/* Highlights */}
                         {achievement.highlights.length > 0 && (
-                          <div className="space-y-2">
+                          <div className="space-y-0.5 md:space-y-1 lg:space-y-2 w-full flex flex-col items-center md:items-start">
                             {achievement.highlights.map((highlight, idx) => (
                               <motion.div 
                                 key={idx}
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: 0.3 + idx * 0.08 }}
-                                className="flex items-start gap-2 group/item"
+                                transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
+                                className="flex items-start gap-1.5 md:gap-2 lg:gap-3 group/item justify-center md:justify-start"
                               >
-                                <div className="mt-1.5">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                                <div className="mt-1 md:mt-1 lg:mt-1.5 flex-shrink-0">
+                                  <div className="w-1 h-1 md:w-1.5 md:h-1.5 lg:w-2 lg:h-2 rounded-full bg-accent relative">
+                                    <div className="absolute inset-0 rounded-full bg-accent/60 animate-ping opacity-40" />
+                                  </div>
                                 </div>
-                                <p className="text-sm text-foreground/90 leading-relaxed group-hover/item:text-foreground transition-colors">
+                                <p className="text-xs md:text-sm lg:text-base text-foreground/90 leading-snug lg:leading-relaxed group-hover/item:text-foreground transition-colors text-center md:text-left">
                                   {highlight}
                                 </p>
                               </motion.div>
@@ -210,37 +212,37 @@ export const IncubationAchievements = () => {
                         )}
                       </motion.div>
 
-                      {/* Right side - Visual element */}
+                      {/* Visual element - 自适应图片容器 */}
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         whileInView={{ opacity: 1, scale: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.3 }}
-                        className="flex items-center justify-center h-full"
+                        className="flex items-center justify-center w-full md:h-full"
                       >
-                        <div className="relative w-full h-[300px]">
-                          {/* Glowing backdrop - softer and slower */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
+                        <div className="relative w-fit mx-auto">
+                          {/* Glowing backdrop */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-xl lg:rounded-2xl blur-3xl scale-110 group-hover:scale-125 transition-transform duration-1000" />
                           
-                          {/* Image container with fixed height */}
-                          <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700 flex items-center justify-center">
+                          {/* Image container - 自适应图片尺寸 */}
+                          <div className="relative rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700">
                             {/* Inner border glow */}
-                            <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
+                            <div className="absolute inset-1.5 md:inset-2 border border-primary/10 rounded-md md:rounded-lg lg:rounded-xl pointer-events-none" />
                             
                             <img 
                               src={achievement.image} 
                               alt={achievement.name} 
-                              className="max-w-full max-h-full object-contain p-4"
+                              className="max-h-[140px] md:max-h-[260px] lg:max-h-[340px] w-auto object-contain p-3 md:p-4"
                               style={{ imageRendering: 'crisp-edges' }}
                               loading="lazy"
                             />
                           </div>
 
                           {/* Decorative dots in corners */}
-                          <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -top-1 -left-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -top-1 -right-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -bottom-1 -left-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
+                          <div className="hidden md:block absolute -bottom-1 -right-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
                         </div>
                       </motion.div>
                     </div>
