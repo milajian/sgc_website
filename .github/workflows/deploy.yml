@@ -36,12 +36,15 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: List build output
+      - name: Verify build output
         run: |
           echo "Build output directory contents:"
-          ls -la out/ || echo "out directory not found"
+          ls -la out/ || (echo "ERROR: out directory not found" && exit 1)
           echo "Checking for index.html:"
-          ls -la out/index.html || echo "index.html not found"
+          ls -la out/index.html || (echo "ERROR: index.html not found" && exit 1)
+          echo "Build output size:"
+          du -sh out/
+          echo "✓ Build output verified successfully"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
