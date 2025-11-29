@@ -36,6 +36,13 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: List build output
+        run: |
+          echo "Build output directory contents:"
+          ls -la out/ || echo "out directory not found"
+          echo "Checking for index.html:"
+          ls -la out/index.html || echo "index.html not found"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
