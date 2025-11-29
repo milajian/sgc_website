@@ -108,152 +108,145 @@ export const IncubationAchievements = () => {
         }} className="w-full">
             <CarouselContent>
               {achievements.map((achievement, index) => <CarouselItem key={index}>
-                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-700">
+                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-700 h-[420px]">
                   {/* Shimmer effect - always active */}
                   <div className="absolute inset-0 opacity-100">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent shimmer-effect" />
                   </div>
 
-                    {index === 2 ? (
-                      // 埋嵌工艺产品 - 上下布局
-                      <div className="flex flex-col gap-8 p-8 md:p-12 relative w-full">
-                        {/* 标题在上 */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: -30 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: 0.2 }}
-                          className="text-center"
-                        >
-                          <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                  {index === 2 ? (
+                    /* 埋嵌工艺产品 - 上下布局 */
+                    <div className="flex flex-col p-6 md:p-8 relative w-full h-full overflow-hidden">
+                      {/* 标题在上 */}
+                      <motion.div 
+                        initial={{ opacity: 0, y: -20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-center mb-4 flex-shrink-0"
+                      >
+                        <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                          {achievement.name}
+                        </h3>
+                      </motion.div>
+
+                      {/* 图片在下 - 固定高度 */}
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="flex items-center justify-center flex-1 min-h-0"
+                      >
+                        <div className="relative w-full max-w-4xl mx-auto h-[320px]">
+                          {/* Glowing backdrop */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
+                          
+                          {/* Image container */}
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700 flex items-center justify-center">
+                            {/* Inner border glow */}
+                            <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
+                            
+                            <img 
+                              src={achievement.image} 
+                              alt={achievement.name} 
+                              className="max-w-full max-h-full object-contain p-4"
+                              style={{ imageRendering: 'crisp-edges' }}
+                              loading="lazy"
+                            />
+                          </div>
+
+                          {/* Decorative dots in corners */}
+                          <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  ) : (
+                    /* 其他卡片 - 左右布局 */
+                    <div className="grid md:grid-cols-[2fr_3fr] gap-6 p-6 md:p-10 relative items-center w-full h-full">
+                      {/* Left side - Text content */}
+                      <motion.div 
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="flex flex-col justify-center space-y-4 ml-6"
+                      >
+                        <div className="space-y-3">
+                          <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
                             {achievement.name}
                           </h3>
                           {achievement.description && (
-                            <p className="text-lg text-muted-foreground leading-relaxed mt-4">
+                            <p className="text-base text-muted-foreground leading-relaxed">
                               {achievement.description}
                             </p>
                           )}
-                        </motion.div>
+                        </div>
 
-                        {/* 图片在下 */}
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: 0.3 }}
-                          className="flex items-center justify-center"
-                        >
-                          <div className="relative w-full max-w-4xl">
-                            {/* Glowing backdrop */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
+                        {/* Highlights */}
+                        {achievement.highlights.length > 0 && (
+                          <div className="space-y-2">
+                            {achievement.highlights.map((highlight, idx) => (
+                              <motion.div 
+                                key={idx}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: 0.3 + idx * 0.08 }}
+                                className="flex items-start gap-2 group/item"
+                              >
+                                <div className="mt-1.5">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                                </div>
+                                <p className="text-sm text-foreground/90 leading-relaxed group-hover/item:text-foreground transition-colors">
+                                  {highlight}
+                                </p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        )}
+                      </motion.div>
+
+                      {/* Right side - Visual element */}
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="flex items-center justify-center h-full"
+                      >
+                        <div className="relative w-full h-[300px]">
+                          {/* Glowing backdrop - softer and slower */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
+                          
+                          {/* Image container with fixed height */}
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700 flex items-center justify-center">
+                            {/* Inner border glow */}
+                            <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
                             
-                            {/* Image container */}
-                            <div className="relative w-fit mx-auto rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700">
-                              {/* Inner border glow */}
-                              <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
-                              
-                              <img 
-                                src={achievement.image} 
-                                alt={achievement.name} 
-                                className="w-full h-auto object-contain p-6"
-                                style={{ imageRendering: 'crisp-edges' }}
-                                loading="lazy"
-                              />
-                            </div>
-
-                            {/* Decorative dots in corners */}
-                            <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                          </div>
-                        </motion.div>
-                      </div>
-                    ) : (
-                      // 其他卡片 - 保持左右布局
-                      <div className={`grid ${index === 1 ? 'md:grid-cols-[5fr_7fr]' : index === 3 ? 'md:grid-cols-[5fr_7fr]' : 'md:grid-cols-2'} gap-8 p-8 md:p-12 relative items-center w-full`}>
-                        {/* Left side - Text content */}
-                        <motion.div 
-                          initial={{ opacity: 0, x: -30 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: 0.2 }}
-                          className="flex flex-col justify-center space-y-6 ml-12"
-                        >
-                          <div className="space-y-4">
-                            <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                              {achievement.name}
-                            </h3>
-                            {achievement.description && (
-                              <p className="text-lg text-muted-foreground leading-relaxed">
-                                {achievement.description}
-                              </p>
-                            )}
+                            <img 
+                              src={achievement.image} 
+                              alt={achievement.name} 
+                              className="max-w-full max-h-full object-contain p-4"
+                              style={{ imageRendering: 'crisp-edges' }}
+                              loading="lazy"
+                            />
                           </div>
 
-                          {/* Highlights */}
-                          {achievement.highlights.length > 0 && (
-                            <div className="space-y-4">
-                              {achievement.highlights.map((highlight, idx) => (
-                                <motion.div 
-                                  key={idx}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
-                                  className="flex items-start gap-3 group/item"
-                                >
-                                  <div className="mt-1.5">
-                                    <div className="w-2 h-2 rounded-full bg-primary/80 relative">
-                                      <div className="absolute inset-0 rounded-full bg-primary/60 animate-ping opacity-40" />
-                                    </div>
-                                  </div>
-                                  <p className="text-foreground/90 leading-relaxed group-hover/item:text-foreground transition-colors">
-                                    {highlight}
-                                  </p>
-                                </motion.div>
-                              ))}
-                            </div>
-                          )}
-                        </motion.div>
-
-                        {/* Right side - Visual element */}
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: 0.3 }}
-                          className="flex items-center justify-center"
-                        >
-                          <div className={`relative w-full ${index === 3 ? 'max-w-xl' : index === 1 ? 'max-w-xl' : 'max-w-md'}`}>
-                            {/* Glowing backdrop - softer and slower */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl group-hover:scale-105 transition-transform duration-1000" />
-                            
-                            {/* Image container with double border effect - no animation */}
-                            <div className={`relative w-fit rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700`}>
-                              {/* Inner border glow */}
-                              <div className="absolute inset-2 border border-primary/10 rounded-xl pointer-events-none" />
-                              
-                              <img 
-                                src={achievement.image} 
-                                alt={achievement.name} 
-                                className="w-full h-auto object-contain p-6"
-                                style={{ imageRendering: 'crisp-edges' }}
-                                loading="lazy"
-                              />
-                            </div>
-
-                            {/* Decorative dots in corners - no animation */}
-                            <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                            <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                          </div>
-                        </motion.div>
-                      </div>
-                    )}
-                  </Card>
-                </CarouselItem>)}
+                          {/* Decorative dots in corners */}
+                          <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
+                          <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  )}
+                </Card>
+              </CarouselItem>)}
             </CarouselContent>
             {/* Custom triangle navigation buttons */}
             <Button onClick={() => {
