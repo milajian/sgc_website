@@ -144,12 +144,12 @@ export const IncubationAchievements = () => {
                           transition={{ duration: 0.6, delay: 0.3 }}
                           className="flex items-center justify-center"
                         >
-                          <div className="relative w-full aspect-square max-w-lg">
+                          <div className="relative w-full aspect-[1920/815] max-w-lg">
                             {/* Glow effect */}
                             <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
                             
                             {/* Image container */}
-                            <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
+                            <div className="relative w-full h-full rounded-3xl border border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-2 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
                               <img 
                                 src={achievement.image} 
                                 alt={achievement.name} 
