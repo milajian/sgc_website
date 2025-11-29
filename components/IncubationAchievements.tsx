@@ -108,146 +108,134 @@ export const IncubationAchievements = () => {
         }} className="w-full">
             <CarouselContent>
               {achievements.map((achievement, index) => <CarouselItem key={index}>
-                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-700 h-[420px] md:h-[400px] lg:h-[480px]">
-                  {/* Shimmer effect - always active */}
-                  <div className="absolute inset-0 opacity-100">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent shimmer-effect" />
-                  </div>
-
-                  {index === 2 ? (
-                    /* 埋嵌工艺产品 - 始终上下布局 */
-                    <div className="flex flex-col p-4 md:p-6 lg:p-8 relative w-full h-full overflow-hidden">
-                      {/* 标题在上 */}
-                      <motion.div 
-                        initial={{ opacity: 0, y: -20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-center mb-4 flex-shrink-0"
-                      >
-                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
-                          {achievement.name}
-                        </h3>
-                      </motion.div>
-
-                      {/* 图片在下 - 自适应容器 */}
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="flex-1 flex items-center justify-center min-h-0"
-                      >
-                        <div className="relative w-fit mx-auto">
-                          {/* Glowing backdrop */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-2xl blur-3xl scale-110 group-hover:scale-125 transition-transform duration-1000" />
-                          
-                          {/* Image container - 自适应图片尺寸 */}
-                          <div className="relative rounded-xl lg:rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700">
-                            {/* Inner border glow */}
-                            <div className="absolute inset-2 border border-primary/10 rounded-lg lg:rounded-xl pointer-events-none" />
-                            
-                            <img 
-                              src={achievement.image} 
-                              alt={achievement.name} 
-                              className="max-h-[340px] md:max-h-[300px] lg:max-h-[380px] w-auto object-contain p-4"
-                              style={{ imageRendering: 'crisp-edges' }}
-                              loading="lazy"
-                            />
-                          </div>
-
-                          {/* Decorative dots in corners */}
-                          <div className="hidden md:block absolute -top-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -bottom-1 -left-1 w-3 h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-primary/40" />
-                        </div>
-                      </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-500">
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent shimmer-effect" />
                     </div>
-                  ) : (
-                    /* 其他卡片 - 响应式布局：小屏上下，中屏及以上左右 */
-                    <div className="flex flex-col justify-center md:grid md:grid-cols-[2fr_3fr] gap-3 md:gap-4 lg:gap-8 p-4 md:p-5 lg:p-10 relative items-center w-full h-full">
-                      {/* Text content */}
-                      <motion.div 
-                        initial={{ opacity: 0, y: -20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="flex flex-col justify-center items-center md:items-start space-y-2 md:space-y-2 lg:space-y-4 md:ml-4 lg:ml-8 w-full"
-                      >
-                        <div className="space-y-1 md:space-y-1.5 lg:space-y-3 text-center md:text-left w-full">
-                          <h3 className="text-lg md:text-xl lg:text-3xl xl:text-4xl font-bold text-foreground leading-tight">
+
+                    {index === 2 ? (
+                      /* 埋嵌工艺产品 - 始终上下布局 */
+                      <div className="flex flex-col p-8 md:p-12 relative w-full">
+                        {/* 标题在上 */}
+                        <motion.div 
+                          initial={{ opacity: 0, y: -20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.2 }}
+                          className="text-center mb-6"
+                        >
+                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                             {achievement.name}
                           </h3>
-                          {achievement.description && (
-                            <p className="text-xs md:text-sm lg:text-lg text-muted-foreground leading-relaxed">
-                              {achievement.description}
-                            </p>
-                          )}
-                        </div>
+                        </motion.div>
 
-                        {/* Highlights */}
-                        {achievement.highlights.length > 0 && (
-                          <div className="space-y-0.5 md:space-y-1 lg:space-y-2 w-full flex flex-col items-center md:items-start">
-                            {achievement.highlights.map((highlight, idx) => (
-                              <motion.div 
-                                key={idx}
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
-                                className="flex items-start gap-1.5 md:gap-2 lg:gap-3 group/item justify-center md:justify-start"
-                              >
-                                <div className="mt-1 md:mt-1 lg:mt-1.5 flex-shrink-0">
-                                  <div className="w-1 h-1 md:w-1.5 md:h-1.5 lg:w-2 lg:h-2 rounded-full bg-accent relative">
+                        {/* 图片在下 */}
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.3 }}
+                          className="flex items-center justify-center"
+                        >
+                          <div className="relative w-full aspect-square max-w-lg">
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
+                            
+                            {/* Image container */}
+                            <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
+                              <img 
+                                src={achievement.image} 
+                                alt={achievement.name} 
+                                className="w-full h-full object-contain"
+                                style={{ imageRendering: 'crisp-edges' }}
+                                loading="lazy"
+                              />
+                            </div>
+                          </div>
+                        </motion.div>
+                      </div>
+                    ) : (
+                      /* 其他卡片 - 参考 PCBMotorAdvantages 的布局 */
+                      <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                        {/* Left: Content */}
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.2 }}
+                          className="flex flex-col justify-center space-y-6"
+                        >
+                          {/* Title */}
+                          <div>
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-3">
+                              {achievement.name}
+                            </h3>
+                            {achievement.description && (
+                              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                                {achievement.description}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Highlights */}
+                          {achievement.highlights.length > 0 && (
+                            <div className="space-y-3">
+                              {achievement.highlights.map((highlight, idx) => (
+                                <motion.div
+                                  key={idx}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
+                                  className="flex items-start gap-3 group/item"
+                                >
+                                  <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 group-hover/item:scale-150 transition-transform relative">
                                     <div className="absolute inset-0 rounded-full bg-accent/60 animate-ping opacity-40" />
                                   </div>
-                                </div>
-                                <p className="text-xs md:text-sm lg:text-base text-foreground/90 leading-snug lg:leading-relaxed group-hover/item:text-foreground transition-colors text-center md:text-left">
-                                  {highlight}
-                                </p>
-                              </motion.div>
-                            ))}
-                          </div>
-                        )}
-                      </motion.div>
+                                  <span className="text-foreground/90 leading-relaxed flex-1">
+                                    {highlight}
+                                  </span>
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
 
-                      {/* Visual element - 自适应图片容器 */}
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="flex items-center justify-center w-full md:h-full"
-                      >
-                        <div className="relative w-fit mx-auto">
-                          {/* Glowing backdrop */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-accent/15 rounded-xl lg:rounded-2xl blur-3xl scale-110 group-hover:scale-125 transition-transform duration-1000" />
-                          
-                          {/* Image container - 自适应图片尺寸 */}
-                          <div className="relative rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden border-2 border-primary/20 backdrop-blur-sm bg-background/5 transition-all duration-700">
-                            {/* Inner border glow */}
-                            <div className="absolute inset-1.5 md:inset-2 border border-primary/10 rounded-md md:rounded-lg lg:rounded-xl pointer-events-none" />
+                        {/* Right: Image */}
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.4 }}
+                          className="flex items-center justify-center"
+                        >
+                          <div className="relative w-full aspect-square max-w-md">
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
                             
-                            <img 
-                              src={achievement.image} 
-                              alt={achievement.name} 
-                              className="max-h-[140px] md:max-h-[260px] lg:max-h-[340px] w-auto object-contain p-3 md:p-4"
-                              style={{ imageRendering: 'crisp-edges' }}
-                              loading="lazy"
-                            />
+                            {/* Image container */}
+                            <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
+                              <img 
+                                src={achievement.image} 
+                                alt={achievement.name} 
+                                className="w-full h-full object-contain"
+                                style={{ imageRendering: 'crisp-edges' }}
+                                loading="lazy"
+                              />
+                            </div>
                           </div>
-
-                          {/* Decorative dots in corners */}
-                          <div className="hidden md:block absolute -top-1 -left-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -top-1 -right-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -bottom-1 -left-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
-                          <div className="hidden md:block absolute -bottom-1 -right-1 w-2 h-2 lg:w-3 lg:h-3 rounded-full bg-primary/40" />
-                        </div>
-                      </motion.div>
-                    </div>
-                  )}
-                </Card>
+                        </motion.div>
+                      </div>
+                    )}
+                  </Card>
+                </motion.div>
               </CarouselItem>)}
             </CarouselContent>
             {/* Custom triangle navigation buttons */}
@@ -285,7 +273,7 @@ export const IncubationAchievements = () => {
       </div>
 
       <style>{`
-        @keyframes shimmer-effect {
+        @keyframes shimmer {
           0% {
             transform: translateX(-100%);
           }
@@ -294,7 +282,7 @@ export const IncubationAchievements = () => {
           }
         }
         .shimmer-effect {
-          animation: shimmer-effect 2s infinite linear;
+          animation: shimmer 3s infinite;
         }
       `}</style>
     </section>;
