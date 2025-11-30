@@ -18,7 +18,15 @@ const slides = [
     ],
     image: getImagePath("/assets/pcb-motor-intro.png"),
     icon: Zap,
-    gradient: "from-cyan-500/15 via-blue-500/15 to-teal-500/15"
+    gradient: "from-cyan-500/15 via-blue-500/15 to-teal-500/15",
+    isNewLayout: true,
+    newLayoutImages: [
+      getImagePath("/assets/pcbdingzi1.png"),
+      getImagePath("/assets/pcbdingzi2.png"),
+      getImagePath("/assets/pcbdingzi3.png")
+    ],
+    newLayoutTitle: "PCB定子轴向磁通电机",
+    newLayoutSubtitle: "无铁芯 PCB定子轴向磁通电机"
   },
   {
     title: "径向磁通 vs 轴向磁通",
@@ -224,7 +232,84 @@ export const PCBMotorSlider = () => {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="flex items-center justify-center"
                       >
-                        {slide.isSpecialLayout && slide.images && slide.textLabels ? (
+                        {slide.isNewLayout && slide.newLayoutImages ? (
+                          // New layout for "PCB定子轴向电机"
+                          <div className="relative w-full max-w-2xl">
+                            {/* Glowing backdrop */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl blur-3xl animate-pulse" />
+                            
+                            {/* Content container */}
+                            <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-6">
+                              {/* Top section: Title + First Image */}
+                              <div className="mb-6">
+                                {/* Title at top left */}
+                                <h4 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-left">
+                                  {slide.newLayoutTitle}
+                                </h4>
+                                
+                                {/* First image centered with label */}
+                                <div className="relative flex justify-center">
+                                  <div className="relative inline-block">
+                                    <img 
+                                      src={slide.newLayoutImages[0]} 
+                                      alt="PCB定子轴向磁通电机爆炸图"
+                                      className="w-full max-w-lg h-auto object-contain"
+                                      loading="lazy"
+                                    />
+                                    {/* Label at bottom-right of image */}
+                                    <span className="absolute bottom-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md font-medium shadow-lg">
+                                      实物爆炸图
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Middle section: Subtitle */}
+                              <div className="mb-6">
+                                <p className="text-center text-lg md:text-xl font-semibold text-accent">
+                                  {slide.newLayoutSubtitle}
+                                </p>
+                              </div>
+                              
+                              {/* Bottom section: Two column layout */}
+                              <div className="grid grid-cols-2 gap-6">
+                                {/* Left column */}
+                                <div className="flex flex-col items-center text-center space-y-3">
+                                  <div className="w-full flex justify-center">
+                                    <img 
+                                      src={slide.newLayoutImages[1]} 
+                                      alt="PCB定子实物"
+                                      className="w-full max-w-[200px] h-auto object-contain"
+                                      loading="lazy"
+                                    />
+                                  </div>
+                                  <p className="text-sm md:text-base font-medium text-foreground">
+                                    PCB定子实物
+                                  </p>
+                                </div>
+                                
+                                {/* Right column */}
+                                <div className="flex flex-col items-center text-center space-y-3">
+                                  <div className="w-full flex justify-center">
+                                    <img 
+                                      src={slide.newLayoutImages[2]} 
+                                      alt="PCB定子截面"
+                                      className="w-full max-w-[200px] h-auto object-contain"
+                                      loading="lazy"
+                                    />
+                                  </div>
+                                  <p className="text-sm md:text-base font-medium text-foreground">
+                                    PCB定子截面
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Circuit corner accents */}
+                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-lg" />
+                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-lg" />
+                          </div>
+                        ) : slide.isSpecialLayout && slide.images && slide.textLabels ? (
                           // Special layout for "PCB电机两种结构形式"
                           <div className="relative w-full max-w-2xl">
                             {/* Glowing backdrop */}
