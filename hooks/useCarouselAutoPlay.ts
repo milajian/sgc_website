@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 
 interface UseCarouselAutoPlayOptions {
-  /** 自动播放间隔（毫秒），默认 2000ms */
+  /** 自动播放间隔（毫秒），默认 4200ms */
   autoPlayInterval?: number;
   /** 暂停后自动恢复播放的延迟（毫秒），默认 5000ms，设为 0 则不自动恢复 */
   restoreDelay?: number;
@@ -42,7 +42,7 @@ interface UseCarouselAutoPlayReturn {
 export function useCarouselAutoPlay(
   options: UseCarouselAutoPlayOptions = {}
 ): UseCarouselAutoPlayReturn {
-  const { autoPlayInterval = 2000, restoreDelay = 5000 } = options;
+  const { autoPlayInterval = 4200, restoreDelay = 5000 } = options;
 
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);

@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect } from "react";
 import { getImagePath } from "@/lib/image-path";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 
 interface SimulationSlide {
   title: string;
@@ -40,40 +40,10 @@ const simulationSlides: SimulationSlide[] = [
 ];
 
 export const SimulationTestSlider = () => {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
-
-  useEffect(() => {
-    if (!api) return;
-
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
-  useEffect(() => {
-    if (!api || !isAutoPlay) return;
-    
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, [api, isAutoPlay]);
-
-  // 自动恢复播放：用户暂停后 5 秒自动恢复
-  useEffect(() => {
-    if (isAutoPlay) return;
-    
-    const restoreTimer = setTimeout(() => {
-      setIsAutoPlay(true);
-    }, 5000);
-
-    return () => clearTimeout(restoreTimer);
-  }, [isAutoPlay]);
+  const { api, setApi, current, scrollPrev, scrollNext, scrollTo } = useCarouselAutoPlay({
+    autoPlayInterval: 4200,
+    restoreDelay: 5000
+  });
 
   return (
     <section id="simulation-test" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
@@ -234,10 +204,7 @@ export const SimulationTestSlider = () => {
 
             {/* Navigation buttons */}
             <Button 
-              onClick={() => {
-                setIsAutoPlay(false);
-                api?.scrollPrev();
-              }} 
+              onClick={scrollPrev}
               className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" 
               variant="ghost"
               aria-label="上一张幻灯片"
@@ -245,10 +212,7 @@ export const SimulationTestSlider = () => {
               <ChevronLeft strokeWidth={3} className="h-12 w-12 transition-colors text-[#2dc2b3]" />
             </Button>
             <Button 
-              onClick={() => {
-                setIsAutoPlay(false);
-                api?.scrollNext();
-              }} 
+              onClick={scrollNext}
               className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" 
               variant="ghost"
               aria-label="下一张幻灯片"
@@ -262,7 +226,7 @@ export const SimulationTestSlider = () => {
             {simulationSlides.map((_, index) => (
               <button
                 key={index}
-                onClick={() => api?.scrollTo(index)}
+                onClick={() => scrollTo(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   current === index 
                     ? "bg-primary w-10 shadow-lg shadow-primary/50" 

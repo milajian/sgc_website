@@ -1,10 +1,10 @@
 'use client'
-import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
+import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 
 interface CaseStudy {
   title: string;
@@ -170,40 +170,10 @@ const caseStudies: CaseStudy[] = [
 ];
 
 export const CaseStudySlider = () => {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
-
-  useEffect(() => {
-    if (!api) return;
-
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
-  useEffect(() => {
-    if (!api || !isAutoPlay) return;
-    
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, [api, isAutoPlay]);
-
-  // 自动恢复播放：用户暂停后 5 秒自动恢复
-  useEffect(() => {
-    if (isAutoPlay) return;
-    
-    const restoreTimer = setTimeout(() => {
-      setIsAutoPlay(true);
-    }, 5000);
-
-    return () => clearTimeout(restoreTimer);
-  }, [isAutoPlay]);
+  const { api, setApi, current, scrollPrev, scrollNext, scrollTo } = useCarouselAutoPlay({
+    autoPlayInterval: 4200,
+    restoreDelay: 5000
+  });
 
   return (
     <section id="case-study" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
@@ -291,10 +261,7 @@ export const CaseStudySlider = () => {
         {/* Navigation Controls */}
         <div className="flex items-center justify-center gap-4 mt-6">
           <button
-            onClick={() => {
-              setIsAutoPlay(false);
-              api?.scrollPrev();
-            }}
+            onClick={scrollPrev}
             className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/40 transition-all duration-300 group"
             aria-label="上一张幻灯片"
           >
@@ -306,7 +273,7 @@ export const CaseStudySlider = () => {
             {caseStudies.map((_, index) => (
               <button
                 key={index}
-                onClick={() => api?.scrollTo(index)}
+                onClick={() => scrollTo(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   current === index 
                     ? "w-8 bg-primary" 
@@ -319,10 +286,7 @@ export const CaseStudySlider = () => {
           </div>
 
           <button
-            onClick={() => {
-              setIsAutoPlay(false);
-              api?.scrollNext();
-            }}
+            onClick={scrollNext}
             className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/40 transition-all duration-300 group"
             aria-label="下一张幻灯片"
           >

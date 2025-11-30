@@ -1,11 +1,11 @@
 'use client'
-import { useState, useEffect } from "react";
 import { getImagePath } from "@/lib/image-path";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Settings } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 interface Slide {
   title: string;
   subtitle: string;
@@ -55,34 +55,10 @@ const slides: Slide[] = [{
   }]
 }];
 export const ProductionTechnologySlider = () => {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
-  useEffect(() => {
-    if (!api) return;
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-  useEffect(() => {
-    if (!api || !isAutoPlay) return;
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [api, isAutoPlay]);
-
-  // 自动恢复播放：用户暂停后 5 秒自动恢复
-  useEffect(() => {
-    if (isAutoPlay) return;
-    
-    const restoreTimer = setTimeout(() => {
-      setIsAutoPlay(true);
-    }, 5000);
-
-    return () => clearTimeout(restoreTimer);
-  }, [isAutoPlay]);
+  const { api, setApi, current, scrollPrev, scrollNext, scrollTo } = useCarouselAutoPlay({
+    autoPlayInterval: 4200,
+    restoreDelay: 5000
+  });
 
   return <section id="production-technology" className="py-16 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
@@ -156,23 +132,17 @@ export const ProductionTechnologySlider = () => {
           </CarouselContent>
 
           {/* Navigation Arrows */}
-          <Button onClick={() => {
-          setIsAutoPlay(false);
-          api?.scrollPrev();
-        }} className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" variant="ghost" aria-label="上一张幻灯片">
+          <Button onClick={scrollPrev} className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" variant="ghost" aria-label="上一张幻灯片">
             <ChevronLeft strokeWidth={3} className="h-12 w-12 transition-colors text-[#2dc2b3]" />
           </Button>
-          <Button onClick={() => {
-          setIsAutoPlay(false);
-          api?.scrollNext();
-        }} className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" variant="ghost" aria-label="下一张幻灯片">
+          <Button onClick={scrollNext} className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 h-auto w-auto bg-transparent border-0 shadow-none hover:bg-transparent p-0" variant="ghost" aria-label="下一张幻灯片">
             <ChevronRight strokeWidth={3} className="h-12 w-12 transition-colors text-[#2dc2b3]" />
           </Button>
         </Carousel>
 
         {/* Dot Indicators */}
         <div className="flex justify-center gap-2 mt-6">
-          {slides.map((_, index) => <button key={index} onClick={() => api?.scrollTo(index)} className={`h-2 rounded-full transition-all duration-300 ${current === index ? "w-8 bg-primary" : "w-2 bg-primary/30 hover:bg-primary/50"}`} aria-label={`跳转到第 ${index + 1} 张幻灯片`} aria-current={current === index ? "true" : undefined} />)}
+          {slides.map((_, index) => <button key={index} onClick={() => scrollTo(index)} className={`h-2 rounded-full transition-all duration-300 ${current === index ? "w-8 bg-primary" : "w-2 bg-primary/30 hover:bg-primary/50"}`} aria-label={`跳转到第 ${index + 1} 张幻灯片`} aria-current={current === index ? "true" : undefined} />)}
         </div>
       </div>
     </section>;
