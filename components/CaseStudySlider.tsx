@@ -123,7 +123,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "2.1mm" },
       { label: "成品尺寸", value: "∅19mm" },
     ],
-    image: getImagePath("/assets/case-robot-finger-25w.png"),
+    image: getImagePath("/assets/机器人2.png"),
   },
   {
     title: "直线电机（磁悬浮）",
@@ -137,7 +137,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "3.35mm" },
       { label: "成品尺寸", value: "129mm*496mm" },
     ],
-    image: getImagePath("/assets/case-linear-motor-maglev-1000w.png"),
+    image: getImagePath("/assets/磁悬浮.png"),
   },
   {
     title: "直线电机（医疗）",
@@ -151,7 +151,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "2.7mm" },
       { label: "成品尺寸", value: "140mm*26mm" },
     ],
-    image: getImagePath("/assets/case-linear-motor-medical-100w.png"),
+    image: getImagePath("/assets/医疗.png"),
   },
   {
     title: "平板电机",

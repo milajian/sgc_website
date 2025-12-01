@@ -116,18 +116,29 @@ export const SimulationTestSlider = () => {
                             key={imgIdx}
                             className={`flex flex-col gap-3 ${index === 0 ? '' : 'max-w-[220px]'} ${index === 1 && imgIdx === 0 ? 'ml-16' : index === 1 && imgIdx === 1 ? 'ml-8' : ''}`}
                           >
-                            <div className={`relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex items-center justify-center ${index === 0 ? 'h-[190px]' : 'h-[160px]'}`}>
-                              {/* Gradient background */}
-                              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-                              <img 
-                                src={image} 
-                                alt={`${slide.title} 图${imgIdx + 1}`}
-                                className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10"
-                                loading="lazy"
-                              />
-                              {/* Glow effect */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            </div>
+                            {index === 0 ? (
+                              <div className={`relative rounded-xl overflow-hidden transition-all duration-500 flex items-center justify-center h-[190px]`}>
+                                <img 
+                                  src={image} 
+                                  alt={`${slide.title} 图${imgIdx + 1}`}
+                                  className="w-full h-full object-contain transition-transform duration-500"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ) : (
+                              <div className={`relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex items-center justify-center h-[160px]`}>
+                                {/* Gradient background */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
+                                <img 
+                                  src={image} 
+                                  alt={`${slide.title} 图${imgIdx + 1}`}
+                                  className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10"
+                                  loading="lazy"
+                                />
+                                {/* Glow effect */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                              </div>
+                            )}
                             {/* Image Caption - Outside the image frame */}
                             <p className="text-sm font-semibold text-foreground text-center">
                               {slide.highlights[imgIdx] || `图片 ${imgIdx + 1}`}
@@ -149,15 +160,13 @@ export const SimulationTestSlider = () => {
                             // Electromagnetic simulation: 2 images in second row
                             slide.images.slice(2, 4).map((image, imgIdx) => (
                               <div key={imgIdx + 2} className="flex flex-col gap-3">
-                                <div className="relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex items-center justify-center h-[190px]">
-                                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
+                                <div className="relative rounded-xl overflow-hidden transition-all duration-500 flex items-center justify-center h-[190px]">
                                   <img 
                                     src={image} 
                                     alt={`${slide.title} 图${imgIdx + 3}`}
-                                    className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10"
+                                    className="w-full h-full object-contain transition-transform duration-500"
                                     loading="lazy"
                                   />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 </div>
                                 <p className="text-sm font-semibold text-foreground text-center">
                                   {slide.highlights[imgIdx + 2] || `图片 ${imgIdx + 3}`}

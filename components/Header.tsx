@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Menu } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { scrollToSection } from "@/lib/scroll";
@@ -272,137 +273,139 @@ export const Header = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[200px] sm:w-[220px]">
-                <div className="flex flex-col space-y-4 mt-8 overflow-y-auto max-h-[calc(100vh-4rem)] pb-8">
-                  <SheetTitle className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">导航菜单</SheetTitle>
-                  
-                  {/* 产品介绍 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">产品介绍</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('incubation-achievements')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      技术中心孵化成果
-                    </button>
-                    <button
-                      onClick={() => handleMobileNavClick('pcb-motor-intro')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB电机产品介绍
-                    </button>
-                  </div>
-
-                  {/* 市场布局和场景 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">市场布局和场景</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('product-lines')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      专精市场布局
-                    </button>
-                    <button
-                      onClick={() => handleMobileNavClick('application-scenes')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      应用场景
-                    </button>
-                  </div>
-
-                  {/* 电机优势与案例分析 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">电机优势与案例分析</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('pcb-motor-advantages')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB电机优势
-                    </button>
-                    <button
-                      onClick={() => handleMobileNavClick('case-study')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB电机案例分析
-                    </button>
-                  </div>
-
-                  {/* 产品历程 */}
-                  <button
-                    onClick={() => handleMobileNavClick('product-journey')}
-                    className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                  >
-                    产品历程
-                  </button>
-
-                  {/* 产品测试与设计 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">产品测试与设计</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('simulation-test')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      仿真测试
-                    </button>
-                    <button
-                      onClick={() => handleMobileNavClick('protection-thermal')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      防护与散热设计
-                    </button>
-                  </div>
-
-                  {/* 生产技术与设备 */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-foreground">生产技术与设备</h3>
-                    <button
-                      onClick={() => handleMobileNavClick('pcb-stator-production-tech')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB定子生产技术
-                    </button>
-                    <button
-                      onClick={() => handleMobileNavClick('production-technology')}
-                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      PCB定子生产设备
-                    </button>
-                  </div>
-
-                  {/* 关于我们 */}
-                  <button
-                    onClick={() => handleMobileNavClick('company')}
-                    className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                  >
-                    关于我们
-                  </button>
-
-                  {/* Mobile Actions */}
-                  <div className="pt-4 border-t space-y-3">
-                    <div className="text-sm text-muted-foreground">股票代码: 300739</div>
-                    <Button 
-                      variant="default" 
-                      className="w-full shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-accent hover:shadow-primary/30 transition-all duration-300" 
-                      asChild
-                    >
-                      <a 
-                        href="/sgc_website/SGCircuits.pdf" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // 使用window.open强制在新标签页打开
-                          const newWindow = window.open('/sgc_website/SGCircuits.pdf', '_blank', 'noopener,noreferrer');
-                          // 如果弹窗被阻止，fallback到默认行为
-                          if (!newWindow) {
-                            window.location.href = '/sgc_website/SGCircuits.pdf';
-                          }
-                        }}
+                <ScrollArea className="h-[calc(100vh-4rem)] mt-8">
+                  <div className="flex flex-col space-y-4 pb-8 pr-4">
+                    <SheetTitle className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">导航菜单</SheetTitle>
+                    
+                    {/* 产品介绍 */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-foreground">产品介绍</h3>
+                      <button
+                        onClick={() => handleMobileNavClick('incubation-achievements')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                       >
-                        了解更多
-                      </a>
-                    </Button>
+                        技术中心孵化成果
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavClick('pcb-motor-intro')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        PCB电机产品介绍
+                      </button>
+                    </div>
+
+                    {/* 市场布局和场景 */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-foreground">市场布局和场景</h3>
+                      <button
+                        onClick={() => handleMobileNavClick('product-lines')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        专精市场布局
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavClick('application-scenes')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        应用场景
+                      </button>
+                    </div>
+
+                    {/* 电机优势与案例分析 */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-foreground">电机优势与案例分析</h3>
+                      <button
+                        onClick={() => handleMobileNavClick('pcb-motor-advantages')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        PCB电机优势
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavClick('case-study')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        PCB电机案例分析
+                      </button>
+                    </div>
+
+                    {/* 产品历程 */}
+                    <button
+                      onClick={() => handleMobileNavClick('product-journey')}
+                      className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                    >
+                      产品历程
+                    </button>
+
+                    {/* 产品测试与设计 */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-foreground">产品测试与设计</h3>
+                      <button
+                        onClick={() => handleMobileNavClick('simulation-test')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        仿真测试
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavClick('protection-thermal')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        防护与散热设计
+                      </button>
+                    </div>
+
+                    {/* 生产技术与设备 */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-foreground">生产技术与设备</h3>
+                      <button
+                        onClick={() => handleMobileNavClick('pcb-stator-production-tech')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        PCB定子生产技术
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavClick('production-technology')}
+                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                      >
+                        PCB定子生产设备
+                      </button>
+                    </div>
+
+                    {/* 关于我们 */}
+                    <button
+                      onClick={() => handleMobileNavClick('company')}
+                      className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                    >
+                      关于我们
+                    </button>
+
+                    {/* Mobile Actions */}
+                    <div className="pt-4 border-t space-y-3">
+                      <div className="text-sm text-muted-foreground">股票代码: 300739</div>
+                      <Button 
+                        variant="default" 
+                        className="w-full shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-accent hover:shadow-primary/30 transition-all duration-300" 
+                        asChild
+                      >
+                        <a 
+                          href="/sgc_website/SGCircuits.pdf" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            // 使用window.open强制在新标签页打开
+                            const newWindow = window.open('/sgc_website/SGCircuits.pdf', '_blank', 'noopener,noreferrer');
+                            // 如果弹窗被阻止，fallback到默认行为
+                            if (!newWindow) {
+                              window.location.href = '/sgc_website/SGCircuits.pdf';
+                            }
+                          }}
+                        >
+                          了解更多
+                        </a>
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                </ScrollArea>
               </SheetContent>
             </Sheet>
           </div>
