@@ -36,7 +36,7 @@ export default function RootLayout({
         <meta name="twitter:site" content="@Lovable" />
         <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             <TooltipProvider>

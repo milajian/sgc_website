@@ -1,4 +1,5 @@
 'use client'
+import { useRef, useEffect } from "react";
 import { getImagePath } from "@/lib/image-path";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -10,7 +11,7 @@ const achievements = [{
   name: "芯片嵌入式PCB解决方案",
   description: "集成SiC芯片的先进PCB嵌入技术",
   highlights: ["降低热阻，更短散热路径", "更高的集成度、功率密度、散热效率", "降低系统复杂性", "更少组件，连接和预定断点", "更高产品稳定性和寿命"],
-  image: getImagePath("/assets/embedded PCB.png")
+  image: getImagePath("/assets/PCBsolution.png")
 }, {
   name: "轴向电机解决方案",
   description: "革命性的PCB定子轴向电机技术",
@@ -65,6 +66,58 @@ export const IncubationAchievements = () => {
     autoPlayInterval: 4200,
     restoreDelay: 5000
   });
+
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const updateHeights = () => {
+      // 过滤掉null值，获取所有Card元素
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (cards.length === 0) return;
+      
+      // 重置高度，让内容自然决定高度
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // 等待浏览器重新计算布局
+      requestAnimationFrame(() => {
+        // 计算最大高度
+        const maxHeight = Math.max(...cards.map(card => card.offsetHeight));
+        
+        // 统一设置高度
+        cards.forEach(card => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+    
+    // 初始计算 - 延迟执行以确保所有卡片都已渲染
+    const timer = setTimeout(() => {
+      updateHeights();
+    }, 100);
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateHeights);
+    
+    // 监听carousel切换，重新计算高度
+    const handleSelect = () => {
+      setTimeout(updateHeights, 100);
+    };
+    
+    if (api) {
+      api.on('select', handleSelect);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeights);
+      if (api) {
+        api.off('select', handleSelect);
+      }
+    };
+  }, [api]);
+
   return <section id="incubation-achievements" className="py-16 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       {/* Subtle circuit background pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
@@ -111,22 +164,140 @@ export const IncubationAchievements = () => {
           align: "start",
           loop: true
         }} className="w-full">
-            <CarouselContent>
-              {carouselAchievements.map((achievement, index) => <CarouselItem key={index}>
+            <CarouselContent className="h-full items-stretch">
+              {carouselAchievements.map((achievement, index) => <CarouselItem key={index} className="h-full">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
+                  className="h-full"
                 >
-                  <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-500">
+                  <Card 
+                    ref={(el) => {
+                      cardRefs.current[index] = el;
+                    }}
+                    className="h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-accent/3 to-primary/5 backdrop-blur-sm overflow-hidden relative group hover:border-primary/30 transition-all duration-500"
+                  >
                     {/* Shimmer effect */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent shimmer-effect" />
                     </div>
 
-                    {/* 其他卡片 - 参考 PCBMotorAdvantages 的布局 */}
-                    <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                    {achievement.name === "芯片嵌入式PCB解决方案" ? (
+                      /* 芯片嵌入式PCB解决方案 - 图片叠加文字布局 */
+                      <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12 flex-1 items-center">
+                        {/* Left: Content */}
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.2 }}
+                          className="flex flex-col justify-center space-y-6"
+                        >
+                          {/* Title */}
+                          <div>
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-3">
+                              {achievement.name}
+                            </h3>
+                            {achievement.description && (
+                              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                                {achievement.description}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Highlights */}
+                          {achievement.highlights.length > 0 && (
+                            <div className="space-y-3">
+                              {achievement.highlights.map((highlight, idx) => (
+                                <motion.div
+                                  key={idx}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
+                                  className="flex items-start gap-3 group/item"
+                                >
+                                  <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 group-hover/item:scale-150 transition-transform relative">
+                                    <div className="absolute inset-0 rounded-full bg-accent/60 animate-ping opacity-40" />
+                                  </div>
+                                  <span className="text-foreground/90 leading-relaxed flex-1">
+                                    {highlight}
+                                  </span>
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+
+                        {/* Right: Image with overlay labels */}
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.4 }}
+                          className="flex items-center justify-center"
+                        >
+                          <div className="relative w-full aspect-square max-w-md">
+                            {/* Glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
+                            
+                            {/* Image container with overlay labels */}
+                            <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
+                              <img 
+                                src={achievement.image} 
+                                alt={achievement.name} 
+                                className="w-full h-full object-contain"
+                                style={{ imageRendering: 'crisp-edges' }}
+                                loading="lazy"
+                              />
+                              
+                              {/* Overlay text labels */}
+                              <div className="absolute inset-0 pointer-events-none">
+                                {/* 左上: SiC芯片 - 在 SiC 晶圆图的正上方，居中对齐 */}
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  whileInView={{ opacity: 1 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.6, delay: 0.6 }}
+                                  className="absolute top-[15%] left-[30%] -translate-x-1/2 px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-primary/95 backdrop-blur-sm text-white text-xs md:text-sm lg:text-base font-semibold shadow-lg whitespace-nowrap"
+                                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+                                >
+                                  SiC芯片
+                                </motion.div>
+                                
+                                {/* 左下: AMB嵌入式 - 在 AMB 图的下方，更贴近图表 */}
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  whileInView={{ opacity: 1 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.6, delay: 0.7 }}
+                                  className="absolute bottom-[16%] left-[15%] px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-primary/95 backdrop-blur-sm text-white text-xs md:text-sm lg:text-base font-semibold shadow-lg"
+                                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+                                >
+                                  AMB嵌入式
+                                </motion.div>
+                                
+                                {/* 右下: 铜基嵌入式 - 在铜基图的下方，更贴近图表 */}
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  whileInView={{ opacity: 1 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.6, delay: 0.8 }}
+                                  className="absolute bottom-[16%] right-[15%] px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-primary/95 backdrop-blur-sm text-white text-xs md:text-sm lg:text-base font-semibold shadow-lg"
+                                  style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
+                                >
+                                  铜基嵌入式
+                                </motion.div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </div>
+                    ) : (
+                      /* 其他卡片 - 参考 PCBMotorAdvantages 的布局 */
+                    <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12 flex-1 items-center">
                       {/* Left: Content */}
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -196,6 +367,7 @@ export const IncubationAchievements = () => {
                         </div>
                       </motion.div>
                     </div>
+                    )}
                   </Card>
                 </motion.div>
               </CarouselItem>)}

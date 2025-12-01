@@ -47,7 +47,7 @@ export const CompanyInfo = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-8 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mb-16">
             {stats.map((stat, index) => <Card key={index} className="p-8 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all text-center">
                 <div className="flex justify-center mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
