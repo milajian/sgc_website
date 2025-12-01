@@ -235,23 +235,36 @@ export const CaseStudySlider = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10"
-        >
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="text-center mb-10">
+          <motion.div 
+            className="flex items-center justify-center gap-3 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <Zap className="w-8 h-8 text-primary" />
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               PCB电机案例分析
             </h2>
-          </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          </motion.div>
+          <motion.p 
+            className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             深入的行业落地能力，形成强工程信任背书
-          </p>
-        </motion.div>
+          </motion.p>
+          <motion.div 
+            className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
+            initial={{ width: 0 }}
+            whileInView={{ width: 96 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          />
+        </div>
 
         {/* Carousel */}
         <div className="relative">
