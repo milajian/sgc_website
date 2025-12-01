@@ -6,6 +6,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { ChevronLeft, ChevronRight, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
+import { useRef, useEffect } from "react";
 
 interface SimulationSlide {
   title: string;
@@ -45,8 +46,59 @@ export const SimulationTestSlider = () => {
     restoreDelay: 5000
   });
 
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const updateHeights = () => {
+      // 过滤掉null值，获取所有Card元素
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (cards.length === 0) return;
+      
+      // 重置高度，让内容自然决定高度
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // 等待浏览器重新计算布局
+      requestAnimationFrame(() => {
+        // 计算最大高度
+        const maxHeight = Math.max(...cards.map(card => card.offsetHeight));
+        
+        // 统一设置高度
+        cards.forEach(card => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+    
+    // 初始计算 - 延迟执行以确保所有卡片都已渲染
+    const timer = setTimeout(() => {
+      updateHeights();
+    }, 100);
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateHeights);
+    
+    // 监听carousel切换，重新计算高度
+    const handleSelect = () => {
+      setTimeout(updateHeights, 100);
+    };
+    
+    if (api) {
+      api.on('select', handleSelect);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeights);
+      if (api) {
+        api.off('select', handleSelect);
+      }
+    };
+  }, [api]);
+
   return (
-    <section id="simulation-test" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+    <section id="simulation-test" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
       
@@ -73,20 +125,26 @@ export const SimulationTestSlider = () => {
         {/* Carousel */}
         <div className="relative">
           <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
-            <CarouselContent>
+            <CarouselContent className="h-full items-stretch">
               {simulationSlides.map((slide, index) => (
-              <CarouselItem key={index}>
+              <CarouselItem key={index} className="h-full">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="h-full"
                 >
-                  <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500">
+                  <Card 
+                    ref={(el) => {
+                      cardRefs.current[index] = el;
+                    }}
+                    className="h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500"
+                  >
                     {/* Shimmer Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent shimmer" />
                     
-                    <div className="relative z-10 p-6 md:p-8">
+                    <div className="relative z-10 p-6 md:p-8 flex-1 flex flex-col justify-center">
                       {/* Top: Title and Subtitle */}
                       <motion.div
                         initial={{ opacity: 0, y: -20 }}

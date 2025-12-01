@@ -50,7 +50,7 @@ const applications: ApplicationItem[] = [
 
 export const ApplicationScenes = () => {
   return (
-    <section id="application-scenes" className="py-16 bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+    <section id="application-scenes" className="py-16 bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       <div className="container mx-auto px-6 relative">
         <div className="max-w-7xl mx-auto">
           {/* Section Title */}

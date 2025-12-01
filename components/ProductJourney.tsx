@@ -45,7 +45,7 @@ const designMilestones = [{
   icon: Users
 }];
 export const ProductJourney = () => {
-  return <section id="product-journey" className="py-16 bg-gradient-to-b from-background via-muted/30 to-background relative overflow-hidden">
+  return <section id="product-journey" className="py-16 bg-gradient-to-b from-background via-muted/30 to-background relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       {/* Circuit pattern background */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzJiZDljMyIgc3Ryb2tlLW9wYWNpdHk9Ii4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
       

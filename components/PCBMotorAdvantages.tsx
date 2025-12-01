@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Feather, Zap, Droplet, DollarSign, Award } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
+import { useRef, useEffect } from "react";
 
 interface Advantage {
   title: string;
@@ -81,8 +82,59 @@ export const PCBMotorAdvantages = () => {
     restoreDelay: 5000
   });
 
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const updateHeights = () => {
+      // 过滤掉null值，获取所有Card元素
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (cards.length === 0) return;
+      
+      // 重置高度，让内容自然决定高度
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // 等待浏览器重新计算布局
+      requestAnimationFrame(() => {
+        // 计算最大高度
+        const maxHeight = Math.max(...cards.map(card => card.offsetHeight));
+        
+        // 统一设置高度
+        cards.forEach(card => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+    
+    // 初始计算 - 延迟执行以确保所有卡片都已渲染
+    const timer = setTimeout(() => {
+      updateHeights();
+    }, 100);
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateHeights);
+    
+    // 监听carousel切换，重新计算高度
+    const handleSelect = () => {
+      setTimeout(updateHeights, 100);
+    };
+    
+    if (api) {
+      api.on('select', handleSelect);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeights);
+      if (api) {
+        api.off('select', handleSelect);
+      }
+    };
+  }, [api]);
+
   return (
-    <section id="pcb-motor-advantages" className="py-16 bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/10 relative overflow-hidden">
+    <section id="pcb-motor-advantages" className="py-16 bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/10 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background circuit pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -135,24 +187,30 @@ export const PCBMotorAdvantages = () => {
               }}
               className="w-full"
             >
-              <CarouselContent>
+              <CarouselContent className="h-full items-stretch">
                 {advantages.map((advantage, index) => {
                   const Icon = advantage.icon;
                   return (
-                    <CarouselItem key={index}>
+                    <CarouselItem key={index} className="h-full">
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
+                        className="h-full"
                       >
-                        <Card className={`border-2 border-primary/20 bg-gradient-to-br ${advantage.gradient} backdrop-blur-sm overflow-hidden relative group hover:border-primary/40 transition-all duration-500`}>
+                        <Card 
+                          ref={(el) => {
+                            cardRefs.current[index] = el;
+                          }}
+                          className={`h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br ${advantage.gradient} backdrop-blur-sm overflow-hidden relative group hover:border-primary/40 transition-all duration-500`}
+                        >
                           {/* Shimmer effect */}
                           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent shimmer" />
                           </div>
 
-                          <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                          <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12 flex-1 items-center">
                             {/* Left: Content */}
                             <motion.div
                               initial={{ opacity: 0, x: -20 }}

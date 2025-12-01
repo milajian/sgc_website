@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
+import { useRef, useEffect } from "react";
 const slides = [
   {
     title: "PCB定子轴向电机",
@@ -76,8 +77,59 @@ export const PCBMotorSlider = () => {
     restoreDelay: 5000
   });
 
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const updateHeights = () => {
+      // 过滤掉null值，获取所有Card元素
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (cards.length === 0) return;
+      
+      // 重置高度，让内容自然决定高度
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // 等待浏览器重新计算布局
+      requestAnimationFrame(() => {
+        // 计算最大高度
+        const maxHeight = Math.max(...cards.map(card => card.offsetHeight));
+        
+        // 统一设置高度
+        cards.forEach(card => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+    
+    // 初始计算 - 延迟执行以确保所有卡片都已渲染
+    const timer = setTimeout(() => {
+      updateHeights();
+    }, 100);
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateHeights);
+    
+    // 监听carousel切换，重新计算高度
+    const handleSelect = () => {
+      setTimeout(updateHeights, 100);
+    };
+    
+    if (api) {
+      api.on('select', handleSelect);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeights);
+      if (api) {
+        api.off('select', handleSelect);
+      }
+    };
+  }, [api]);
+
   return (
-    <section id="pcb-motor-intro" className="py-16 bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+    <section id="pcb-motor-intro" className="py-16 bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
 
       <div className="container mx-auto px-6 relative">
         <div className="max-w-7xl mx-auto">
@@ -113,24 +165,30 @@ export const PCBMotorSlider = () => {
             />
           </div>
 
-          <Carousel 
-            setApi={setApi} 
-            opts={{
-              align: "start",
-              loop: true
-            }} 
-            className="w-full"
-          >
-            <CarouselContent>
+          <div className="relative">
+            <Carousel 
+              setApi={setApi} 
+              opts={{
+                align: "start",
+                loop: true
+              }} 
+              className="w-full"
+            >
+              <CarouselContent className="h-full items-stretch">
               {slides.map((slide, index) => (
-                <CarouselItem key={index}>
-                  <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500">
+                <CarouselItem key={index} className="h-full">
+                  <Card 
+                    ref={(el) => {
+                      cardRefs.current[index] = el;
+                    }}
+                    className="h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500"
+                  >
                     {/* Shimmer effect - similar to PCB Motor Advantages but slightly different */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent shimmer" />
                     </div>
 
-                    <div className={`${slide.highlights.length === 0 ? 'flex flex-col items-center justify-center p-8 md:p-12' : 'grid md:grid-cols-2 gap-8 p-8 md:p-12 items-center'} relative`}>
+                    <div className={`${slide.highlights.length === 0 ? 'flex flex-col items-center justify-center p-8 md:p-12' : 'grid md:grid-cols-2 gap-8 p-8 md:p-12 items-stretch'} relative flex-1`}>
                       {slide.highlights.length === 0 ? (
                         // Top-bottom layout for comparison slide
                         <>
@@ -465,7 +523,8 @@ export const PCBMotorSlider = () => {
             >
               <ChevronRight strokeWidth={3} className="h-12 w-12 transition-colors text-[#2dc2b3]" />
             </Button>
-          </Carousel>
+            </Carousel>
+          </div>
 
           {/* Dots indicator with glow */}
           <div className="flex justify-center gap-2 mt-6">

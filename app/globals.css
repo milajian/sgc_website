@@ -126,6 +126,96 @@ All colors MUST be HSL.
   }
 }
 
+/* Section 边缘平滑过渡效果 - 排除 Hero 和 CompanyInfo section */
+@layer utilities {
+  /* 顶部边缘渐变过渡 */
+  .section-fade-top {
+    position: relative;
+  }
+  
+  .section-fade-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.7) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* 底部边缘渐变过渡 */
+  .section-fade-bottom {
+    position: relative;
+  }
+  
+  .section-fade-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      to top,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.7) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* 对于有渐变背景的 section，使用更柔和的过渡 */
+  .section-fade-top-gradient {
+    position: relative;
+  }
+  
+  .section-fade-top-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.5) 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .section-fade-bottom-gradient {
+    position: relative;
+  }
+  
+  .section-fade-bottom-gradient::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(
+      to top,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.5) 60%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
 @keyframes float-tech {
   0%, 100% {
     transform: translateY(0px) rotateY(0deg);

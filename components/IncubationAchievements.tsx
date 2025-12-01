@@ -65,7 +65,7 @@ export const IncubationAchievements = () => {
     autoPlayInterval: 4200,
     restoreDelay: 5000
   });
-  return <section id="incubation-achievements" className="py-16 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden">
+  return <section id="incubation-achievements" className="py-16 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       {/* Subtle circuit background pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{

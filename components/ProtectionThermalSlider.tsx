@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Shield, Layers, Box, Flame, Droplets, GitBra
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
+import { useRef, useEffect } from "react";
 interface ProtectionThermalSlide {
   title: string;
   subtitle: string;
@@ -96,7 +97,58 @@ export const ProtectionThermalSlider = () => {
     restoreDelay: 5000
   });
 
-  return <section id="protection-thermal" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const updateHeights = () => {
+      // 过滤掉null值，获取所有Card元素
+      const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (cards.length === 0) return;
+      
+      // 重置高度，让内容自然决定高度
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // 等待浏览器重新计算布局
+      requestAnimationFrame(() => {
+        // 计算最大高度
+        const maxHeight = Math.max(...cards.map(card => card.offsetHeight));
+        
+        // 统一设置高度
+        cards.forEach(card => {
+          card.style.height = `${maxHeight}px`;
+        });
+      });
+    };
+    
+    // 初始计算 - 延迟执行以确保所有卡片都已渲染
+    const timer = setTimeout(() => {
+      updateHeights();
+    }, 100);
+    
+    // 监听窗口大小变化
+    window.addEventListener('resize', updateHeights);
+    
+    // 监听carousel切换，重新计算高度
+    const handleSelect = () => {
+      setTimeout(updateHeights, 100);
+    };
+    
+    if (api) {
+      api.on('select', handleSelect);
+    }
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeights);
+      if (api) {
+        api.off('select', handleSelect);
+      }
+    };
+  }, [api]);
+
+  return <section id="protection-thermal" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
       
@@ -129,8 +181,8 @@ export const ProtectionThermalSlider = () => {
           <Carousel setApi={setApi} opts={{
           loop: true
         }} className="w-full">
-            <CarouselContent>
-              {slides.map((slide, index) => <CarouselItem key={index}>
+            <CarouselContent className="h-full items-stretch">
+              {slides.map((slide, index) => <CarouselItem key={index} className="h-full">
                   <motion.div initial={{
                 opacity: 0,
                 scale: 0.95
@@ -142,12 +194,17 @@ export const ProtectionThermalSlider = () => {
               }} transition={{
                 duration: 0.5,
                 delay: index * 0.1
-              }}>
-                    <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500 min-h-[420px] flex flex-col">
+              }} className="h-full">
+                    <Card 
+                      ref={(el) => {
+                        cardRefs.current[index] = el;
+                      }}
+                      className="h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500"
+                    >
                       {/* Shimmer Effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent shimmer" />
                       
-                      <div className="relative z-10 pt-6 pb-4 px-6 md:pt-8 md:pb-6 md:px-8 flex-1 flex flex-col">
+                      <div className="relative z-10 pt-6 pb-4 px-6 md:pt-8 md:pb-6 md:px-8 flex-1 flex flex-col justify-center">
                         {/* Top: Title and Subtitle */}
                         <motion.div initial={{
                       opacity: 0,
@@ -183,7 +240,7 @@ export const ProtectionThermalSlider = () => {
                     }} transition={{
                       duration: 0.6,
                       delay: 0.3
-                    }} className={`grid grid-cols-1 ${index === 0 ? 'md:grid-cols-3 gap-3' : 'md:grid-cols-3 gap-3'} flex-1 min-h-[400px] items-stretch`}>
+                    }} className={`grid grid-cols-1 ${index === 0 ? 'md:grid-cols-3 gap-3' : 'md:grid-cols-3 gap-3'} flex-1 items-stretch`}>
                           {slide.methods.map((method, methodIdx) => <div key={methodIdx} className="flex flex-col h-full">
                               {/* Method Card */}
                               <div className="relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex flex-col h-full">

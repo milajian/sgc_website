@@ -38,7 +38,7 @@ const processSteps = [
 
 export const PCBStatorProductionTech = () => {
   return (
-    <section id="pcb-stator-production-tech" className="py-16 bg-background relative overflow-hidden">
+    <section id="pcb-stator-production-tech" className="py-16 bg-background relative overflow-hidden section-fade-top section-fade-bottom">
       <style>{`
         @keyframes pulse-glow {
           0%, 100% {

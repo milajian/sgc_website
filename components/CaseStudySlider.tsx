@@ -32,7 +32,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "2.4mm" },
       { label: "成品尺寸", value: "∅103.75mm" },
     ],
-    image: getImagePath("/assets/水泵300.png"),
+    image: getImagePath("/assets/水泵300新2.png"),
   },
   {
     title: "水泵",
@@ -165,7 +165,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "5.1mm" },
       { label: "成品尺寸", value: "321mm*321mm" },
     ],
-    image: getImagePath("/assets/case-planar-motor-500w.png"),
+    image: getImagePath("/assets/平面电机.png"),
   },
 ];
 
@@ -176,7 +176,7 @@ export const CaseStudySlider = () => {
   });
 
   return (
-    <section id="case-study" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+    <section id="case-study" className="py-16 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
       
@@ -202,14 +202,14 @@ export const CaseStudySlider = () => {
 
         {/* Carousel */}
         <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
-          <CarouselContent>
+          <CarouselContent className="h-full items-stretch">
             {caseStudies.map((study, index) => (
-              <CarouselItem key={index}>
-                <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500">
+              <CarouselItem key={index} className="h-full">
+                <Card className="h-full flex flex-col border-2 border-primary/20 bg-gradient-to-br from-primary/8 via-accent/5 to-primary/8 backdrop-blur-sm overflow-hidden relative group hover:border-primary/35 transition-all duration-500">
                   {/* Shimmer Effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/8 to-transparent shimmer" />
                   
-                  <div className="grid md:grid-cols-[1fr,2fr] gap-8 p-6 md:p-8 relative z-10">
+                  <div className="grid md:grid-cols-[1fr,2fr] gap-8 p-6 md:p-8 relative z-10 flex-1 items-center">
                     {/* Left: Text Content */}
                     <div className="flex flex-col justify-center space-y-6">
                       <div>
@@ -291,7 +291,7 @@ export const CaseStudySlider = () => {
         </Carousel>
 
         {/* Navigation Controls */}
-        <div className="flex items-center justify-center gap-4 mt-6">
+        <div className="flex items-center justify-center gap-4 mt-1">
           <button
             onClick={scrollPrev}
             className="p-3 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/40 transition-all duration-300 group"

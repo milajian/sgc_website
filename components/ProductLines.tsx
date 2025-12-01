@@ -85,7 +85,7 @@ const productLines = [{
   applications: "医疗设备、精密泵浦、无人机云台、光学调节机构、智能锁与微型执行器等"
 }];
 export const ProductLines = () => {
-  return <section id="product-lines" className="py-16 bg-background">
+  return <section id="product-lines" className="py-16 bg-background section-fade-bottom">
       <div className="container mx-auto px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
