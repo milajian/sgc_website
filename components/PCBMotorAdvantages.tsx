@@ -134,7 +134,7 @@ export const PCBMotorAdvantages = () => {
   }, [api]);
 
   return (
-    <section id="pcb-motor-advantages" className="py-16 bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/10 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
+    <section id="pcb-motor-advantages" className="py-20 bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/10 relative overflow-hidden section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background circuit pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{

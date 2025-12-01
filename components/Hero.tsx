@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { getImagePath } from "@/lib/image-path";
 const heroMotorHeader = getImagePath("/assets/hero-motor-header.png");
 export const Hero = () => {
-  return <section className="relative pt-16 pb-14 flex items-center overflow-hidden bg-gradient-hero">
+  return <section className="relative pt-20 pb-20 flex items-center overflow-hidden bg-gradient-hero">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9nPjwvc3ZnPg==')] opacity-10 py-0 my-0" />
       
       <div className="container pl-6 pr-4 md:px-6 relative z-10 max-w-7xl mx-auto w-full">

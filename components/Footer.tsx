@@ -4,7 +4,7 @@ import { getImagePath } from "@/lib/image-path";
 const logo = getImagePath("/assets/logo.png");
 
 export const Footer = () => {
-  return <footer className="bg-secondary text-secondary-foreground py-12 border-t border-border">
+  return <footer className="bg-secondary text-secondary-foreground py-20 border-t border-border">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="col-span-2">

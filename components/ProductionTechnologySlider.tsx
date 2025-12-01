@@ -112,7 +112,7 @@ export const ProductionTechnologySlider = () => {
     };
   }, [api]);
 
-  return <section id="production-technology" className="py-16 bg-background relative overflow-hidden section-fade-top">
+  return <section id="production-technology" className="py-20 bg-background relative overflow-hidden section-fade-top">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Title */}
         <motion.div className="flex items-center justify-center gap-3 mb-12" initial={{

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { scrollToSection } from "@/lib/scroll";
 const logo = getImagePath("/assets/logo.png");
@@ -19,6 +19,20 @@ const logo = getImagePath("/assets/logo.png");
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
+    'product-intro': false,
+    'market-scenes': false,
+    'motor-advantages': false,
+    'test-design': false,
+    'production-tech': false,
+  });
+
+  const toggleMenu = useCallback((menuKey: string) => {
+    setExpandedMenus(prev => ({
+      ...prev,
+      [menuKey]: !prev[menuKey],
+    }));
+  }, []);
 
   const handleMobileNavClick = useCallback((sectionId: string) => {
     scrollToSection(sectionId);
@@ -274,109 +288,163 @@ export const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[200px] sm:w-[220px]">
                 <ScrollArea className="h-[calc(100vh-4rem)] mt-8">
-                  <div className="flex flex-col space-y-4 pb-8 pr-4">
+                  <div className="flex flex-col space-y-5 pb-8 pr-4">
                     <SheetTitle className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">导航菜单</SheetTitle>
                     
                     {/* 产品介绍 */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-foreground">产品介绍</h3>
+                    <div className="space-y-1.5">
                       <button
-                        onClick={() => handleMobileNavClick('incubation-achievements')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                        onClick={() => toggleMenu('product-intro')}
+                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        技术中心孵化成果
+                        <span>产品介绍</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['product-intro'] ? 'rotate-180' : ''}`} />
                       </button>
-                      <button
-                        onClick={() => handleMobileNavClick('pcb-motor-intro')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                      >
-                        PCB电机产品介绍
-                      </button>
+                      {expandedMenus['product-intro'] && (
+                        <div className="space-y-1 pl-2">
+                          <button
+                            onClick={() => handleMobileNavClick('incubation-achievements')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            技术中心孵化成果
+                          </button>
+                          <button
+                            onClick={() => handleMobileNavClick('pcb-motor-intro')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB电机产品介绍
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* 市场布局和场景 */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-foreground">市场布局和场景</h3>
+                    <div className="space-y-1.5">
                       <button
-                        onClick={() => handleMobileNavClick('product-lines')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                        onClick={() => toggleMenu('market-scenes')}
+                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        专精市场布局
+                        <span>市场布局和场景</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['market-scenes'] ? 'rotate-180' : ''}`} />
                       </button>
-                      <button
-                        onClick={() => handleMobileNavClick('application-scenes')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                      >
-                        应用场景
-                      </button>
+                      {expandedMenus['market-scenes'] && (
+                        <div className="space-y-1 pl-2">
+                          <button
+                            onClick={() => handleMobileNavClick('product-lines')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            专精市场布局
+                          </button>
+                          <button
+                            onClick={() => handleMobileNavClick('application-scenes')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            应用场景
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* 电机优势与案例分析 */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-foreground">电机优势与案例分析</h3>
+                    <div className="space-y-1.5">
                       <button
-                        onClick={() => handleMobileNavClick('pcb-motor-advantages')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                        onClick={() => toggleMenu('motor-advantages')}
+                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        PCB电机优势
+                        <span>电机优势与案例分析</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['motor-advantages'] ? 'rotate-180' : ''}`} />
                       </button>
-                      <button
-                        onClick={() => handleMobileNavClick('case-study')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                      >
-                        PCB电机案例分析
-                      </button>
+                      {expandedMenus['motor-advantages'] && (
+                        <div className="space-y-1 pl-2">
+                          <button
+                            onClick={() => handleMobileNavClick('pcb-motor-advantages')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB电机优势
+                          </button>
+                          <button
+                            onClick={() => handleMobileNavClick('case-study')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB电机案例分析
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* 产品历程 */}
-                    <button
-                      onClick={() => handleMobileNavClick('product-journey')}
-                      className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      产品历程
-                    </button>
+                    <div className="space-y-1.5">
+                      <h3 
+                        onClick={() => handleMobileNavClick('product-journey')}
+                        className="text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                      >
+                        产品历程
+                      </h3>
+                    </div>
 
                     {/* 产品测试与设计 */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-foreground">产品测试与设计</h3>
+                    <div className="space-y-1.5">
                       <button
-                        onClick={() => handleMobileNavClick('simulation-test')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                        onClick={() => toggleMenu('test-design')}
+                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        仿真测试
+                        <span>产品测试与设计</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['test-design'] ? 'rotate-180' : ''}`} />
                       </button>
-                      <button
-                        onClick={() => handleMobileNavClick('protection-thermal')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                      >
-                        防护与散热设计
-                      </button>
+                      {expandedMenus['test-design'] && (
+                        <div className="space-y-1 pl-2">
+                          <button
+                            onClick={() => handleMobileNavClick('simulation-test')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            仿真测试
+                          </button>
+                          <button
+                            onClick={() => handleMobileNavClick('protection-thermal')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            防护与散热设计
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* 生产技术与设备 */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-semibold text-foreground">生产技术与设备</h3>
+                    <div className="space-y-1.5">
                       <button
-                        onClick={() => handleMobileNavClick('pcb-stator-production-tech')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                        onClick={() => toggleMenu('production-tech')}
+                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        PCB定子生产技术
+                        <span>生产技术与设备</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['production-tech'] ? 'rotate-180' : ''}`} />
                       </button>
-                      <button
-                        onClick={() => handleMobileNavClick('production-technology')}
-                        className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                      >
-                        PCB定子生产设备
-                      </button>
+                      {expandedMenus['production-tech'] && (
+                        <div className="space-y-1 pl-2">
+                          <button
+                            onClick={() => handleMobileNavClick('pcb-stator-production-tech')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB定子生产技术
+                          </button>
+                          <button
+                            onClick={() => handleMobileNavClick('production-technology')}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB定子生产设备
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* 关于我们 */}
-                    <button
-                      onClick={() => handleMobileNavClick('company')}
-                      className="block w-full text-left px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                    >
-                      关于我们
-                    </button>
+                    <div className="space-y-1.5">
+                      <h3 
+                        onClick={() => handleMobileNavClick('company')}
+                        className="text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                      >
+                        关于我们
+                      </h3>
+                    </div>
 
                     {/* Mobile Actions */}
                     <div className="pt-4 border-t space-y-3">
