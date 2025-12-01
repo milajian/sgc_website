@@ -297,8 +297,8 @@ export const Header = () => {
                         onClick={() => toggleMenu('product-intro')}
                         className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        <span>产品介绍</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['product-intro'] ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left">产品介绍</span>
+                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['product-intro'] ? 'rotate-180' : ''}`} />
                       </button>
                       {expandedMenus['product-intro'] && (
                         <div className="space-y-1 pl-2">
@@ -324,8 +324,8 @@ export const Header = () => {
                         onClick={() => toggleMenu('market-scenes')}
                         className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        <span>市场布局和场景</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['market-scenes'] ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left">市场布局和场景</span>
+                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['market-scenes'] ? 'rotate-180' : ''}`} />
                       </button>
                       {expandedMenus['market-scenes'] && (
                         <div className="space-y-1 pl-2">
@@ -351,8 +351,8 @@ export const Header = () => {
                         onClick={() => toggleMenu('motor-advantages')}
                         className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        <span>电机优势与案例分析</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['motor-advantages'] ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left">电机优势与案例分析</span>
+                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['motor-advantages'] ? 'rotate-180' : ''}`} />
                       </button>
                       {expandedMenus['motor-advantages'] && (
                         <div className="space-y-1 pl-2">
@@ -388,8 +388,8 @@ export const Header = () => {
                         onClick={() => toggleMenu('test-design')}
                         className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        <span>产品测试与设计</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['test-design'] ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left">产品测试与设计</span>
+                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['test-design'] ? 'rotate-180' : ''}`} />
                       </button>
                       {expandedMenus['test-design'] && (
                         <div className="space-y-1 pl-2">
@@ -415,8 +415,8 @@ export const Header = () => {
                         onClick={() => toggleMenu('production-tech')}
                         className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
                       >
-                        <span>生产技术与设备</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['production-tech'] ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left">生产技术与设备</span>
+                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['production-tech'] ? 'rotate-180' : ''}`} />
                       </button>
                       {expandedMenus['production-tech'] && (
                         <div className="space-y-1 pl-2">
