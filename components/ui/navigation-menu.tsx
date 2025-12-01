@@ -13,6 +13,7 @@ const NavigationMenu = React.forwardRef<
   <NavigationMenuPrimitive.Root
     ref={ref}
     className={cn("relative z-10 flex max-w-max flex-1 items-center justify-center", className)}
+    suppressHydrationWarning
     {...props}
   >
     {children}
@@ -39,6 +40,7 @@ const NavigationMenuItem = React.forwardRef<
   <NavigationMenuPrimitive.Item
     ref={ref}
     className={cn("relative", className)}
+    suppressHydrationWarning
     {...props}
   />
 ));
@@ -55,6 +57,7 @@ const NavigationMenuTrigger = React.forwardRef<
   <NavigationMenuPrimitive.Trigger
     ref={ref}
     className={cn(navigationMenuTriggerStyle(), "group", className)}
+    suppressHydrationWarning
     {...props}
   >
     {children}{" "}

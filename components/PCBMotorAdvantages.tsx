@@ -204,50 +204,330 @@ export const PCBMotorAdvantages = () => {
                               transition={{ duration: 0.6, delay: 0.4 }}
                               className="flex items-center justify-center"
                             >
-                              <div className="relative w-full aspect-square max-w-md">
-                                {/* Glow effect */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
-                                
-                                {/* Image or Placeholder */}
-                                <div className="relative w-full h-full rounded-3xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-primary/50 transition-all duration-500 group-hover:scale-105 overflow-hidden">
-                                  {index === 0 ? (
-                                    <img 
-                                      src={getImagePath("/assets/lightweight-comparison.png")} 
-                                      alt="轻量化对比图" 
-                                      className="w-full h-full object-contain"
-                                      loading="lazy"
-                                    />
-                                  ) : index === 1 ? (
-                                    <img 
-                                      src={getImagePath("/assets/power-density-comparison.png")} 
-                                      alt="功率密度对比图" 
-                                      className="w-full h-full object-contain"
-                                      loading="lazy"
-                                    />
-                                  ) : index === 2 ? (
-                                    <img 
-                                      src={getImagePath("/assets/waterproof-demonstration.png")} 
-                                      alt="PCB定子防水性展示" 
-                                      className="w-full h-full object-contain"
-                                      loading="lazy"
-                                    />
-                                  ) : index === 3 ? (
-                                    <img 
-                                      src={getImagePath("/assets/manufacturing-cost.png")} 
-                                      alt="Yasa自动化生产线与传统电机制造对比" 
-                                      className="w-full h-full object-contain"
-                                      loading="lazy"
-                                    />
-                                  ) : (
-                                    <div className="text-center space-y-4">
-                                      <Icon className="w-24 h-24 mx-auto text-primary/40 group-hover:text-primary/60 transition-colors" />
-                                      <p className="text-sm text-muted-foreground italic leading-relaxed">
-                                        {advantage.imagePlaceholder}
-                                      </p>
+                              {index === 1 ? (
+                                /* 功率密度高 - 特殊布局 */
+                                <div className="relative w-full max-w-md flex flex-col items-center space-y-6">
+                                  {/* 顶部：组合图片 */}
+                                  <div className="relative w-full">
+                                    <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
+                                      <img 
+                                        src={getImagePath("/assets/gonglvmidu.png")} 
+                                        alt="功率密度对比图" 
+                                        className="w-full h-auto object-contain"
+                                        loading="lazy"
+                                      />
                                     </div>
-                                  )}
+                                  </div>
+
+                                  {/* 中间：三个文字标签 */}
+                                  <div className="flex justify-around w-full gap-2">
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      whileInView={{ opacity: 1, y: 0 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 0.5 }}
+                                      className="text-center flex-1"
+                                    >
+                                      <p className="text-sm md:text-base font-medium text-foreground">圆线横截</p>
+                                    </motion.div>
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      whileInView={{ opacity: 1, y: 0 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 0.6 }}
+                                      className="text-center flex-1"
+                                    >
+                                      <p className="text-sm md:text-base font-medium text-foreground">扁线横截</p>
+                                    </motion.div>
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      whileInView={{ opacity: 1, y: 0 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 0.7 }}
+                                      className="text-center flex-1"
+                                    >
+                                      <p className="text-sm md:text-base font-medium text-foreground">PCB定子槽横截面</p>
+                                    </motion.div>
+                                  </div>
+
+                                  {/* 底部：铜满率对比 */}
+                                  <div className="relative flex items-center justify-center gap-4 md:gap-6 lg:gap-8 w-full py-6 group/copper-rate">
+                                    {/* SVG 圆弧线容器 - 使用绝对定位覆盖整个区域 */}
+                                    <svg 
+                                      className="absolute top-0 left-0 w-full h-full pointer-events-none transition-opacity duration-300 group-hover/copper-rate:opacity-100" 
+                                      style={{ height: 'calc(100% + 60px)', top: '-30px' }}
+                                      viewBox="0 0 100 100"
+                                      preserveAspectRatio="none"
+                                    >
+                                      <defs>
+                                        {/* 线条渐变定义 */}
+                                        <linearGradient id="lineGradientLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                                          <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="0.3" />
+                                          <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.6" />
+                                          <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.8" />
+                                        </linearGradient>
+                                        <linearGradient id="lineGradientRight" x1="100%" y1="0%" x2="0%" y2="0%">
+                                          <stop offset="0%" stopColor="hsl(var(--accent))" stopOpacity="0.3" />
+                                          <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.6" />
+                                          <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.8" />
+                                        </linearGradient>
+                                        {/* 线条阴影滤镜 */}
+                                        <filter id="lineGlow">
+                                          <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                                          <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                          </feMerge>
+                                        </filter>
+                                      </defs>
+                                      
+                                      {/* 左侧上方线 - 从圆圈左侧偏上起笔，向左上方延伸 */}
+                                      <path
+                                        d="M 42 45 Q 35 35, 12 25"
+                                        stroke="url(#lineGradientLeft)"
+                                        strokeWidth="1.5"
+                                        fill="none"
+                                        strokeOpacity="0.6"
+                                        strokeLinecap="round"
+                                        filter="url(#lineGlow)"
+                                        className="transition-all duration-300 group-hover/copper-rate:stroke-opacity-100"
+                                      />
+                                      {/* 左侧下方线 - 从圆圈左侧偏下起笔，向左下方延伸 */}
+                                      <path
+                                        d="M 42 55 Q 35 65, 12 75"
+                                        stroke="url(#lineGradientLeft)"
+                                        strokeWidth="1.5"
+                                        fill="none"
+                                        strokeOpacity="0.6"
+                                        strokeLinecap="round"
+                                        filter="url(#lineGlow)"
+                                        className="transition-all duration-300 group-hover/copper-rate:stroke-opacity-100"
+                                      />
+                                      {/* 右侧上方线 - 从圆圈右侧偏上起笔，向右上方延伸（对称） */}
+                                      <path
+                                        d="M 58 45 Q 65 35, 88 25"
+                                        stroke="url(#lineGradientRight)"
+                                        strokeWidth="1.5"
+                                        fill="none"
+                                        strokeOpacity="0.6"
+                                        strokeLinecap="round"
+                                        filter="url(#lineGlow)"
+                                        className="transition-all duration-300 group-hover/copper-rate:stroke-opacity-100"
+                                      />
+                                      {/* 右侧下方线 - 从圆圈右侧偏下起笔，向右下方延伸（对称） */}
+                                      <path
+                                        d="M 58 55 Q 65 65, 88 75"
+                                        stroke="url(#lineGradientRight)"
+                                        strokeWidth="1.5"
+                                        fill="none"
+                                        strokeOpacity="0.6"
+                                        strokeLinecap="round"
+                                        filter="url(#lineGlow)"
+                                        className="transition-all duration-300 group-hover/copper-rate:stroke-opacity-100"
+                                      />
+                                    </svg>
+
+                                    {/* 左侧：圆线百分比 */}
+                                    <motion.div
+                                      initial={{ opacity: 0, x: -20 }}
+                                      whileInView={{ opacity: 1, x: 0 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 0.8 }}
+                                      className="text-center relative z-10 group/item-left"
+                                    >
+                                      <p className="text-sm md:text-base font-medium text-foreground mb-1 group-hover/item-left:text-primary transition-colors">圆线</p>
+                                      <p className="text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent group-hover/item-left:scale-105 transition-transform duration-300">30-40%</p>
+                                    </motion.div>
+
+                                    {/* 中间：铜满率圆圈 */}
+                                    <motion.div
+                                      initial={{ opacity: 0, scale: 0.9 }}
+                                      whileInView={{ opacity: 1, scale: 1 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 0.9 }}
+                                      className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 relative z-10 transition-all duration-300 hover:scale-105"
+                                    >
+                                      <p className="text-sm md:text-base lg:text-lg font-bold text-primary-foreground text-center">铜满率</p>
+                                    </motion.div>
+
+                                    {/* 右侧：扁线百分比 */}
+                                    <motion.div
+                                      initial={{ opacity: 0, x: 20 }}
+                                      whileInView={{ opacity: 1, x: 0 }}
+                                      viewport={{ once: true }}
+                                      transition={{ duration: 0.4, delay: 1.0 }}
+                                      className="text-center relative z-10 group/item-right"
+                                    >
+                                      <p className="text-sm md:text-base font-medium text-foreground mb-1 group-hover/item-right:text-primary transition-colors">扁线</p>
+                                      <p className="text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent group-hover/item-right:scale-105 transition-transform duration-300">60%</p>
+                                    </motion.div>
+                                  </div>
                                 </div>
-                              </div>
+                              ) : (
+                                <div className="relative w-full aspect-square max-w-md">
+                                  {/* Glow effect */}
+                                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-3xl blur-3xl group-hover:scale-110 transition-transform duration-700" />
+                                  
+                                  {/* Image or Placeholder */}
+                                  <div className="relative w-full h-full rounded-3xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-primary/50 transition-all duration-500 group-hover:scale-105 overflow-hidden">
+                                    {index === 0 ? (
+                                      /* 轻量化 - 两个图片左右布局 */
+                                      <div className="relative w-full max-w-md flex flex-row items-stretch gap-4 h-full">
+                                        {/* 第一个图片：径向电机 */}
+                                        <div className="relative flex-1 flex flex-col items-center justify-between">
+                                          {/* 电机图片 */}
+                                          <div className="relative w-full flex-1 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden flex items-center justify-center min-h-0 p-4">
+                                            <img 
+                                              src={getImagePath("/assets/qinglianghua1.png")} 
+                                              alt="径向电机" 
+                                              className="w-full h-full object-contain"
+                                              loading="lazy"
+                                            />
+                                          </div>
+                                          
+                                          {/* 标题横幅 */}
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.5 }}
+                                            className="w-full mt-3"
+                                          >
+                                            <div className="bg-accent rounded-lg py-2 px-4">
+                                              <p className="text-xs md:text-sm font-medium text-accent-foreground text-center">径向电机</p>
+                                            </div>
+                                          </motion.div>
+                                          
+                                          {/* 规格信息 */}
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.6 }}
+                                            className="w-full mt-3 space-y-2"
+                                          >
+                                            {/* 轴向尺寸 */}
+                                            <div className="flex items-center justify-between border-b border-border/50 pb-1">
+                                              <span className="text-xs md:text-sm text-muted-foreground">轴向尺寸</span>
+                                              <span className="text-xs md:text-sm font-medium text-foreground">200mm</span>
+                                            </div>
+                                            {/* 重量 */}
+                                            <div className="flex items-center justify-between border-b border-border/50 pb-1">
+                                              <span className="text-xs md:text-sm text-muted-foreground">重量</span>
+                                              <span className="text-xs md:text-sm font-medium text-foreground">20kg</span>
+                                            </div>
+                                          </motion.div>
+                                        </div>
+
+                                        {/* 第二个图片：PCB电机 */}
+                                        <div className="relative flex-1 flex flex-col items-center justify-between">
+                                          {/* 电机图片 */}
+                                          <div className="relative w-full flex-1 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden flex items-center justify-center min-h-0 p-4">
+                                            <img 
+                                              src={getImagePath("/assets/qinglianghua2.png")} 
+                                              alt="PCB电机" 
+                                              className="w-full h-full object-contain"
+                                              loading="lazy"
+                                            />
+                                          </div>
+                                          
+                                          {/* 标题横幅 */}
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.7 }}
+                                            className="w-full mt-3"
+                                          >
+                                            <div className="bg-accent rounded-lg py-2 px-4">
+                                              <p className="text-xs md:text-sm font-medium text-accent-foreground text-center">PCB电机</p>
+                                            </div>
+                                          </motion.div>
+                                          
+                                          {/* 规格信息 */}
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.8 }}
+                                            className="w-full mt-3 space-y-2"
+                                          >
+                                            {/* 轴向尺寸 */}
+                                            <div className="flex items-center justify-between border-b border-border/50 pb-1">
+                                              <span className="text-xs md:text-sm text-muted-foreground">轴向尺寸</span>
+                                              <span className="text-xs md:text-sm font-medium text-foreground">87.5mm</span>
+                                            </div>
+                                            {/* 重量 */}
+                                            <div className="flex items-center justify-between border-b border-border/50 pb-1">
+                                              <span className="text-xs md:text-sm text-muted-foreground">重量</span>
+                                              <span className="text-xs md:text-sm font-medium text-foreground">11kg</span>
+                                            </div>
+                                          </motion.div>
+                                        </div>
+                                      </div>
+                                    ) : index === 2 ? (
+                                      <img 
+                                        src={getImagePath("/assets/waterproof-demonstration.png")} 
+                                        alt="PCB定子防水性展示" 
+                                        className="w-full h-full object-contain"
+                                        loading="lazy"
+                                      />
+                                    ) : index === 3 ? (
+                                      /* 加工成本低 - 两个图片左右布局 */
+                                      <div className="relative w-full max-w-md flex flex-row items-start gap-4">
+                                        {/* 第一个图片：Yasa */}
+                                        <div className="relative flex-1 flex flex-col items-center">
+                                          <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
+                                            <img 
+                                              src={getImagePath("/assets/yasa.png")} 
+                                              alt="Yasa自动化生产线" 
+                                              className="w-full h-auto object-contain"
+                                              loading="lazy"
+                                            />
+                                          </div>
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.5 }}
+                                            className="text-center mt-3"
+                                          >
+                                            <p className="text-xs md:text-sm font-medium text-foreground">Yasa 几亿美金自动定子线</p>
+                                          </motion.div>
+                                        </div>
+
+                                        {/* 第二个图片：轴向电机铁芯压铸工艺 */}
+                                        <div className="relative flex-1 flex flex-col items-center">
+                                          <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
+                                            <img 
+                                              src={getImagePath("/assets/zhouxiang.png")} 
+                                              alt="轴向电机铁芯压铸工艺" 
+                                              className="w-full h-auto object-contain"
+                                              loading="lazy"
+                                            />
+                                          </div>
+                                          <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.4, delay: 0.6 }}
+                                            className="text-center mt-3"
+                                          >
+                                            <p className="text-xs md:text-sm font-medium text-foreground">和轴向电机铁芯压铸工艺难</p>
+                                          </motion.div>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="text-center space-y-4">
+                                        <Icon className="w-24 h-24 mx-auto text-primary/40 group-hover:text-primary/60 transition-colors" />
+                                        <p className="text-sm text-muted-foreground italic leading-relaxed">
+                                          {advantage.imagePlaceholder}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                             </motion.div>
                           </div>
                         </Card>

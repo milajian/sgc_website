@@ -56,18 +56,37 @@ export const Header = () => {
           
           {/* Navigation Menu - Desktop */}
           <div className="hidden lg:flex items-center">
-            <NavigationMenu aria-label="主导航菜单">
+            <NavigationMenu aria-label="主导航菜单" id="main-navigation-menu">
               <NavigationMenuList className="gap-0 lg:gap-0.5 xl:gap-1">
                 {/* 产品介绍 */}
                 <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <button
-                      onClick={() => scrollToSection('pcb-motor-intro')}
-                      className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4"
-                    >
-                      产品介绍
-                    </button>
-                  </NavigationMenuLink>
+                  <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
+                    产品介绍
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl">
+                    <ul className="w-[220px] p-2">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <button
+                            onClick={() => scrollToSection('incubation-achievements')}
+                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            技术中心孵化成果
+                          </button>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <button
+                            onClick={() => scrollToSection('pcb-motor-intro')}
+                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            PCB电机产品介绍
+                          </button>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
 
                 {/* 市场布局和场景 */}
@@ -226,7 +245,20 @@ export const Header = () => {
               className="hidden sm:flex shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-accent hover:shadow-primary/30 transition-all duration-300 text-xs lg:text-sm px-2 lg:px-3 xl:px-4" 
               asChild
             >
-              <a href="/SGCircuits.pdf" download="SGCircuits.pdf">
+              <a 
+                href="/sgc_website/SGCircuits.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // 使用window.open强制在新标签页打开
+                  const newWindow = window.open('/sgc_website/SGCircuits.pdf', '_blank', 'noopener,noreferrer');
+                  // 如果弹窗被阻止，fallback到默认行为
+                  if (!newWindow) {
+                    window.location.href = '/sgc_website/SGCircuits.pdf';
+                  }
+                }}
+              >
                 了解更多
               </a>
             </Button>
@@ -244,12 +276,21 @@ export const Header = () => {
                   <SheetTitle className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">导航菜单</SheetTitle>
                   
                   {/* 产品介绍 */}
-                  <button
-                    onClick={() => handleMobileNavClick('pcb-motor-intro')}
-                    className="text-sm font-semibold text-foreground hover:text-primary transition-colors text-left"
-                  >
-                    产品介绍
-                  </button>
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-semibold text-foreground">产品介绍</h3>
+                    <button
+                      onClick={() => handleMobileNavClick('incubation-achievements')}
+                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                    >
+                      技术中心孵化成果
+                    </button>
+                    <button
+                      onClick={() => handleMobileNavClick('pcb-motor-intro')}
+                      className="block w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                    >
+                      PCB电机产品介绍
+                    </button>
+                  </div>
 
                   {/* 市场布局和场景 */}
                   <div className="space-y-2">
@@ -343,7 +384,20 @@ export const Header = () => {
                       className="w-full shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-accent hover:shadow-primary/30 transition-all duration-300" 
                       asChild
                     >
-                      <a href="/SGCircuits.pdf" download="SGCircuits.pdf">
+                      <a 
+                        href="/sgc_website/SGCircuits.pdf" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // 使用window.open强制在新标签页打开
+                          const newWindow = window.open('/sgc_website/SGCircuits.pdf', '_blank', 'noopener,noreferrer');
+                          // 如果弹窗被阻止，fallback到默认行为
+                          if (!newWindow) {
+                            window.location.href = '/sgc_website/SGCircuits.pdf';
+                          }
+                        }}
+                      >
                         了解更多
                       </a>
                     </Button>

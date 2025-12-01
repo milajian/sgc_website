@@ -32,7 +32,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "2.4mm" },
       { label: "成品尺寸", value: "∅103.75mm" },
     ],
-    image: getImagePath("/assets/case-water-pump-300w.png"),
+    image: getImagePath("/assets/水泵300.png"),
   },
   {
     title: "水泵",
@@ -48,7 +48,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "6.9mm" },
       { label: "成品尺寸", value: "∅87.89*89mm" },
     ],
-    image: getImagePath("/assets/case-water-pump-400w.png"),
+    image: getImagePath("/assets/水泵4001.png"),
   },
   {
     title: "风机",
@@ -63,7 +63,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "3.8mm" },
       { label: "成品尺寸", value: "∅154.5mm" },
     ],
-    image: getImagePath("/assets/case-fan-400w.png"),
+    image: getImagePath("/assets/风机1.png"),
   },
   {
     title: "大型服务器风机",
@@ -78,7 +78,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "6.5mm" },
       { label: "成品尺寸", value: "∅400mm" },
     ],
-    image: getImagePath("/assets/case-server-fan-6000w.png"),
+    image: getImagePath("/assets/大型风机.png"),
   },
   {
     title: "发电机",
@@ -93,7 +93,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "7.9mm" },
       { label: "成品尺寸", value: "∅250mm" },
     ],
-    image: getImagePath("/assets/case-generator-500w.png"),
+    image: getImagePath("/assets/发电机.png"),
   },
   {
     title: "机器人关节电机",
@@ -108,7 +108,7 @@ const caseStudies: CaseStudy[] = [
       { label: "成品板厚", value: "5.7mm" },
       { label: "成品尺寸", value: "∅68.5mm" },
     ],
-    image: getImagePath("/assets/case-robot-joint-200w.png"),
+    image: getImagePath("/assets/机器人.png"),
   },
   {
     title: "机器人指关节电机",
@@ -213,26 +213,58 @@ export const CaseStudySlider = () => {
                     {/* Left: Text Content */}
                     <div className="flex flex-col justify-center space-y-6">
                       <div>
-                        <h3 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-pre-line">
+                        <h3 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent whitespace-pre-line">
                           {study.title}
                         </h3>
-                        <p className="text-xl text-muted-foreground font-semibold">
+                        <p className="text-2xl md:text-3xl text-accent font-bold">
                           {study.application}
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        {study.specs.map((spec, specIndex) => (
-                          <div key={specIndex} className="space-y-1">
-                            <p className="text-sm text-muted-foreground">{spec.label}</p>
-                            <p className="text-base font-semibold text-foreground">{spec.value}</p>
-                          </div>
-                        ))}
+                      {/* 规格参数表格 */}
+                      <div className="rounded-lg border border-primary/20 overflow-hidden bg-background/50 backdrop-blur-sm">
+                        <table className="w-full text-sm">
+                          <tbody>
+                            {Array.from({ length: Math.ceil(study.specs.length / 2) }).map((_, rowIndex) => {
+                              const leftSpec = study.specs[rowIndex * 2];
+                              const rightSpec = study.specs[rowIndex * 2 + 1];
+                              const isEven = rowIndex % 2 === 0;
+                              return (
+                                <tr 
+                                  key={rowIndex} 
+                                  className={`
+                                    border-b border-primary/10 last:border-b-0
+                                    transition-colors duration-200
+                                    ${isEven ? 'bg-primary/5' : 'bg-transparent'}
+                                    hover:bg-accent/10
+                                  `}
+                                >
+                                  {/* 左列 - 标签 */}
+                                  <td className="py-2.5 px-3 md:px-4 text-muted-foreground text-xs font-medium whitespace-nowrap w-[20%]">
+                                    {leftSpec?.label}
+                                  </td>
+                                  {/* 左列 - 值 */}
+                                  <td className="py-2.5 px-3 md:px-4 font-semibold text-primary text-sm md:text-base border-r border-primary/10 w-[30%]">
+                                    {leftSpec?.value}
+                                  </td>
+                                  {/* 右列 - 标签 */}
+                                  <td className="py-2.5 px-3 md:px-4 text-muted-foreground text-xs font-medium whitespace-nowrap w-[20%]">
+                                    {rightSpec?.label}
+                                  </td>
+                                  {/* 右列 - 值 */}
+                                  <td className="py-2.5 px-3 md:px-4 font-semibold text-primary text-sm md:text-base w-[30%]">
+                                    {rightSpec?.value}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
 
                     {/* Right: Image */}
-                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
                       {study.image ? (
                         <img 
                           src={study.image} 

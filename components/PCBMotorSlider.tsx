@@ -1,7 +1,7 @@
 'use client'
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { ChevronLeft, ChevronRight, Zap, Battery, Cpu, TrendingDown, CircuitBoard } from "lucide-react";
+import { ChevronLeft, ChevronRight, Zap, Battery, Cpu, CircuitBoard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
@@ -39,7 +39,8 @@ const slides = [
     ],
     image: getImagePath("/assets/jingxiangzhouxiang.png"),
     icon: Zap,
-    gradient: "from-teal-500/15 via-cyan-500/15 to-blue-500/15"
+    gradient: "from-teal-500/15 via-cyan-500/15 to-blue-500/15",
+    isComparisonLayout: true
   },
   {
     title: "PCB电机\n两种结构形式",
@@ -66,14 +67,6 @@ const slides = [
       rightTitle: "无铁芯",
       rightDesc: "无需铁芯，重量/成本大幅度减少"
     }
-  },
-  {
-    title: "与传统电机对比",
-    subtitle: "",
-    highlights: [],
-    image: getImagePath("/assets/pcb-motor-core.png"),
-    icon: TrendingDown,
-    gradient: "from-cyan-500/20 via-blue-500/20 to-teal-500/20"
   }
 ];
 
@@ -370,6 +363,54 @@ export const PCBMotorSlider = () => {
                                   <p className="text-sm text-muted-foreground">
                                     {slide.textLabels.rightDesc}
                                   </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Circuit corner accents */}
+                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-lg" />
+                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-lg" />
+                          </div>
+                        ) : slide.isComparisonLayout ? (
+                          // Comparison layout for "径向磁通 vs 轴向磁通"
+                          <div className={`relative w-full max-w-xl`}>
+                            {/* Glowing backdrop */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 rounded-2xl blur-3xl animate-pulse" />
+                            
+                            {/* Image container */}
+                            <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 pt-8 pb-4 px-4">
+                              <img 
+                                src={slide.image} 
+                                alt={slide.title}
+                                className="w-full h-auto object-contain"
+                              />
+                              
+                              {/* Labels overlay - positioned for both left and right halves of comparison image */}
+                              <div className="absolute inset-0 pointer-events-none">
+                                {/* Left side labels - 径向磁通电机 */}
+                                {/* Top banner - 径向磁通电机 (centered horizontally in left half, at very top) */}
+                                <div className="absolute top-[2%] left-[12%] md:top-[1.5%] md:left-[10%]">
+                                  <div className="bg-primary rounded-lg py-1.5 px-3 md:py-2 md:px-4 shadow-lg">
+                                    <p className="text-xs md:text-sm font-medium text-primary-foreground whitespace-nowrap">径向磁通电机</p>
+                                  </div>
+                                </div>
+                                
+                                {/* Bottom label - 线圈定子实物 (centered horizontally in left half, below stator coil image) */}
+                                <div className="absolute bottom-[6%] left-[25%] -translate-x-1/2 md:bottom-[5%] md:left-[25%] md:-translate-x-1/2">
+                                  <p className="text-xs md:text-sm font-medium text-accent text-center whitespace-nowrap">线圈定子实物</p>
+                                </div>
+                                
+                                {/* Right side labels - 轴向磁通电机 */}
+                                {/* Top banner - 轴向磁通电机 (centered horizontally in right half, at very top) */}
+                                <div className="absolute top-[2%] right-[12%] md:top-[1.5%] md:right-[10%]">
+                                  <div className="bg-primary rounded-lg py-1.5 px-3 md:py-2 md:px-4 shadow-lg">
+                                    <p className="text-xs md:text-sm font-medium text-primary-foreground whitespace-nowrap">轴向磁通电机</p>
+                                  </div>
+                                </div>
+                                
+                                {/* Bottom label - 线圈定子实物 (centered horizontally in right half, below stator coil image) */}
+                                <div className="absolute bottom-[6%] right-[25%] translate-x-1/2 md:bottom-[5%] md:right-[25%] md:translate-x-1/2">
+                                  <p className="text-xs md:text-sm font-medium text-accent text-center whitespace-nowrap">线圈定子实物</p>
                                 </div>
                               </div>
                             </div>
