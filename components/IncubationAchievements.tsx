@@ -18,49 +18,14 @@ const achievements = [{
   highlights: ["适用于工业电机（风机、水泵等）", "机器人（仿生机器人、机械臂）", "无人机，发电机", "新能源汽车驱动", "交通运输与船舶应用"],
   image: getImagePath("/assets/PCB solution.png")
 }, {
-  name: "埋嵌工艺产品",
-  description: "",
-  highlights: [],
-  image: getImagePath("/assets/incubation-embedded-process.png")
-}, {
   name: "设计制造与散热工艺",
   description: "全流程技术支持与热管理方案",
   highlights: ["更小尺寸与重量", "更少铜耗与碳排放", "降低功耗", "有/无磁芯设计", "加工成本降低"],
   image: getImagePath("/assets/design1.png")
 }];
 
-// 分离"埋嵌工艺产品"到独立变量
-const embeddedProcessProduct = achievements[2];
-// Carousel 中只包含其他3个卡片
-const carouselAchievements = achievements.filter((_, index) => index !== 2);
-
-// 埋嵌工艺产品图片和文字数据
-const embeddedProcessItems = [
-  {
-    image: getImagePath("/assets/maiqian1.png"),
-    label: "埋嵌SiC功率芯片"
-  },
-  {
-    image: getImagePath("/assets/maiqian2.png"),
-    label: "埋嵌分立式电容"
-  },
-  {
-    image: getImagePath("/assets/maiqian3.png"),
-    label: "埋嵌分立式电阻"
-  },
-  {
-    image: getImagePath("/assets/maiqian4.png"),
-    label: "散热铜排"
-  },
-  {
-    image: getImagePath("/assets/maiqian5.png"),
-    label: "埋嵌薄膜式电容"
-  },
-  {
-    image: getImagePath("/assets/maiqian6.png"),
-    label: "埋嵌薄膜式电阻"
-  }
-];
+// Carousel 中包含所有3个卡片
+const carouselAchievements = achievements;
 export const IncubationAchievements = () => {
   const { api, setApi, current, scrollPrev, scrollNext, scrollTo } = useCarouselAutoPlay({
     autoPlayInterval: 4200,
@@ -398,69 +363,6 @@ export const IncubationAchievements = () => {
             ))}
           </div>
 
-          {/* 埋嵌工艺产品 - 独立展示 */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mt-12 flex flex-col items-center"
-          >
-            {/* 标题在上 */}
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center mb-6"
-            >
-              <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
-                {embeddedProcessProduct.name}
-              </h3>
-            </motion.div>
-
-            {/* 图片网格布局 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-0 w-full max-w-5xl items-stretch">
-              {embeddedProcessItems.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex flex-col items-center group h-full"
-                >
-                  {/* 图片容器 */}
-                  <div className="relative w-full h-40 md:h-48 mb-1 flex-shrink-0">
-                    {/* Glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl blur-xl group-hover:scale-110 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
-                    
-                    {/* Image container */}
-                    <div className="relative w-full h-full rounded-2xl border border-accent/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-0 group-hover:border-accent/50 transition-all duration-300 group-hover:scale-105 overflow-hidden shadow-md shadow-accent/10">
-                      <img 
-                        src={item.image} 
-                        alt={item.label} 
-                        className="w-full h-full object-contain"
-                        style={{ imageRendering: 'crisp-edges' }}
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 文字标签 */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
-                    className="text-sm md:text-base font-medium text-foreground text-center h-12 md:h-14 flex items-center justify-center"
-                  >
-                    {item.label}
-                  </motion.p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
 
