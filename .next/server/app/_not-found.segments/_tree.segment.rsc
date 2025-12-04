@@ -1,0 +1,2 @@
+:HL["/sgc_website/_next/static/chunks/1c54e036cd64acd4.css","style"]
+0:{"buildId":"Al0SJDW01LOK2IRlGULw6","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"/_not-found","paramType":null,"paramKey":"/_not-found","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

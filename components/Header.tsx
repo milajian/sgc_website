@@ -91,7 +91,7 @@ export const Header = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <button
-                            onClick={() => {}}
+                            onClick={() => router.push('/tech-center/history')}
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             历史发展
@@ -101,7 +101,7 @@ export const Header = () => {
                       <li>
                         <NavigationMenuLink asChild>
                           <button
-                            onClick={() => {}}
+                            onClick={() => router.push('/tech-center/research-structure')}
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             研发架构
@@ -153,12 +153,12 @@ export const Header = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <button
-                            onClick={() => {}}
+                          <Link
+                            href="/tech-center/expert-list"
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             专家列表
-                          </button>
+                          </Link>
                         </NavigationMenuLink>
                       </li>
                     </ul>
@@ -382,6 +382,7 @@ export const Header = () => {
                         <div className="space-y-1 pl-2">
                           <button
                             onClick={() => {
+                              router.push('/tech-center/history');
                               setMobileMenuOpen(false);
                             }}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
@@ -390,6 +391,7 @@ export const Header = () => {
                           </button>
                           <button
                             onClick={() => {
+                              router.push('/tech-center/research-structure');
                               setMobileMenuOpen(false);
                             }}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
@@ -437,6 +439,7 @@ export const Header = () => {
                           <button
                             onClick={() => {
                               setMobileMenuOpen(false);
+                              router.push('/tech-center/expert-list');
                             }}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
