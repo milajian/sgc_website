@@ -48,43 +48,6 @@ export default function PCBEmbeddedPage() {
 
           <div className="container mx-auto px-6 relative">
             <div className="max-w-7xl mx-auto">
-              {/* Page Title */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-12"
-              >
-                <motion.div 
-                  className="flex items-center justify-center gap-3 mb-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Layers className="w-8 h-8 text-primary" />
-                  <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    PCB 埋嵌
-                  </h1>
-                </motion.div>
-                <motion.p 
-                  className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  先进的PCB埋嵌工艺技术，实现更高集成度和性能
-                </motion.p>
-                <motion.div 
-                  className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: 96 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                />
-              </motion.div>
-
               {/* 埋嵌工艺产品 - 优化展示 */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -94,18 +57,39 @@ export default function PCBEmbeddedPage() {
                 className="mb-8"
               >
                 <motion.div 
-                  initial={{ opacity: 0, y: -20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="text-center mb-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center mb-12"
                 >
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-2">
-                    埋嵌工艺产品
-                  </h2>
-                  <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                  <motion.div 
+                    className="flex items-center justify-center gap-3 mb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Layers className="w-8 h-8 text-primary" />
+                    <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      埋嵌工艺产品
+                    </h1>
+                  </motion.div>
+                  <motion.p 
+                    className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
                     采用先进的PCB埋嵌技术，将电子元件直接嵌入PCB板内，实现更高的集成度和可靠性
-                  </p>
+                  </motion.p>
+                  <motion.div 
+                    className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: 96 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  />
                 </motion.div>
 
                 {/* 产品网格布局 - 使用Card组件优化 */}

@@ -60,12 +60,21 @@ export const ProductJourney = () => {
             opacity: 1,
             y: 0
           }} viewport={{
-            once: true
+            once: true,
+            margin: "-50px"
           }} transition={{
             duration: 0.6
           }}>
               <Map className="w-8 h-8 text-primary" />
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h2 
+                className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+                style={{
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  backgroundImage: 'linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)))'
+                }}
+              >
                 PCB电机产品历程
               </h2>
             </motion.div>
