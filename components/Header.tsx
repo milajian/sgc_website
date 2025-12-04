@@ -27,9 +27,11 @@ export const Header = () => {
     'pcb-coil': false,
     'product-innovation': false,
     'product-lines': false,
+    'axial-motor-stator': false,
   });
   const [productInnovationHover, setProductInnovationHover] = useState(false);
   const [productLinesHover, setProductLinesHover] = useState(false);
+  const [axialMotorStatorHover, setAxialMotorStatorHover] = useState(false);
 
   const toggleMenu = useCallback((menuKey: string) => {
     setExpandedMenus(prev => ({
@@ -84,7 +86,7 @@ export const Header = () => {
                   <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
                     技术中心
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl">
+                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg shadow-xl" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
                     <ul className="w-[220px] p-2">
                       <li>
                         <NavigationMenuLink asChild>
@@ -118,7 +120,7 @@ export const Header = () => {
                           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${productInnovationHover ? 'rotate-180' : ''}`} />
                         </div>
                         {productInnovationHover && (
-                          <ul className="absolute left-full top-0 ml-1 w-[220px] bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl rounded-md p-2 z-50">
+                          <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
                             <li>
                               <Link
                                 href="/tech-center/product-innovation/incubation-achievements"
@@ -168,7 +170,7 @@ export const Header = () => {
                   <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
                     PCB线圈
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl">
+                  <NavigationMenuContent className="bg-background/95 backdrop-blur-lg shadow-xl" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
                     <ul className="w-[220px] p-2">
                       {/* 五大产品线 */}
                       <li 
@@ -183,15 +185,70 @@ export const Header = () => {
                           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${productLinesHover ? 'rotate-180' : ''}`} />
                         </div>
                         {productLinesHover && (
-                          <ul className="absolute left-full top-0 ml-1 w-[220px] bg-background/95 backdrop-blur-lg border border-primary/20 shadow-xl rounded-md p-2 z-50">
+                          <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
+                            <li 
+                              className="relative"
+                              onMouseEnter={() => setAxialMotorStatorHover(true)}
+                              onMouseLeave={() => setAxialMotorStatorHover(false)}
+                            >
+                              <div
+                                className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors cursor-pointer flex items-center justify-between"
+                              >
+                                <span>轴向磁通电机定子</span>
+                                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${axialMotorStatorHover ? 'rotate-180' : ''}`} />
+                              </div>
+                              {axialMotorStatorHover && (
+                                <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
+                                  <li>
+                                    <Link
+                                      href="/pcb-coil-axial/pcb-motor-intro"
+                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                      onClick={() => {
+                                        setAxialMotorStatorHover(false);
+                                        setProductLinesHover(false);
+                                      }}
+                                    >
+                                      PCB电机产品介绍
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="/pcb-coil-axial/pcb-motor-advantages"
+                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                      onClick={() => {
+                                        setAxialMotorStatorHover(false);
+                                        setProductLinesHover(false);
+                                      }}
+                                    >
+                                      PCB电机优势
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      href="/pcb-coil-axial/application-scenes"
+                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                      onClick={() => {
+                                        setAxialMotorStatorHover(false);
+                                        setProductLinesHover(false);
+                                      }}
+                                    >
+                                      应用场景
+                                    </Link>
+                                  </li>
                             <li>
                               <Link
-                                href="/pcb-coil-axial"
+                                      href="/pcb-coil-axial/case-study"
                                 className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                onClick={() => setProductLinesHover(false)}
+                                      onClick={() => {
+                                        setAxialMotorStatorHover(false);
+                                        setProductLinesHover(false);
+                                      }}
                               >
-                                轴向磁通电机定子
+                                      PCB电机案例分析
                               </Link>
+                                  </li>
+                                </ul>
+                              )}
                             </li>
                             <li>
                               <Link
@@ -270,12 +327,12 @@ export const Header = () => {
 
                 {/* 玻璃基板 */}
                 <NavigationMenuItem>
-                  <button 
-                    onClick={() => {}}
+                  <Link 
+                    href="/glass-substrate"
                     className="text-foreground hover:text-primary transition-colors text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2"
                   >
                     玻璃基板
-                  </button>
+                  </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -411,14 +468,52 @@ export const Header = () => {
                           {expandedMenus['product-lines'] && (
                             <div className="space-y-1 pl-2">
                               <button
+                                onClick={() => toggleMenu('axial-motor-stator')}
+                                className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors px-3 py-1.5"
+                              >
+                                <span className="flex-1 text-left">轴向磁通电机定子</span>
+                                <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['axial-motor-stator'] ? 'rotate-180' : ''}`} />
+                              </button>
+                              {expandedMenus['axial-motor-stator'] && (
+                                <div className="space-y-1 pl-2">
+                                  <button
+                                    onClick={() => {
+                                      setMobileMenuOpen(false);
+                                      router.push('/pcb-coil-axial/pcb-motor-intro');
+                                    }}
+                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                  >
+                                    PCB电机产品介绍
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setMobileMenuOpen(false);
+                                      router.push('/pcb-coil-axial/pcb-motor-advantages');
+                                    }}
+                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                  >
+                                    PCB电机优势
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setMobileMenuOpen(false);
+                                      router.push('/pcb-coil-axial/application-scenes');
+                                    }}
+                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                  >
+                                    应用场景
+                                  </button>
+                              <button
                                 onClick={() => {
                                   setMobileMenuOpen(false);
-                                  router.push('/pcb-coil-axial');
+                                      router.push('/pcb-coil-axial/case-study');
                                 }}
                                 className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                               >
-                                轴向磁通电机定子
+                                    PCB电机案例分析
                               </button>
+                                </div>
+                              )}
                               <button
                                 onClick={() => {
                                   setMobileMenuOpen(false);

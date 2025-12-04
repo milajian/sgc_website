@@ -1,7 +1,7 @@
 'use client'
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { ChevronLeft, ChevronRight, Zap, Cog } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
@@ -19,117 +19,52 @@ interface CaseStudy {
   image?: string;
 }
 
-const caseStudies: CaseStudy[] = [
+const linearMotorCaseStudies: CaseStudy[] = [
   {
-    title: "水泵",
-    application: "300W",
+    title: "直线电机（磁悬浮）",
+    application: "1000W",
     specs: [
-      { label: "应用领域", value: "水泵" },
-      { label: "功率", value: "300W" },
-      { label: "额定电流", value: "23A" },
-      { label: "转速", value: "5000rpm" },
-      { label: "额定效率", value: ">87%" },
-      { label: "层数", value: "10层" },
-      { label: "内层铜厚", value: "4/4 Oz" },
-      { label: "成品板厚", value: "2.4mm" },
-      { label: "成品尺寸", value: "∅103.75mm" },
+      { label: "应用领域", value: "直线电机（磁悬浮）" },
+      { label: "功率", value: "1000W" },
+      { label: "额定电流", value: "10A" },
+      { label: "层数", value: "12层" },
+      { label: "内层铜厚", value: "5/5 Oz" },
+      { label: "成品板厚", value: "3.35mm" },
+      { label: "成品尺寸", value: "129mm*496mm" },
     ],
-    image: getImagePath("/assets/水泵300新2.png"),
+    image: getImagePath("/assets/磁悬浮.png"),
   },
   {
-    title: "水泵",
-    application: "400W",
+    title: "直线电机（医疗）",
+    application: "100W",
     specs: [
-      { label: "应用领域", value: "水泵" },
-      { label: "功率", value: "400W" },
-      { label: "额定电流", value: "40A" },
-      { label: "转速", value: "4500rpm" },
-      { label: "额定扭矩", value: "0.85N·m" },
-      { label: "层数", value: "20层" },
-      { label: "内层铜厚", value: "6/6 Oz" },
-      { label: "成品板厚", value: "6.9mm" },
-      { label: "成品尺寸", value: "∅87.89*89mm" },
+      { label: "应用领域", value: "直线电机（医疗）" },
+      { label: "功率", value: "100W" },
+      { label: "额定电流", value: "5A" },
+      { label: "层数", value: "16层" },
+      { label: "内层铜厚", value: "3/3 Oz" },
+      { label: "成品板厚", value: "2.7mm" },
+      { label: "成品尺寸", value: "140mm*26mm" },
     ],
-    image: getImagePath("/assets/水泵4001.png"),
+    image: getImagePath("/assets/医疗.png"),
   },
   {
-    title: "风机",
-    application: "400W",
-    specs: [
-      { label: "应用领域", value: "风机" },
-      { label: "功率", value: "400W" },
-      { label: "额定电流", value: "1A" },
-      { label: "转速", value: "1800rpm" },
-      { label: "层数", value: "14层" },
-      { label: "内层铜厚", value: "4/4 Oz" },
-      { label: "成品板厚", value: "3.8mm" },
-      { label: "成品尺寸", value: "∅154.5mm" },
-    ],
-    image: getImagePath("/assets/风机1.png"),
-  },
-  {
-    title: "大型服务器风机",
-    application: "6000W",
-    specs: [
-      { label: "应用领域", value: "主驱电机" },
-      { label: "功率", value: "6000W" },
-      { label: "额定电流", value: "15A" },
-      { label: "转速", value: "3600rpm" },
-      { label: "层数", value: "26层" },
-      { label: "内层铜厚", value: "4/4 Oz" },
-      { label: "成品板厚", value: "6.5mm" },
-      { label: "成品尺寸", value: "∅400mm" },
-    ],
-    image: getImagePath("/assets/大型风机.png"),
-  },
-  {
-    title: "发电机",
+    title: "平板电机",
     application: "500W",
     specs: [
-      { label: "应用领域", value: "发电机" },
+      { label: "应用领域", value: "平板电机" },
       { label: "功率", value: "500W" },
-      { label: "额定电流", value: "12A" },
-      { label: "转速", value: "500rpm" },
-      { label: "层数", value: "32层" },
-      { label: "内层铜厚", value: "4/4 Oz" },
-      { label: "成品板厚", value: "7.9mm" },
-      { label: "成品尺寸", value: "∅250mm" },
-    ],
-    image: getImagePath("/assets/发电机.png"),
-  },
-  {
-    title: "机器人关节电机",
-    application: "200W",
-    specs: [
-      { label: "应用领域", value: "机器人关节电机" },
-      { label: "功率", value: "200W" },
-      { label: "额定电流", value: "9A" },
-      { label: "转速", value: "7200rpm" },
-      { label: "层数", value: "26层" },
-      { label: "内层铜厚", value: "4/4 Oz" },
-      { label: "成品板厚", value: "5.7mm" },
-      { label: "成品尺寸", value: "∅68.5mm" },
-    ],
-    image: getImagePath("/assets/机器人.png"),
-  },
-  {
-    title: "机器人指关节电机",
-    application: "25W",
-    specs: [
-      { label: "应用领域", value: "机器人指关节电机" },
-      { label: "功率", value: "25W" },
       { label: "额定电流", value: "1A" },
-      { label: "转速", value: "3600rpm" },
-      { label: "层数", value: "12层+5阶HDI" },
-      { label: "内层铜厚", value: "2/2 Oz" },
-      { label: "成品板厚", value: "2.1mm" },
-      { label: "成品尺寸", value: "∅19mm" },
+      { label: "层数", value: "16层" },
+      { label: "内层铜厚", value: "7/7 Oz" },
+      { label: "成品板厚", value: "5.1mm" },
+      { label: "成品尺寸", value: "321mm*321mm" },
     ],
-    image: getImagePath("/assets/机器人2.png"),
+    image: getImagePath("/assets/平面电机.png"),
   },
 ];
 
-export const CaseStudySlider = () => {
+export const LinearMotorSlider = () => {
   const { api, setApi, current, scrollPrev, scrollNext, scrollTo } = useCarouselAutoPlay({
     autoPlayInterval: 4200,
     restoreDelay: 5000
@@ -187,13 +122,13 @@ export const CaseStudySlider = () => {
   }, [api]);
 
   return (
-    <section id="case-study" className="py-20 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background section-fade-top-gradient section-fade-bottom-gradient">
+    <section className="pt-6 pb-20 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background section-fade-top-gradient section-fade-bottom-gradient">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-12">
           <motion.div 
             className="flex items-center justify-center gap-3 mb-4"
             initial={{ opacity: 0, y: 20 }}
@@ -201,10 +136,10 @@ export const CaseStudySlider = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Zap className="w-8 h-8 text-primary" />
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <MoveHorizontal className="w-8 h-8 text-primary" />
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               PCB电机案例分析
-            </h2>
+            </h1>
           </motion.div>
           <motion.p 
             className="text-xl text-muted-foreground max-w-4xl mx-auto mb-4"
@@ -213,7 +148,7 @@ export const CaseStudySlider = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            深入的行业落地能力，形成强工程信任背书
+            直线电机应用案例展示
           </motion.p>
           <motion.div 
             className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
@@ -224,7 +159,7 @@ export const CaseStudySlider = () => {
           />
         </div>
 
-        {/* 轴向磁通子标题 */}
+        {/* 直线电机子标题 */}
         <div className="text-center mb-10">
           <motion.div 
             className="flex items-center justify-center gap-3 mb-4"
@@ -233,9 +168,9 @@ export const CaseStudySlider = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Cog className="w-7 h-7 text-primary" />
+            <MoveHorizontal className="w-7 h-7 text-primary" />
             <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              轴向磁通
+              直线电机
             </h3>
           </motion.div>
         </div>
@@ -244,7 +179,7 @@ export const CaseStudySlider = () => {
         <div className="relative">
           <Carousel setApi={setApi} opts={{ loop: true }} className="w-full">
             <CarouselContent className="h-full items-stretch">
-              {caseStudies.map((study, index) => (
+              {linearMotorCaseStudies.map((study, index) => (
                 <CarouselItem key={index} className="h-full">
                   <Card 
                     ref={(el) => {
@@ -321,7 +256,7 @@ export const CaseStudySlider = () => {
                         ) : (
                           <div className="text-center p-8">
                             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                              <Zap className="w-10 h-10 text-primary" />
+                              <MoveHorizontal className="w-10 h-10 text-primary" />
                             </div>
                             <p className="text-lg font-medium text-muted-foreground">
                               {study.imagePlaceholder}
@@ -349,7 +284,7 @@ export const CaseStudySlider = () => {
 
             {/* Dots indicator with glow */}
             <div className="flex gap-2">
-              {caseStudies.map((_, index) => (
+              {linearMotorCaseStudies.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => scrollTo(index)}
@@ -393,3 +328,4 @@ export const CaseStudySlider = () => {
     </section>
   );
 };
+

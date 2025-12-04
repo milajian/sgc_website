@@ -48,18 +48,20 @@ export const CompanyInfo = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mb-16">
-            {stats.map((stat, index) => <Card key={index} className="p-8 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
-                    <stat.icon className="w-6 h-6 text-primary" />
+            {stats.map((stat, index) => <Card key={index} className="p-6 md:p-8 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all text-center flex flex-col items-center justify-center min-h-[180px]">
+                <div className="flex justify-center mb-5 md:mb-6">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-accent/30 backdrop-blur-sm flex items-center justify-center border border-accent/40">
+                    <stat.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
                   </div>
                 </div>
-                <p className="text-3xl font-bold mb-2 text-blue-50">
-                  {stat.value}{stat.suffix}
-                </p>
-                <p className="text-secondary-foreground/80">
-                  {stat.label}
-                </p>
+                <div className="flex-1 flex flex-col justify-center w-full">
+                  <p className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 text-blue-50 leading-tight">
+                    {stat.value}{stat.suffix}
+                  </p>
+                  <p className="text-sm md:text-base text-secondary-foreground/90 font-medium">
+                    {stat.label}
+                  </p>
+                </div>
               </Card>)}
           </div>
 

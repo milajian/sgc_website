@@ -1,9 +1,9 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { Circle } from "lucide-react";
+import { Square } from "lucide-react";
 
-export default function HollowCupStatorPage() {
+export default function GlassSubstratePage() {
   return (
     <div className="min-h-screen">
       <main className="pt-20">
@@ -33,9 +33,9 @@ export default function HollowCupStatorPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6 }}
                 >
-                  <Circle className="w-8 h-8 text-primary" />
+                  <Square className="w-8 h-8 text-primary" />
                   <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    空心杯电机定子
+                    玻璃基板
                   </h1>
                 </motion.div>
                 <motion.p 
@@ -45,7 +45,7 @@ export default function HollowCupStatorPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  PCB线圈技术在空心杯电机定子中的应用
+                  玻璃基板技术介绍
                 </motion.p>
                 <motion.div 
                   className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"
