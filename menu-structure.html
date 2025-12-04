@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站导航菜单层级结构图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, hsl(210 20% 98%) 0%, hsl(210 20% 95%) 100%);
+            color: hsl(210 55% 20%);
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
+            padding: 3rem;
+        }
+        
+        h1 {
+            color: hsl(210 55% 25%);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(175 60% 40%) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: hsl(210 20% 40%);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            color: hsl(210 55% 25%);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid hsl(175 60% 40%);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, hsl(210 55% 25% / 0.05) 0%, hsl(175 60% 40% / 0.05) 100%);
+            border: 2px solid hsl(210 55% 25% / 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: hsl(175 60% 40%);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            color: hsl(210 55% 25%);
+            font-weight: 600;
+        }
+        
+        .tree-view {
+            background: hsl(210 20% 98%);
+            border: 2px solid hsl(210 55% 25% / 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        
+        .mermaid-container {
+            background: white;
+            border: 2px solid hsl(210 55% 25% / 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .routes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .routes-table th {
+            background: hsl(210 55% 25%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .routes-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid hsl(210 55% 25% / 0.1);
+        }
+        
+        .routes-table tr:hover {
+            background: hsl(175 60% 40% / 0.05);
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .level-1 { background: hsl(210 55% 25%); color: white; }
+        .level-2 { background: hsl(175 60% 40%); color: white; }
+        .level-3 { background: hsl(210 55% 25% / 0.2); color: hsl(210 55% 25%); }
+        .level-4 { background: hsl(175 60% 40% / 0.2); color: hsl(175 60% 40%); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>网站导航菜单层级结构图</h1>
+        <p class="subtitle">SGCircuits PCB Group - 导航菜单完整层级结构可视化</p>
+        
+        <div class="section">
+            <h2>层级统计</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>4</h3>
+                    <p>Level 1<br>顶级菜单</p>
+                </div>
+                <div class="stat-card">
+                    <h3>7</h3>
+                    <p>Level 2<br>二级菜单</p>
+                </div>
+                <div class="stat-card">
+                    <h3>8</h3>
+                    <p>Level 3<br>三级菜单</p>
+                </div>
+                <div class="stat-card">
+                    <h3>4</h3>
+                    <p>Level 4<br>四级菜单</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>树形结构图</h2>
+            <div class="tree-view">
+导航菜单
+│
+├─ <span class="level-badge level-1">L1</span>技术中心
+│  ├─ <span class="level-badge level-2">L2</span>历史发展
+│  ├─ <span class="level-badge level-2">L2</span>研发架构
+│  ├─ <span class="level-badge level-2">L2</span>产品创新
+│  │  ├─ <span class="level-badge level-3">L3</span>孵化成果
+│  │  ├─ <span class="level-badge level-3">L3</span>PCB电机定子设计与仿真
+│  │  └─ <span class="level-badge level-3">L3</span>生产技术与设备
+│  └─ <span class="level-badge level-2">L2</span>专家列表
+│
+├─ <span class="level-badge level-1">L1</span>PCB线圈
+│  ├─ <span class="level-badge level-2">L2</span>五大产品线
+│  │  ├─ <span class="level-badge level-3">L3</span>轴向磁通电机定子
+│  │  │  ├─ <span class="level-badge level-4">L4</span>PCB电机产品介绍
+│  │  │  ├─ <span class="level-badge level-4">L4</span>PCB电机优势
+│  │  │  ├─ <span class="level-badge level-4">L4</span>应用场景
+│  │  │  └─ <span class="level-badge level-4">L4</span>PCB电机案例分析
+│  │  ├─ <span class="level-badge level-3">L3</span>直线电机绕组
+│  │  ├─ <span class="level-badge level-3">L3</span>平面变压器
+│  │  ├─ <span class="level-badge level-3">L3</span>平面电机绕组
+│  │  └─ <span class="level-badge level-3">L3</span>空心杯电机定子
+│  ├─ <span class="level-badge level-2">L2</span>专精市场布局
+│  └─ <span class="level-badge level-2">L2</span>PCB电机产品历程
+│
+├─ <span class="level-badge level-1">L1</span>PCB埋嵌
+│
+└─ <span class="level-badge level-1">L1</span>玻璃基板
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>流程图</h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TD
+    A[导航菜单] --> B[技术中心]
+    A --> C[PCB线圈]
+    A --> D[PCB埋嵌]
+    A --> E[玻璃基板]
+    
+    B --> B1[历史发展]
+    B --> B2[研发架构]
+    B --> B3[产品创新]
+    B --> B4[专家列表]
+    
+    B3 --> B3a[孵化成果]
+    B3 --> B3b[PCB电机定子设计与仿真]
+    B3 --> B3c[生产技术与设备]
+    
+    C --> C1[五大产品线]
+    C --> C2[专精市场布局]
+    C --> C3[PCB电机产品历程]
+    
+    C1 --> C1a[轴向磁通电机定子]
+    C1 --> C1b[直线电机绕组]
+    C1 --> C1c[平面变压器]
+    C1 --> C1d[平面电机绕组]
+    C1 --> C1e[空心杯电机定子]
+    
+    C1a --> C1a1[PCB电机产品介绍]
+    C1a --> C1a2[PCB电机优势]
+    C1a --> C1a3[应用场景]
+    C1a --> C1a4[PCB电机案例分析]
+    
+    style A fill:#1E3A5F,stroke:#2AA19B,stroke-width:3px,color:#fff
+    style B fill:#2AA19B,stroke:#1E3A5F,stroke-width:2px,color:#fff
+    style C fill:#2AA19B,stroke:#1E3A5F,stroke-width:2px,color:#fff
+    style D fill:#2AA19B,stroke:#1E3A5F,stroke-width:2px,color:#fff
+    style E fill:#2AA19B,stroke:#1E3A5F,stroke-width:2px,color:#fff
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>路由路径映射</h2>
+            <table class="routes-table">
+                <thead>
+                    <tr>
+                        <th>菜单项</th>
+                        <th>路由路径</th>
+                        <th>层级</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>技术中心</strong></td>
+                        <td>-</td>
+                        <td><span class="level-badge level-1">L1</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;孵化成果</td>
+                        <td>/tech-center/product-innovation/incubation-achievements</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;PCB电机定子设计与仿真</td>
+                        <td>/tech-center/product-innovation/simulation-design</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;生产技术与设备</td>
+                        <td>/tech-center/product-innovation#production-technology</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCB线圈</strong></td>
+                        <td>-</td>
+                        <td><span class="level-badge level-1">L1</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;PCB电机产品介绍</td>
+                        <td>/pcb-coil-axial/pcb-motor-intro</td>
+                        <td><span class="level-badge level-4">L4</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;PCB电机优势</td>
+                        <td>/pcb-coil-axial/pcb-motor-advantages</td>
+                        <td><span class="level-badge level-4">L4</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;应用场景</td>
+                        <td>/pcb-coil-axial/application-scenes</td>
+                        <td><span class="level-badge level-4">L4</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;PCB电机案例分析</td>
+                        <td>/pcb-coil-axial/case-study</td>
+                        <td><span class="level-badge level-4">L4</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;直线电机绕组</td>
+                        <td>/pcb-coil-linear-winding</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;平面变压器</td>
+                        <td>/pcb-coil-planar-transformer</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;平面电机绕组</td>
+                        <td>/pcb-coil-planar-winding</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;空心杯电机定子</td>
+                        <td>/pcb-coil-hollow-cup-stator</td>
+                        <td><span class="level-badge level-3">L3</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;专精市场布局</td>
+                        <td>/pcb-coil-market-layout</td>
+                        <td><span class="level-badge level-2">L2</span></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;PCB电机产品历程</td>
+                        <td>/pcb-coil-product-journey</td>
+                        <td><span class="level-badge level-2">L2</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCB埋嵌</strong></td>
+                        <td>/pcb-embedded</td>
+                        <td><span class="level-badge level-1">L1</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>玻璃基板</strong></td>
+                        <td>/glass-substrate</td>
+                        <td><span class="level-badge level-1">L1</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#1E3A5F',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#2AA19B',
+                lineColor: '#2AA19B',
+                secondaryColor: '#2AA19B',
+                tertiaryColor: '#f0f0f0'
+            }
+        });
+    </script>
+</body>
+</html>
+

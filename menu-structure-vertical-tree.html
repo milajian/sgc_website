@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单层级纵向树状结构图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, hsl(210 20% 98%) 0%, hsl(210 20% 95%) 100%);
+            padding: 3rem;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+        
+        .container {
+            max-width: 2400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
+            padding: 3rem;
+        }
+        
+        h1 {
+            text-align: center;
+            color: hsl(210 55% 25%);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(175 60% 40%) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 2;
+        }
+        
+        .tree-row {
+            display: flex;
+            align-items: center;
+            min-height: 2.5rem;
+            position: relative;
+        }
+        
+        .tree-cell {
+            padding: 0.5rem 1rem;
+            border: 2px solid;
+            border-radius: 6px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-right: 1rem;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        /* Level 1 - 第一列 */
+        .level-1 {
+            background: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(210 55% 30%) 100%);
+            color: white;
+            border-color: hsl(210 55% 25%);
+            font-size: 1.1rem;
+        }
+        
+        /* Level 2 - 第二列 */
+        .level-2 {
+            background: linear-gradient(135deg, hsl(175 60% 40%) 0%, hsl(175 60% 45%) 100%);
+            color: white;
+            border-color: hsl(175 60% 40%);
+            font-size: 1rem;
+            margin-left: 2rem;
+        }
+        
+        /* Level 3 - 第三列 */
+        .level-3 {
+            background: hsl(210 55% 25% / 0.1);
+            color: hsl(210 55% 25%);
+            border-color: hsl(210 55% 25%);
+            font-size: 0.95rem;
+            margin-left: 4rem;
+        }
+        
+        /* Level 4 - 第四列 */
+        .level-4 {
+            background: hsl(175 60% 40% / 0.1);
+            color: hsl(175 60% 40%);
+            border-color: hsl(175 60% 40%);
+            font-size: 0.9rem;
+            margin-left: 6rem;
+        }
+        
+        /* 连接线 */
+        .connector {
+            position: absolute;
+            left: 0;
+            width: 2px;
+            background: hsl(210 55% 25% / 0.3);
+            height: 100%;
+        }
+        
+        /* 树形符号 */
+        .tree-symbol {
+            color: hsl(210 55% 25%);
+            font-weight: bold;
+            margin-right: 0.5rem;
+            min-width: 1.5rem;
+            display: inline-block;
+        }
+        
+        /* 空单元格占位 */
+        .empty-cell {
+            visibility: hidden;
+        }
+        
+        /* 列标题 */
+        .column-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid hsl(210 55% 25% / 0.2);
+        }
+        
+        .column-title {
+            font-weight: 700;
+            color: hsl(210 55% 25%);
+            font-size: 1.1rem;
+            min-width: 200px;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .column-title.level-1-title {
+            margin-left: 0;
+        }
+        
+        .column-title.level-2-title {
+            margin-left: 2rem;
+        }
+        
+        .column-title.level-3-title {
+            margin-left: 4rem;
+        }
+        
+        .column-title.level-4-title {
+            margin-left: 6rem;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 1rem;
+            }
+            .container {
+                box-shadow: none;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>网站导航菜单层级纵向树状结构图</h1>
+        
+        <div class="column-header">
+            <div class="column-title level-1-title">Level 1</div>
+            <div class="column-title level-2-title">Level 2</div>
+            <div class="column-title level-3-title">Level 3</div>
+            <div class="column-title level-4-title">Level 4</div>
+        </div>
+        
+        <div class="tree-container">
+            <!-- 技术中心分支 -->
+            <div class="tree-row">
+                <div class="tree-cell level-1">技术中心</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">历史发展</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">研发架构</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">产品创新</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">孵化成果</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">PCB电机定子设计与仿真</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">生产技术与设备</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">专家列表</div>
+            </div>
+            
+            <!-- PCB线圈分支 -->
+            <div class="tree-row">
+                <div class="tree-cell level-1">PCB线圈</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">五大产品线</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">轴向磁通电机定子</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-4">PCB电机产品介绍</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-4">PCB电机优势</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-4">应用场景</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-4">PCB电机案例分析</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">直线电机绕组</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-4">PCB电机案例分析</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">平面变压器</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">平面电机绕组</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-3">空心杯电机定子</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">专精市场布局</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">PCB电机产品历程</div>
+            </div>
+            
+            <!-- PCB埋嵌分支 -->
+            <div class="tree-row">
+                <div class="tree-cell level-1">PCB埋嵌</div>
+            </div>
+            <div class="tree-row">
+                <div class="tree-cell empty-cell"></div>
+                <div class="tree-cell level-2">埋嵌工艺产品</div>
+            </div>
+            
+            <!-- 玻璃基板分支 -->
+            <div class="tree-row">
+                <div class="tree-cell level-1">玻璃基板</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

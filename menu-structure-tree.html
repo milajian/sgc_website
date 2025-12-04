@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单层级树状结构图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, hsl(210 20% 98%) 0%, hsl(210 20% 95%) 100%);
+            padding: 3rem;
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+        
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
+            padding: 3rem;
+        }
+        
+        h1 {
+            text-align: center;
+            color: hsl(210 55% 25%);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(175 60% 40%) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        
+        .tree-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin: 1rem 0;
+        }
+        
+        .node-box {
+            padding: 1rem 1.5rem;
+            border: 3px solid;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            position: relative;
+            z-index: 2;
+            background: white;
+        }
+        
+        /* Level 1 - 顶级菜单 */
+        .level-1 .node-box {
+            background: linear-gradient(135deg, hsl(210 55% 25%) 0%, hsl(210 55% 30%) 100%);
+            color: white;
+            border-color: hsl(210 55% 25%);
+            font-size: 1.2rem;
+            padding: 1.2rem 2rem;
+            min-width: 180px;
+        }
+        
+        /* Level 2 - 二级菜单 */
+        .level-2 .node-box {
+            background: linear-gradient(135deg, hsl(175 60% 40%) 0%, hsl(175 60% 45%) 100%);
+            color: white;
+            border-color: hsl(175 60% 40%);
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            min-width: 160px;
+        }
+        
+        /* Level 3 - 三级菜单 */
+        .level-3 .node-box {
+            background: hsl(210 55% 25% / 0.1);
+            color: hsl(210 55% 25%);
+            border-color: hsl(210 55% 25%);
+            font-size: 0.95rem;
+            padding: 0.9rem 1.3rem;
+            min-width: 140px;
+        }
+        
+        /* Level 4 - 四级菜单 */
+        .level-4 .node-box {
+            background: hsl(175 60% 40% / 0.1);
+            color: hsl(175 60% 40%);
+            border-color: hsl(175 60% 40%);
+            font-size: 0.9rem;
+            padding: 0.8rem 1.2rem;
+            min-width: 120px;
+        }
+        
+        /* 连接线 - 垂直向上 */
+        .tree-node::before {
+            content: '';
+            position: absolute;
+            top: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 1rem;
+            background: hsl(210 55% 25% / 0.4);
+            z-index: 1;
+        }
+        
+        .level-1 .tree-node::before {
+            display: none;
+        }
+        
+        /* 子节点容器 */
+        .children {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            padding-top: 1rem;
+        }
+        
+        /* 水平连接线 */
+        .children::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: hsl(210 55% 25% / 0.4);
+            z-index: 1;
+        }
+        
+        /* 从父节点到水平线的垂直连接 */
+        .children::after {
+            content: '';
+            position: absolute;
+            top: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 1rem;
+            background: hsl(210 55% 25% / 0.4);
+            z-index: 1;
+        }
+        
+        /* 多个子节点时的连接线调整 */
+        .children .tree-node:first-child::before,
+        .children .tree-node:last-child::before {
+            width: 50%;
+        }
+        
+        .children .tree-node:first-child::before {
+            left: 50%;
+        }
+        
+        .children .tree-node:last-child::before {
+            left: 0;
+        }
+        
+        .children .tree-node:only-child::before {
+            width: 100%;
+            left: 0;
+        }
+        
+        /* 根节点特殊处理 */
+        .root {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+        
+        .root-node {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: hsl(210 55% 25%);
+            padding: 1rem 2rem;
+            border: 3px dashed hsl(210 55% 25% / 0.3);
+            border-radius: 8px;
+            background: hsl(210 55% 25% / 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1600px) {
+            .root {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 1rem;
+            }
+            .container {
+                box-shadow: none;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>网站导航菜单层级树状结构图</h1>
+        
+        <div class="tree">
+            <div class="root-node">导航菜单</div>
+            
+            <div class="root">
+                <!-- 技术中心分支 -->
+                <div class="tree-node level-1">
+                    <div class="node-box">技术中心</div>
+                    <div class="children">
+                        <div class="tree-node level-2">
+                            <div class="node-box">历史发展</div>
+                        </div>
+                        <div class="tree-node level-2">
+                            <div class="node-box">研发架构</div>
+                        </div>
+                        <div class="tree-node level-2">
+                            <div class="node-box">产品创新</div>
+                            <div class="children">
+                                <div class="tree-node level-3">
+                                    <div class="node-box">孵化成果</div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">PCB电机定子设计与仿真</div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">生产技术与设备</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tree-node level-2">
+                            <div class="node-box">专家列表</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PCB线圈分支 -->
+                <div class="tree-node level-1">
+                    <div class="node-box">PCB线圈</div>
+                    <div class="children">
+                        <div class="tree-node level-2">
+                            <div class="node-box">五大产品线</div>
+                            <div class="children">
+                                <div class="tree-node level-3">
+                                    <div class="node-box">轴向磁通电机定子</div>
+                                    <div class="children">
+                                        <div class="tree-node level-4">
+                                            <div class="node-box">PCB电机产品介绍</div>
+                                        </div>
+                                        <div class="tree-node level-4">
+                                            <div class="node-box">PCB电机优势</div>
+                                        </div>
+                                        <div class="tree-node level-4">
+                                            <div class="node-box">应用场景</div>
+                                        </div>
+                                        <div class="tree-node level-4">
+                                            <div class="node-box">PCB电机案例分析</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">直线电机绕组</div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">平面变压器</div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">平面电机绕组</div>
+                                </div>
+                                <div class="tree-node level-3">
+                                    <div class="node-box">空心杯电机定子</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tree-node level-2">
+                            <div class="node-box">专精市场布局</div>
+                        </div>
+                        <div class="tree-node level-2">
+                            <div class="node-box">PCB电机产品历程</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PCB埋嵌分支 -->
+                <div class="tree-node level-1">
+                    <div class="node-box">PCB埋嵌</div>
+                </div>
+                
+                <!-- 玻璃基板分支 -->
+                <div class="tree-node level-1">
+                    <div class="node-box">玻璃基板</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
