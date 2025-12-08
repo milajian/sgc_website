@@ -1,26 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/admin/expert-list/page": "app/admin/expert-list/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/research-structure/page": "app/admin/research-structure/page.js",
-  "/glass-substrate/page": "app/glass-substrate/page.js",
   "/page": "app/page.js",
-  "/pcb-coil-axial/application-scenes/page": "app/pcb-coil-axial/application-scenes/page.js",
-  "/pcb-coil-axial/case-study/page": "app/pcb-coil-axial/case-study/page.js",
-  "/pcb-coil-axial/page": "app/pcb-coil-axial/page.js",
   "/pcb-coil-axial/pcb-motor-advantages/page": "app/pcb-coil-axial/pcb-motor-advantages/page.js",
   "/pcb-coil-axial/pcb-motor-intro/page": "app/pcb-coil-axial/pcb-motor-intro/page.js",
-  "/pcb-coil-hollow-cup-stator/page": "app/pcb-coil-hollow-cup-stator/page.js",
-  "/pcb-coil-linear-winding/page": "app/pcb-coil-linear-winding/page.js",
-  "/pcb-coil-market-layout/page": "app/pcb-coil-market-layout/page.js",
-  "/pcb-coil-planar-transformer/page": "app/pcb-coil-planar-transformer/page.js",
-  "/pcb-coil-planar-winding/page": "app/pcb-coil-planar-winding/page.js",
   "/pcb-coil-product-journey/page": "app/pcb-coil-product-journey/page.js",
-  "/pcb-embedded/page": "app/pcb-embedded/page.js",
-  "/tech-center/expert-list/page": "app/tech-center/expert-list/page.js",
-  "/tech-center/history/page": "app/tech-center/history/page.js",
-  "/tech-center/product-innovation/incubation-achievements/page": "app/tech-center/product-innovation/incubation-achievements/page.js",
-  "/tech-center/product-innovation/page": "app/tech-center/product-innovation/page.js",
-  "/tech-center/product-innovation/simulation-design/page": "app/tech-center/product-innovation/simulation-design/page.js",
-  "/tech-center/research-structure/page": "app/tech-center/research-structure/page.js"
+  "/tech-center/product-innovation/incubation-achievements/page": "app/tech-center/product-innovation/incubation-achievements/page.js"
 }

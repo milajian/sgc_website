@@ -22,9 +22,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-// 启动服务器
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`API endpoint: http://localhost:${PORT}/api/experts`);
+// 启动服务器（允许外部访问，用于内网穿透）
+const HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
+  console.log(`API endpoint: http://${HOST}:${PORT}/api/experts`);
+  console.log(`Health check: http://${HOST}:${PORT}/health`);
 });
 

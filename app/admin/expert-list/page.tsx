@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Expert } from "@/components/ExpertTeam";
+import { Expert } from "@/lib/types";
 import { Save, Upload, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -21,14 +21,15 @@ export default function ExpertListAdminPage() {
 
   const fetchExperts = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
       
       // 添加超时控制
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
       
       try {
-        const response = await fetch(`${apiUrl}/api/experts`, {
+        const response = await fetch(`${apiUrl}/experts`, {
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
@@ -63,8 +64,9 @@ export default function ExpertListAdminPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${apiUrl}/api/experts`, {
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
+      const response = await fetch(`${apiUrl}/experts`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,8 +93,9 @@ export default function ExpertListAdminPage() {
     formData.append('expertId', expertId);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${apiUrl}/api/experts/upload`, {
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
+      const response = await fetch(`${apiUrl}/experts/upload`, {
         method: 'POST',
         body: formData,
       });

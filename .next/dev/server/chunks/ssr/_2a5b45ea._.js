@@ -210,12 +210,13 @@ function ExpertListAdminPage() {
     }, []);
     const fetchExperts = async ()=>{
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
             // 添加超时控制
             const controller = new AbortController();
             const timeoutId = setTimeout(()=>controller.abort(), 3000); // 3秒超时
             try {
-                const response = await fetch(`${apiUrl}/api/experts`, {
+                const response = await fetch(`${apiUrl}/experts`, {
                     signal: controller.signal,
                     headers: {
                         'Content-Type': 'application/json'
@@ -247,8 +248,9 @@ function ExpertListAdminPage() {
     const handleSave = async ()=>{
         setSaving(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiUrl}/api/experts`, {
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
+            const response = await fetch(`${apiUrl}/experts`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -272,8 +274,9 @@ function ExpertListAdminPage() {
         formData.append('image', file);
         formData.append('expertId', expertId);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiUrl}/api/experts/upload`, {
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
+            const response = await fetch(`${apiUrl}/experts/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -328,12 +331,12 @@ function ExpertListAdminPage() {
                 children: "加载中..."
             }, void 0, false, {
                 fileName: "[project]/app/admin/expert-list/page.tsx",
-                lineNumber: 147,
+                lineNumber: 150,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/expert-list/page.tsx",
-            lineNumber: 146,
+            lineNumber: 149,
             columnNumber: 7
         }, this);
     }
@@ -354,7 +357,7 @@ function ExpertListAdminPage() {
                                     children: "专家列表管理"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 161,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -368,14 +371,14 @@ function ExpertListAdminPage() {
                                                     className: "w-4 h-4 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 163,
+                                                    lineNumber: 166,
                                                     columnNumber: 19
                                                 }, this),
                                                 "添加专家"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                            lineNumber: 162,
+                                            lineNumber: 165,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -386,26 +389,26 @@ function ExpertListAdminPage() {
                                                     className: "w-4 h-4 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 170,
                                                     columnNumber: 19
                                                 }, this),
                                                 saving ? '保存中...' : '保存'
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 169,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                    lineNumber: 161,
+                                    lineNumber: 164,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                            lineNumber: 157,
+                            lineNumber: 160,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -424,7 +427,7 @@ function ExpertListAdminPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 177,
+                                                    lineNumber: 180,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -436,18 +439,18 @@ function ExpertListAdminPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                        lineNumber: 184,
+                                                        lineNumber: 187,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 178,
+                                                    lineNumber: 181,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                            lineNumber: 176,
+                                            lineNumber: 179,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -459,7 +462,7 @@ function ExpertListAdminPage() {
                                                             children: "照片"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 191,
+                                                            lineNumber: 194,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -471,7 +474,7 @@ function ExpertListAdminPage() {
                                                                     className: "w-24 h-24 rounded-lg object-cover border-2 border-primary/20"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                                    lineNumber: 194,
+                                                                    lineNumber: 197,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -487,24 +490,24 @@ function ExpertListAdminPage() {
                                                                         className: "cursor-pointer"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                                        lineNumber: 201,
+                                                                        lineNumber: 204,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                                    lineNumber: 200,
+                                                                    lineNumber: 203,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 192,
+                                                            lineNumber: 195,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 190,
+                                                    lineNumber: 193,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -514,7 +517,7 @@ function ExpertListAdminPage() {
                                                             children: "姓名"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 218,
+                                                            lineNumber: 221,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -524,13 +527,13 @@ function ExpertListAdminPage() {
                                                             placeholder: "请输入姓名"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 219,
+                                                            lineNumber: 222,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 217,
+                                                    lineNumber: 220,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -540,7 +543,7 @@ function ExpertListAdminPage() {
                                                             children: "角色标题（顶部显示）"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 229,
+                                                            lineNumber: 232,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -550,13 +553,13 @@ function ExpertListAdminPage() {
                                                             placeholder: "例如：定子设计 工程师"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 230,
+                                                            lineNumber: 233,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 228,
+                                                    lineNumber: 231,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -566,7 +569,7 @@ function ExpertListAdminPage() {
                                                             children: "角色描述"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 240,
+                                                            lineNumber: 243,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -576,13 +579,13 @@ function ExpertListAdminPage() {
                                                             placeholder: "例如：定子设计、生产制造工程师"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 241,
+                                                            lineNumber: 244,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 242,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -592,7 +595,7 @@ function ExpertListAdminPage() {
                                                             children: "教育背景"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 251,
+                                                            lineNumber: 254,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -602,13 +605,13 @@ function ExpertListAdminPage() {
                                                             placeholder: "例如：桂林电子科技大学 硕士"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 252,
+                                                            lineNumber: 255,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 250,
+                                                    lineNumber: 253,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,7 +621,7 @@ function ExpertListAdminPage() {
                                                             children: "主要成就"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 262,
+                                                            lineNumber: 265,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -629,51 +632,51 @@ function ExpertListAdminPage() {
                                                             rows: 3
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                            lineNumber: 263,
+                                                            lineNumber: 266,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                                    lineNumber: 261,
+                                                    lineNumber: 264,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                                            lineNumber: 188,
+                                            lineNumber: 191,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, expert.id, true, {
                                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                                    lineNumber: 175,
+                                    lineNumber: 178,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/app/admin/expert-list/page.tsx",
-                            lineNumber: 173,
+                            lineNumber: 176,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/expert-list/page.tsx",
-                    lineNumber: 156,
+                    lineNumber: 159,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/admin/expert-list/page.tsx",
-                lineNumber: 155,
+                lineNumber: 158,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/expert-list/page.tsx",
-            lineNumber: 154,
+            lineNumber: 157,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/admin/expert-list/page.tsx",
-        lineNumber: 153,
+        lineNumber: 156,
         columnNumber: 5
     }, this);
 }

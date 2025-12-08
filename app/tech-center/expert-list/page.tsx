@@ -1,6 +1,7 @@
 'use client'
 
-import { ExpertTeam, Expert } from "@/components/ExpertTeam";
+import { ExpertTeam } from "@/components/ExpertTeam";
+import { Expert } from "@/lib/types";
 import { useEffect, useState } from "react";
 
 export default function ExpertListPage() {

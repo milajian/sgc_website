@@ -139,15 +139,6 @@ export const Header = () => {
                                 PCB电机定子设计与仿真
                               </Link>
                             </li>
-                            <li>
-                              <Link
-                                href="/tech-center/product-innovation#production-technology"
-                                className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                onClick={() => setProductInnovationHover(false)}
-                              >
-                                生产技术与设备
-                              </Link>
-                            </li>
                           </ul>
                         )}
                       </li>
@@ -289,6 +280,17 @@ export const Header = () => {
                           </ul>
                         )}
                       </li>
+                      {/* 生产技术与设备 */}
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/pcb-coil-axial/pcb-motor-advantages#pcb-stator-production-tech"
+                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            生产技术与设备
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
                       {/* 专精市场布局 */}
                       <li>
                         <NavigationMenuLink asChild>
@@ -425,15 +427,6 @@ export const Header = () => {
                               >
                                 PCB电机定子设计与仿真
                               </button>
-                              <button
-                                onClick={() => {
-                                  setMobileMenuOpen(false);
-                                  router.push('/tech-center/product-innovation#production-technology');
-                                }}
-                                className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                              >
-                                生产技术与设备
-                              </button>
                             </div>
                           )}
                           <button
@@ -555,6 +548,16 @@ export const Header = () => {
                               </button>
                             </div>
                           )}
+                          {/* 生产技术与设备 */}
+                          <button
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              router.push('/pcb-coil-axial/pcb-motor-advantages#pcb-stator-production-tech');
+                            }}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            生产技术与设备
+                          </button>
                           {/* 专精市场布局 */}
                           <button
                             onClick={() => {

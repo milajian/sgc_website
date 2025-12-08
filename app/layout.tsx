@@ -38,7 +38,13 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <ThemeProvider 
+            attribute="class" 
+            defaultTheme="light" 
+            enableSystem={false}
+            disableTransitionOnChange={false}
+            storageKey="sgc-theme"
+          >
             <TooltipProvider>
               <Header />
               {children}

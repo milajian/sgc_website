@@ -44,13 +44,14 @@ export default function ResearchStructureAdminPage() {
 
   const fetchData = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
       
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
       
       try {
-        const response = await fetch(`${apiUrl}/api/research-structure`, {
+        const response = await fetch(`${apiUrl}/research-structure`, {
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
@@ -91,8 +92,9 @@ export default function ResearchStructureAdminPage() {
     
     setSaving(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${apiUrl}/api/research-structure`, {
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
+      const response = await fetch(`${apiUrl}/research-structure`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -121,8 +123,9 @@ export default function ResearchStructureAdminPage() {
     formData.append('partnerId', partnerId);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${apiUrl}/api/research-structure/upload`, {
+      // 使用相对路径，通过 Next.js API 路由代理到后端
+      const apiUrl = '/api';
+      const response = await fetch(`${apiUrl}/research-structure/upload`, {
         method: 'POST',
         body: formData,
       });

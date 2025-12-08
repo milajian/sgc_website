@@ -243,11 +243,12 @@ function ResearchStructureAdminPage() {
     }, []);
     const fetchData = async ()=>{
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
             const controller = new AbortController();
             const timeoutId = setTimeout(()=>controller.abort(), 3000);
             try {
-                const response = await fetch(`${apiUrl}/api/research-structure`, {
+                const response = await fetch(`${apiUrl}/research-structure`, {
                     signal: controller.signal,
                     headers: {
                         'Content-Type': 'application/json'
@@ -284,8 +285,9 @@ function ResearchStructureAdminPage() {
         if (!data) return;
         setSaving(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiUrl}/api/research-structure`, {
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
+            const response = await fetch(`${apiUrl}/research-structure`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -310,8 +312,9 @@ function ResearchStructureAdminPage() {
         formData.append('logo', file);
         formData.append('partnerId', partnerId);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-            const response = await fetch(`${apiUrl}/api/research-structure/upload`, {
+            // 使用相对路径，通过 Next.js API 路由代理到后端
+            const apiUrl = '/api';
+            const response = await fetch(`${apiUrl}/research-structure/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -410,12 +413,12 @@ function ResearchStructureAdminPage() {
                 children: "加载中..."
             }, void 0, false, {
                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                lineNumber: 220,
+                lineNumber: 223,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/research-structure/page.tsx",
-            lineNumber: 219,
+            lineNumber: 222,
             columnNumber: 7
         }, this);
     }
@@ -427,12 +430,12 @@ function ResearchStructureAdminPage() {
                 children: "数据加载失败"
             }, void 0, false, {
                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                lineNumber: 228,
+                lineNumber: 231,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/research-structure/page.tsx",
-            lineNumber: 227,
+            lineNumber: 230,
             columnNumber: 7
         }, this);
     }
@@ -453,7 +456,7 @@ function ResearchStructureAdminPage() {
                                     children: "研发架构管理"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 239,
+                                    lineNumber: 242,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -464,20 +467,20 @@ function ResearchStructureAdminPage() {
                                             className: "w-4 h-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 243,
+                                            lineNumber: 246,
                                             columnNumber: 17
                                         }, this),
                                         saving ? '保存中...' : '保存'
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 242,
+                                    lineNumber: 245,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                            lineNumber: 238,
+                            lineNumber: 241,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -488,7 +491,7 @@ function ResearchStructureAdminPage() {
                                     children: "中心标题"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 250,
+                                    lineNumber: 253,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -498,7 +501,7 @@ function ResearchStructureAdminPage() {
                                             children: "技术中心标题"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 252,
+                                            lineNumber: 255,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -509,19 +512,19 @@ function ResearchStructureAdminPage() {
                                             className: "mt-2"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 253,
+                                            lineNumber: 256,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 251,
+                                    lineNumber: 254,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                            lineNumber: 249,
+                            lineNumber: 252,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -532,7 +535,7 @@ function ResearchStructureAdminPage() {
                                     children: "领导层"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 265,
+                                    lineNumber: 268,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -547,7 +550,7 @@ function ResearchStructureAdminPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                    lineNumber: 269,
+                                                    lineNumber: 272,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -558,24 +561,24 @@ function ResearchStructureAdminPage() {
                                                     className: "mt-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                    lineNumber: 270,
+                                                    lineNumber: 273,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, index, true, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 268,
+                                            lineNumber: 271,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 266,
+                                    lineNumber: 269,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                            lineNumber: 264,
+                            lineNumber: 267,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -586,7 +589,7 @@ function ResearchStructureAdminPage() {
                                     children: "部门"
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 284,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -603,7 +606,7 @@ function ResearchStructureAdminPage() {
                                                                 children: "部门名称"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 290,
+                                                                lineNumber: 293,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -614,13 +617,13 @@ function ResearchStructureAdminPage() {
                                                                 className: "mt-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 291,
+                                                                lineNumber: 294,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                        lineNumber: 289,
+                                                        lineNumber: 292,
                                                         columnNumber: 23
                                                     }, this),
                                                     dept.groups && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -629,7 +632,7 @@ function ResearchStructureAdminPage() {
                                                                 children: "子组（每行一个）"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 302,
+                                                                lineNumber: 305,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -643,13 +646,13 @@ function ResearchStructureAdminPage() {
                                                                 className: "mt-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 303,
+                                                                lineNumber: 306,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                        lineNumber: 301,
+                                                        lineNumber: 304,
                                                         columnNumber: 25
                                                     }, this),
                                                     dept.functions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -658,7 +661,7 @@ function ResearchStructureAdminPage() {
                                                                 children: "功能（每行一个）"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 318,
+                                                                lineNumber: 321,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -672,35 +675,35 @@ function ResearchStructureAdminPage() {
                                                                 className: "mt-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 319,
+                                                                lineNumber: 322,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                        lineNumber: 317,
+                                                        lineNumber: 320,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                lineNumber: 288,
+                                                lineNumber: 291,
                                                 columnNumber: 21
                                             }, this)
                                         }, dept.id, false, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 287,
+                                            lineNumber: 290,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 285,
+                                    lineNumber: 288,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                            lineNumber: 283,
+                            lineNumber: 286,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -714,7 +717,7 @@ function ResearchStructureAdminPage() {
                                             children: "产学研合作单位"
                                         }, void 0, false, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 340,
+                                            lineNumber: 343,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -725,20 +728,20 @@ function ResearchStructureAdminPage() {
                                                     className: "w-4 h-4 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                    lineNumber: 342,
+                                                    lineNumber: 345,
                                                     columnNumber: 19
                                                 }, this),
                                                 "添加合作单位"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 341,
+                                            lineNumber: 344,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 339,
+                                    lineNumber: 342,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -754,7 +757,7 @@ function ResearchStructureAdminPage() {
                                                             children: "合作单位"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                            lineNumber: 350,
+                                                            lineNumber: 353,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -766,18 +769,18 @@ function ResearchStructureAdminPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                lineNumber: 357,
+                                                                lineNumber: 360,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                            lineNumber: 351,
+                                                            lineNumber: 354,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                    lineNumber: 349,
+                                                    lineNumber: 352,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -789,7 +792,7 @@ function ResearchStructureAdminPage() {
                                                                     children: "Logo"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                    lineNumber: 364,
+                                                                    lineNumber: 367,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -802,7 +805,7 @@ function ResearchStructureAdminPage() {
                                                                                 name: partner.name || 'Partner'
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                lineNumber: 368,
+                                                                                lineNumber: 371,
                                                                                 columnNumber: 31
                                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                                 className: "w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10",
@@ -810,17 +813,17 @@ function ResearchStructureAdminPage() {
                                                                                     className: "w-8 h-8 text-primary/40"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                    lineNumber: 374,
+                                                                                    lineNumber: 377,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                lineNumber: 373,
+                                                                                lineNumber: 376,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                            lineNumber: 366,
+                                                                            lineNumber: 369,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -842,7 +845,7 @@ function ResearchStructureAdminPage() {
                                                                                     id: `file-input-${partner.id}`
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                    lineNumber: 379,
+                                                                                    lineNumber: 382,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -857,32 +860,32 @@ function ResearchStructureAdminPage() {
                                                                                             className: "w-4 h-4 mr-2"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                            lineNumber: 402,
+                                                                                            lineNumber: 405,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         "选择图片"
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                                    lineNumber: 394,
+                                                                                    lineNumber: 397,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                            lineNumber: 378,
+                                                                            lineNumber: 381,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                    lineNumber: 365,
+                                                                    lineNumber: 368,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                            lineNumber: 363,
+                                                            lineNumber: 366,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -892,7 +895,7 @@ function ResearchStructureAdminPage() {
                                                                     children: "单位名称"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                    lineNumber: 411,
+                                                                    lineNumber: 414,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -903,57 +906,57 @@ function ResearchStructureAdminPage() {
                                                                     className: "mt-2"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                                    lineNumber: 412,
+                                                                    lineNumber: 415,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                            lineNumber: 410,
+                                                            lineNumber: 413,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                                    lineNumber: 361,
+                                                    lineNumber: 364,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, partner.id, true, {
                                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                                            lineNumber: 348,
+                                            lineNumber: 351,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                                    lineNumber: 346,
+                                    lineNumber: 349,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/admin/research-structure/page.tsx",
-                            lineNumber: 338,
+                            lineNumber: 341,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/admin/research-structure/page.tsx",
-                    lineNumber: 237,
+                    lineNumber: 240,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/admin/research-structure/page.tsx",
-                lineNumber: 236,
+                lineNumber: 239,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/admin/research-structure/page.tsx",
-            lineNumber: 235,
+            lineNumber: 238,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/admin/research-structure/page.tsx",
-        lineNumber: 234,
+        lineNumber: 237,
         columnNumber: 5
     }, this);
 }

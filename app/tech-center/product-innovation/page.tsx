@@ -1,14 +1,10 @@
 'use client'
 
-import { PCBStatorProductionTech } from "@/components/PCBStatorProductionTech";
-import { ProductionTechnologySlider } from "@/components/ProductionTechnologySlider";
-
 export default function ProductInnovationPage() {
   return (
     <div className="min-h-screen">
       <main className="pt-20">
-        <PCBStatorProductionTech />
-        <ProductionTechnologySlider />
+        {/* 内容已迁移到 PCB线圈 -> PCB电机优势页面 */}
       </main>
     </div>
   );

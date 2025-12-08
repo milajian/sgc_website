@@ -166,3 +166,4 @@ function getDefaultData(): ResearchStructureData {
   };
 }
 
+

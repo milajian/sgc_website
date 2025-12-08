@@ -4,16 +4,7 @@ import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { GraduationCap, Award, Briefcase, Users } from "lucide-react";
-
-export interface Expert {
-  id: string;
-  name: string;
-  role: string;
-  roleTitle: string;
-  education: string;
-  achievements: string;
-  image?: string;
-}
+import { Expert } from "@/lib/types";
 
 interface ExpertTeamProps {
   experts: Expert[];

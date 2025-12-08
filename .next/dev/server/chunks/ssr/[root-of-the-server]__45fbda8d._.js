@@ -46,8 +46,6 @@ const __TURBOPACK__default__export__ = (0, __TURBOPACK__imported__module__$5b$pr
 
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$admin$2f$research$2d$structure$2f$page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/app/admin/research-structure/page.tsx [app-rsc] (client reference proxy) <module evaluation>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$admin$2f$research$2d$structure$2f$page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__ = __turbopack_context__.i("[project]/app/admin/research-structure/page.tsx [app-rsc] (client reference proxy)");
-;
-__turbopack_context__.n(__TURBOPACK__imported__module__$5b$project$5d2f$app$2f$admin$2f$research$2d$structure$2f$page$2e$tsx__$5b$app$2d$rsc$5d$__$28$client__reference__proxy$29$__);
 }),
 "[project]/app/admin/research-structure/page.tsx [app-rsc] (ecmascript, Next.js Server Component)", ((__turbopack_context__) => {
 
