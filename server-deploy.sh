@@ -53,12 +53,12 @@ install_nginx() {
 create_nginx_config() {
     echo -e "${YELLOW}创建 Nginx 配置...${NC}"
     
-    cat > "$NGINX_CONFIG_PATH" <<EOF
+    cat > "$NGINX_CONFIG_PATH" <<'EOF'
 server {
     listen 80;
-    server_name ${DOMAIN} ${DOMAIN}.*;
+    server_name _;
     
-    root ${WEB_DIR};
+    root /var/www/sgc_website/dist;
     index index.html;
     
     # 启用 gzip 压缩
@@ -73,9 +73,20 @@ server {
         add_header Cache-Control "public, immutable";
     }
     
-    # 主页面
+    # 处理尾部斜杠：重定向到不带斜杠的路径（除了根路径）
+    location ~ ^(.+)/$ {
+        return 301 $1;
+    }
+    
+    # 主页面 - 改进路径处理，避免403错误
     location / {
-        try_files \$uri \$uri/ /index.html;
+        # 尝试文件，如果不存在则返回 index.html（用于客户端路由）
+        try_files $uri $uri.html /index.html;
+    }
+    
+    # 处理 HTML 文件
+    location ~ \.html$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
     
     # 404 处理

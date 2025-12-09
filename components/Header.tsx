@@ -161,16 +161,10 @@ export const Header = () => {
       e.stopPropagation();
     }
     
-    // 获取 basePath（从环境变量，Next.js 会在构建时替换）
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    // 确保路径不带尾部斜杠，避免403错误
-    // 先移除 basePath 末尾的斜杠（如果有），再拼接路径
-    const cleanBasePath = basePath.replace(/\/$/, '');
-    const targetPath = `${cleanBasePath}/pcb-coil-product-lines`.replace(/\/$/, '');
-    // 使用 replace 而不是 href，避免在历史记录中留下带斜杠的路径
-    // 立即执行，不等待任何异步操作
-    window.location.replace(targetPath);
-  }, []);
+    // 使用 Next.js 路由而不是 window.location.replace，避免尾部斜线问题
+    // router.push 会自动处理 basePath，并且不会添加尾部斜线
+    router.push('/pcb-coil-product-lines');
+  }, [router]);
 
 
   // Esc 键关闭移动端菜单
