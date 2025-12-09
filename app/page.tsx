@@ -16,14 +16,17 @@ export default function Home() {
     // 从后端API获取数据
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        // 优先使用环境变量配置的API URL，否则使用相对路径通过Next.js API代理访问
+        // 如果设置了 NEXT_PUBLIC_API_URL，直接访问后端；否则使用相对路径
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiPath = apiUrl ? `${apiUrl}/api/research-structure` : '/api/research-structure';
         
         // 添加超时控制
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
         
         try {
-          const response = await fetch(`${apiUrl}/api/research-structure`, {
+          const response = await fetch(apiPath, {
             signal: controller.signal,
             headers: {
               'Content-Type': 'application/json',
@@ -35,13 +38,16 @@ export default function Home() {
           if (response.ok) {
             const fetchedData = await response.json();
             if (fetchedData && fetchedData.center) {
+              console.log('使用后端返回的研发架构数据:', fetchedData);
               setResearchData(fetchedData);
             } else {
               // 如果返回数据格式不正确，使用默认数据
+              console.warn('后端返回数据格式不正确，使用默认数据');
               setResearchData(getDefaultData());
             }
           } else {
             // 如果API返回错误，使用默认数据
+            console.warn('API返回错误，使用默认数据');
             setResearchData(getDefaultData());
           }
         } catch (fetchError: any) {
@@ -72,14 +78,16 @@ export default function Home() {
     if (hash && mainRef.current) {
       // 立即隐藏内容，避免显示顶部内容
       mainRef.current.style.visibility = 'hidden';
+    } else {
+      // 如果没有 hash，确保内容可见
+      if (mainRef.current) {
+        mainRef.current.style.visibility = 'visible';
+      }
     }
   }, []);
 
   // 处理 hash 导航（跨页面导航时使用）
   useEffect(() => {
-    // 等待页面内容加载完成
-    if (loadingResearch) return;
-
     const handleHashNavigation = () => {
       const hash = window.location.hash;
       if (hash) {
@@ -117,14 +125,31 @@ export default function Home() {
       }
     };
 
-    // 初始检查
-    handleHashNavigation();
+    // 添加超时保护：即使 loadingResearch 一直为 true，也要在合理时间后显示内容
+    const timeoutId = setTimeout(() => {
+      if (mainRef.current && mainRef.current.style.visibility === 'hidden') {
+        console.warn('超时保护：强制显示页面内容');
+        mainRef.current.style.visibility = 'visible';
+      }
+    }, 5000); // 5秒后强制显示
 
-    // 监听 hashchange 事件（用于浏览器前进/后退）
-    window.addEventListener('hashchange', handleHashNavigation);
+    // 等待页面内容加载完成
+    if (!loadingResearch) {
+      // 初始检查
+      handleHashNavigation();
 
+      // 监听 hashchange 事件（用于浏览器前进/后退）
+      window.addEventListener('hashchange', handleHashNavigation);
+
+      return () => {
+        clearTimeout(timeoutId);
+        window.removeEventListener('hashchange', handleHashNavigation);
+      };
+    }
+
+    // 即使 loadingResearch 为 true，也要清理超时器
     return () => {
-      window.removeEventListener('hashchange', handleHashNavigation);
+      clearTimeout(timeoutId);
     };
   }, [loadingResearch, pathname]);
 

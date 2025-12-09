@@ -7,6 +7,7 @@ import { IncubationAchievements } from "@/components/IncubationAchievements";
 import { ExpertTeam } from "@/components/ExpertTeam";
 import { Expert } from "@/lib/types";
 import { getImageUrl } from "@/lib/image-url";
+import { getImagePath } from "@/lib/image-path";
 
 export interface ResearchStructureData {
   center: {
@@ -48,14 +49,17 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
     // 从后端API获取专家数据
     const fetchExperts = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        // 使用相对路径，通过Next.js API代理访问
+        // 优先使用环境变量配置的API URL，否则使用相对路径
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiPath = apiUrl ? `${apiUrl}/api/experts` : '/api/experts';
         
         // 添加超时控制
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
         
         try {
-          const response = await fetch(`${apiUrl}/api/experts`, {
+          const response = await fetch(apiPath, {
             signal: controller.signal,
             headers: {
               'Content-Type': 'application/json',
@@ -67,13 +71,18 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
           if (response.ok) {
             const fetchedData = await response.json();
             if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+              // 优先使用后端返回的数据，即使 image 字段为空也使用
+              // 这样可以确保使用后端上传的图片
+              console.log('使用后端返回的专家数据:', fetchedData);
               setExperts(fetchedData);
             } else {
               // 如果返回空数组，使用默认数据
+              console.warn('后端返回空数组，使用默认数据');
               setExperts(getDefaultExperts());
             }
           } else {
             // 如果API返回错误，使用默认数据
+            console.warn('API返回错误，使用默认数据');
             setExperts(getDefaultExperts());
           }
         } catch (fetchError: any) {
@@ -349,7 +358,7 @@ function getDefaultExperts(): Expert[] {
       roleTitle: '定子设计 工程师',
       education: '桂林电子科技大学 硕士',
       achievements: '发表专利4篇,其中发明专利3篇,实用新型专利1篇',
-      image: '/assets/expert-1.jpg'
+      image: '' // 改为空字符串，显示占位符而不是错误的logo
     },
     {
       id: '2',
@@ -358,7 +367,7 @@ function getDefaultExperts(): Expert[] {
       roleTitle: '热仿真 工程师',
       education: '陕西科技大学 硕士',
       achievements: '发表论文1篇,专利1篇',
-      image: '/assets/expert-2.jpg'
+      image: '' // 改为空字符串
     },
     {
       id: '3',
@@ -367,7 +376,7 @@ function getDefaultExperts(): Expert[] {
       roleTitle: '制造 主管',
       education: '电子科技大学 本科',
       achievements: '具有15年厚铜生产经验,发表专利10余篇',
-      image: '/assets/expert-3.jpg'
+      image: '' // 改为空字符串
     },
     {
       id: '4',
@@ -376,7 +385,7 @@ function getDefaultExperts(): Expert[] {
       roleTitle: '电磁仿真 技术专家',
       education: '长沙理工大学 本科',
       achievements: '13年电机研发经验,实用新型专利4篇',
-      image: '/assets/expert-4.jpg'
+      image: '' // 改为空字符串
     }
   ];
 }

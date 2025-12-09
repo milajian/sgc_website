@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function POST(request: NextRequest) {

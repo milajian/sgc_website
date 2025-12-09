@@ -1,5 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+// 静态导出时需要提供 generateStaticParams
+// 对于 catch-all 路由 [...path]，返回一个占位符路径以避免构建错误
+export async function generateStaticParams() {
+  // 返回一个占位符路径，实际在静态导出时不会被使用
+  return [{ path: ['_'] }];
+}
+
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET(

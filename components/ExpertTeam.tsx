@@ -95,7 +95,7 @@ export const ExpertTeam = ({ experts }: ExpertTeamProps) => {
                       {/* 照片 */}
                       <div className="flex-shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                          {expert.image ? (
+                          {expert.image && expert.image.trim() !== '' ? (
                             <img 
                               src={getImageUrl(expert.image)}
                               alt={expert.name}
@@ -103,6 +103,7 @@ export const ExpertTeam = ({ experts }: ExpertTeamProps) => {
                               loading="lazy"
                               onError={(e) => {
                                 // 如果图片加载失败，显示占位符
+                                console.warn(`专家 ${expert.name} 的图片加载失败:`, expert.image);
                                 const target = e.target as HTMLImageElement;
                                 target.style.display = 'none';
                                 const parent = target.parentElement;

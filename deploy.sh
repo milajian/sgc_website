@@ -139,7 +139,7 @@ build_project() {
     
     # 构建项目 - 部署到IP地址时不使用basePath
     echo -e "${YELLOW}执行构建（IP地址部署，不使用basePath）...${NC}"
-    BASE_PATH= NODE_ENV=production npm run build
+    BASE_PATH= NEXT_PUBLIC_BASE_PATH= NODE_ENV=production npm run build
     
     if [ ! -d "${LOCAL_BUILD_DIR}" ]; then
         echo -e "${RED}错误: 构建输出目录不存在: ${LOCAL_BUILD_DIR}${NC}"

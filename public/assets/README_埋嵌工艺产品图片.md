@@ -57,3 +57,4 @@ public/assets/maiqian6.png
 
 代码中已使用 `getImagePath()` 函数处理路径，会自动处理 basePath 配置。添加图片文件后，页面会自动显示图片，无需修改代码。
 
+

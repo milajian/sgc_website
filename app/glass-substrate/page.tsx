@@ -2,8 +2,29 @@
 
 import { motion } from "framer-motion";
 import { Square } from "lucide-react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function GlassSubstratePage() {
+  const router = useRouter();
+
+  // 标准化路径：移除尾部斜杠，避免403错误和路径不一致
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      // 如果路径带尾部斜杠且不是根路径，重定向
+      if (currentPath !== '/glass-substrate' && currentPath.endsWith('/')) {
+        const normalizedPath = currentPath.replace(/\/$/, '');
+        if (normalizedPath === '/glass-substrate') {
+          // 使用 replaceState 而不是 router.replace，避免在静态导出模式下出现问题
+          window.history.replaceState(null, '', '/glass-substrate');
+          // 触发路径更新事件，让 Header 组件知道路径变化
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        }
+      }
+    }
+  }, [router]);
+
   return (
     <div className="min-h-screen">
       <main className="pt-20">

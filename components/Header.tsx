@@ -21,6 +21,7 @@ const logo = getImagePath("/assets/logo.png");
 export const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [currentPath, setCurrentPath] = useState<string>('/');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
@@ -30,32 +31,92 @@ export const Header = () => {
   });
   const [productLinesHover, setProductLinesHover] = useState(false);
 
+  // 获取当前路径（兼容静态导出模式）
+  useEffect(() => {
+    // 在客户端获取实际路径
+    const updatePath = () => {
+      if (typeof window !== 'undefined') {
+        const actualPath = window.location.pathname;
+        // 移除 basePath 前缀（如果存在），以便路径匹配逻辑正常工作
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+        let pathWithoutBasePath = actualPath;
+        if (basePath && actualPath.startsWith(basePath)) {
+          pathWithoutBasePath = actualPath.slice(basePath.length) || '/';
+        }
+        setCurrentPath(pathWithoutBasePath);
+      }
+    };
+
+    // 初始设置
+    updatePath();
+
+    // 监听路径变化（用于浏览器前进/后退）
+    window.addEventListener('popstate', updatePath);
+    
+    // 如果 usePathname 可用，也监听它的变化
+    // usePathname 返回的路径已经移除了 basePath，直接使用
+    if (pathname) {
+      setCurrentPath(pathname);
+    }
+
+    // 监听链接点击事件，更新路径
+    const handleLinkClick = () => {
+      setTimeout(updatePath, 0);
+    };
+    document.addEventListener('click', handleLinkClick);
+
+    return () => {
+      window.removeEventListener('popstate', updatePath);
+      document.removeEventListener('click', handleLinkClick);
+    };
+  }, [pathname]);
+
   // 根据当前路径判断激活的菜单项
   const getActiveMenuKey = useCallback((): string | null => {
-    if (!pathname) return null;
+    // 使用实际路径而不是 pathname hook（兼容静态导出模式）
+    let activePath = currentPath;
     
-    // 技术中心：路径包含 /tech-center 或主页的特定 section
-    if (pathname.includes('/tech-center') || pathname === '/') {
-      return 'tech-center';
+    // 如果 currentPath 为空，尝试从 window.location 获取
+    if (!activePath && typeof window !== 'undefined') {
+      activePath = window.location.pathname;
     }
     
-    // PCB线圈：路径包含 /pcb-coil
-    if (pathname.includes('/pcb-coil')) {
-      return 'pcb-coil';
+    if (!activePath) return null;
+    
+    // 移除 basePath 前缀（如果存在）
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    let pathWithoutBasePath = activePath;
+    if (basePath && activePath.startsWith(basePath)) {
+      pathWithoutBasePath = activePath.slice(basePath.length) || '/';
     }
     
-    // PCB埋嵌
-    if (pathname === '/pcb-embedded' || pathname.includes('/pcb-embedded')) {
+    // 标准化路径：移除尾部斜杠（除了根路径）
+    const normalizedPath = pathWithoutBasePath === '/' ? '/' : pathWithoutBasePath.replace(/\/$/, '');
+    
+    // 优先判断更具体的路径，避免冲突
+    
+    // PCB埋嵌 - 精确匹配，避免与其他路径冲突
+    if (normalizedPath === '/pcb-embedded' || normalizedPath.startsWith('/pcb-embedded/')) {
       return 'pcb-embedded';
     }
     
-    // 玻璃基板
-    if (pathname === '/glass-substrate' || pathname.includes('/glass-substrate')) {
+    // 玻璃基板 - 精确匹配
+    if (normalizedPath === '/glass-substrate' || normalizedPath.startsWith('/glass-substrate/')) {
       return 'glass-substrate';
     }
     
+    // PCB线圈：路径包含 /pcb-coil（但不能是 /pcb-embedded）
+    if (normalizedPath.includes('/pcb-coil') && !normalizedPath.includes('/pcb-embedded')) {
+      return 'pcb-coil';
+    }
+    
+    // 技术中心：路径包含 /tech-center 或主页
+    if (normalizedPath.includes('/tech-center') || normalizedPath === '/') {
+      return 'tech-center';
+    }
+    
     return null;
-  }, [pathname]);
+  }, [currentPath]);
 
   const activeMenuKey = getActiveMenuKey();
 
@@ -76,22 +137,41 @@ export const Header = () => {
   }, []);
 
 
-  const handleTechCenterClick = useCallback(() => {
-    // 导航到首页
-    router.push('/');
-  }, [router]);
+  const handleTechCenterClick = useCallback((e?: React.MouseEvent) => {
+    // 如果传入了事件，阻止默认行为和冒泡
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // 获取 basePath（从环境变量，Next.js 会在构建时替换）
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    // 在静态导出模式下，需要手动添加 basePath
+    // 确保路径正确：basePath 后跟根路径
+    const cleanBasePath = basePath.replace(/\/$/, '');
+    const targetPath = cleanBasePath ? `${cleanBasePath}/` : '/';
+    // 使用 replace 而不是 href，保持一致性
+    window.location.replace(targetPath);
+  }, []);
 
-  const handlePCBCoilClick = useCallback(() => {
-    // 导航到PCB线圈产品线页面
-    router.push('/pcb-coil-product-lines');
-  }, [router]);
+  const handlePCBCoilClick = useCallback((e?: React.MouseEvent) => {
+    // 如果传入了事件，阻止默认行为和冒泡
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // 获取 basePath（从环境变量，Next.js 会在构建时替换）
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    // 确保路径不带尾部斜杠，避免403错误
+    // 先移除 basePath 末尾的斜杠（如果有），再拼接路径
+    const cleanBasePath = basePath.replace(/\/$/, '');
+    const targetPath = `${cleanBasePath}/pcb-coil-product-lines`.replace(/\/$/, '');
+    // 使用 replace 而不是 href，避免在历史记录中留下带斜杠的路径
+    // 立即执行，不等待任何异步操作
+    window.location.replace(targetPath);
+  }, []);
 
-
-  // 预取常用页面，提升跳转速度
-  useEffect(() => {
-    router.prefetch('/');
-    router.prefetch('/pcb-coil-product-lines');
-  }, [router]);
 
   // Esc 键关闭移动端菜单
   useEffect(() => {
@@ -129,9 +209,12 @@ export const Header = () => {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger 
                     onClick={(e) => {
+                      // 阻止默认行为，避免 NavigationMenuTrigger 的默认跳转
+                      e.preventDefault();
+                      e.stopPropagation();
                       // 如果点击的是触发器本身（不是下拉菜单），则跳转
                       if (e.target === e.currentTarget || (e.target as HTMLElement).textContent === '技术中心') {
-                        handleTechCenterClick();
+                        handleTechCenterClick(e);
                       }
                     }}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
@@ -189,9 +272,12 @@ export const Header = () => {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger 
                     onClick={(e) => {
+                      // 阻止默认行为，避免 NavigationMenuTrigger 的默认跳转
+                      e.preventDefault();
+                      e.stopPropagation();
                       // 如果点击的是触发器本身（不是下拉菜单），则跳转
                       if (e.target === e.currentTarget || (e.target as HTMLElement).textContent === 'PCB线圈') {
-                        handlePCBCoilClick();
+                        handlePCBCoilClick(e);
                       }
                     }}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
@@ -358,8 +444,10 @@ export const Header = () => {
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => {
-                            handleTechCenterClick();
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleTechCenterClick(e);
                             setMobileMenuOpen(false);
                           }}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
@@ -414,8 +502,10 @@ export const Header = () => {
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => {
-                            handlePCBCoilClick();
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handlePCBCoilClick(e);
                             setMobileMenuOpen(false);
                           }}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
@@ -582,3 +672,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;

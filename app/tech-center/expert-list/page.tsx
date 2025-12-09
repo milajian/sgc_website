@@ -1,15 +1,17 @@
 'use client'
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 export default function ExpertListPage() {
-  const router = useRouter();
-  
   useEffect(() => {
-    // 重定向到主页的PCB电机团队架构锚点
-    router.replace('/#expert-team');
-  }, [router]);
+    // 使用 window.location 进行重定向，更可靠
+    // 这样可以确保锚点导航正常工作
+    if (typeof window !== 'undefined') {
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const targetUrl = basePath ? `${basePath}/#expert-team` : '/#expert-team';
+      window.location.href = targetUrl;
+    }
+  }, []);
   
   return null;
 }
