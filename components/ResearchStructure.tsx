@@ -1,8 +1,12 @@
 'use client'
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Network, Settings, LayoutGrid, FlaskConical, Building2 } from "lucide-react";
+import { IncubationAchievements } from "@/components/IncubationAchievements";
+import { ExpertTeam } from "@/components/ExpertTeam";
+import { Expert } from "@/lib/types";
+import { getImageUrl } from "@/lib/image-url";
 
 export interface ResearchStructureData {
   center: {
@@ -37,25 +41,84 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export const ResearchStructure = ({ data }: ResearchStructureProps) => {
+  const [experts, setExperts] = useState<Expert[]>([]);
+  const [loadingExperts, setLoadingExperts] = useState(true);
+
+  useEffect(() => {
+    // 从后端API获取专家数据
+    const fetchExperts = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        
+        // 添加超时控制
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
+        
+        try {
+          const response = await fetch(`${apiUrl}/api/experts`, {
+            signal: controller.signal,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (response.ok) {
+            const fetchedData = await response.json();
+            if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+              setExperts(fetchedData);
+            } else {
+              // 如果返回空数组，使用默认数据
+              setExperts(getDefaultExperts());
+            }
+          } else {
+            // 如果API返回错误，使用默认数据
+            setExperts(getDefaultExperts());
+          }
+        } catch (fetchError: any) {
+          clearTimeout(timeoutId);
+          // 如果是超时或网络错误，使用默认数据
+          if (fetchError.name === 'AbortError') {
+            console.warn('API请求超时，使用默认数据');
+          } else {
+            console.warn('无法连接到后端服务，使用默认数据');
+          }
+          setExperts(getDefaultExperts());
+        }
+      } catch (error) {
+        // 其他错误，使用默认数据
+        console.warn('获取专家数据失败，使用默认数据:', error);
+        setExperts(getDefaultExperts());
+      } finally {
+        setLoadingExperts(false);
+      }
+    };
+
+    fetchExperts();
+  }, []);
+
   const getIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName] || Network;
     return <IconComponent className="w-6 h-6" />;
   };
 
   return (
-    <section className="py-20 bg-background relative overflow-hidden">
+    <Fragment>
+    <section id="research-structure" className="py-20 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         {/* 主标题 */}
         <motion.div 
-          className="text-center mb-12"
+          className="flex items-center justify-center gap-3 mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-4">
-            明阳电路技术中心
-          </h1>
+          <LayoutGrid className="w-8 h-8 text-primary" />
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            研发架构
+          </h2>
         </motion.div>
 
         {/* 组织架构图 */}
@@ -232,7 +295,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
                   
                   return (
                     <img 
-                      src={logo} 
+                      src={getImageUrl(logo)} 
                       alt={name}
                       className="max-h-20 max-w-full object-contain"
                       onError={() => setImageError(true)}
@@ -264,6 +327,57 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
         </div>
       </div>
     </section>
+    
+    {/* 技术中心孵化成果 */}
+    <IncubationAchievements />
+    
+    {/* PCB电机团队架构 */}
+    {!loadingExperts && experts.length > 0 && (
+      <ExpertTeam experts={experts} />
+    )}
+    </Fragment>
   );
 };
+
+// 默认专家数据（当后端不可用时使用）
+function getDefaultExperts(): Expert[] {
+  return [
+    {
+      id: '1',
+      name: '回思樾',
+      role: '定子设计、生产制造工程师',
+      roleTitle: '定子设计 工程师',
+      education: '桂林电子科技大学 硕士',
+      achievements: '发表专利4篇,其中发明专利3篇,实用新型专利1篇',
+      image: '/assets/expert-1.jpg'
+    },
+    {
+      id: '2',
+      name: '颜嘉豪',
+      role: '仿真工程师、生产制造工程师',
+      roleTitle: '热仿真 工程师',
+      education: '陕西科技大学 硕士',
+      achievements: '发表论文1篇,专利1篇',
+      image: '/assets/expert-2.jpg'
+    },
+    {
+      id: '3',
+      name: '段李权',
+      role: 'NPI主管,负责难度板跟进及交付',
+      roleTitle: '制造 主管',
+      education: '电子科技大学 本科',
+      achievements: '具有15年厚铜生产经验,发表专利10余篇',
+      image: '/assets/expert-3.jpg'
+    },
+    {
+      id: '4',
+      name: '刘伟',
+      role: '电机专家,电机电磁仿真,结构设计',
+      roleTitle: '电磁仿真 技术专家',
+      education: '长沙理工大学 本科',
+      achievements: '13年电机研发经验,实用新型专利4篇',
+      image: '/assets/expert-4.jpg'
+    }
+  ];
+}
 

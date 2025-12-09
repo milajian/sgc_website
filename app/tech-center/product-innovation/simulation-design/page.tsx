@@ -1,17 +1,17 @@
 'use client'
 
-import { SimulationTestSlider } from "@/components/SimulationTestSlider";
-import { ProtectionThermalSlider } from "@/components/ProtectionThermalSlider";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SimulationDesignPage() {
-  return (
-    <div className="min-h-screen">
-      <main className="pt-20">
-        <SimulationTestSlider />
-        <ProtectionThermalSlider />
-      </main>
-    </div>
-  );
+  const router = useRouter();
+  
+  useEffect(() => {
+    // 重定向到轴向磁通电机定子页面的仿真测试锚点
+    router.replace('/pcb-coil-axial#simulation-test');
+  }, [router]);
+  
+  return null;
 }
 
 

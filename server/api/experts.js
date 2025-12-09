@@ -159,9 +159,8 @@ router.post('/upload', upload.single('image'), (req, res) => {
     }
 
     const filename = req.file.filename;
-    // 返回完整的URL路径，包含API基础URL
-    const apiBaseUrl = process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 3001}`;
-    const imageUrl = `${apiBaseUrl}/uploads/${filename}`;
+    // 返回相对路径，通过Next.js API代理访问
+    const imageUrl = `/uploads/${filename}`;
 
     // 更新对应专家的图片URL
     const experts = readExperts();

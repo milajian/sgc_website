@@ -3,7 +3,44 @@
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
-import { Layers } from "lucide-react";
+import { Layers, ImageIcon } from "lucide-react";
+import { useState } from "react";
+
+// 图片组件，带错误处理和占位符
+function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
+  const [imgError, setImgError] = useState(false);
+  const [imgLoading, setImgLoading] = useState(true);
+
+  return (
+    <>
+      {!imgError ? (
+        <img 
+          src={src} 
+          alt={alt} 
+          className="w-full h-full object-contain"
+          style={{ imageRendering: 'crisp-edges' }}
+          loading="lazy"
+          onError={() => {
+            setImgError(true);
+            setImgLoading(false);
+          }}
+          onLoad={() => setImgLoading(false)}
+        />
+      ) : (
+        <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
+          <ImageIcon className="w-12 h-12 mb-2 opacity-50" />
+          <p className="text-xs text-center px-2">{alt}</p>
+          <p className="text-xs text-muted-foreground/60 mt-1">图片未找到</p>
+        </div>
+      )}
+      {imgLoading && !imgError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+          <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+        </div>
+      )}
+    </>
+  );
+}
 
 // 埋嵌工艺产品图片和文字数据
 const embeddedProcessItems = [
@@ -115,12 +152,9 @@ export default function PCBEmbeddedPage() {
                           
                           {/* Image container */}
                           <div className="relative w-full h-full rounded-2xl border border-accent/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-4 group-hover:border-accent/50 transition-all duration-300 group-hover:scale-105 overflow-hidden shadow-md shadow-accent/10">
-                            <img 
+                            <ImageWithFallback 
                               src={item.image} 
-                              alt={item.label} 
-                              className="w-full h-full object-contain"
-                              style={{ imageRendering: 'crisp-edges' }}
-                              loading="lazy"
+                              alt={item.label}
                             />
                           </div>
                         </div>

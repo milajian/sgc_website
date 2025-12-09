@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -20,18 +20,44 @@ const logo = getImagePath("/assets/logo.png");
 
 export const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
     'tech-center': false,
     'pcb-coil': false,
-    'product-innovation': false,
     'product-lines': false,
-    'axial-motor-stator': false,
   });
-  const [productInnovationHover, setProductInnovationHover] = useState(false);
   const [productLinesHover, setProductLinesHover] = useState(false);
-  const [axialMotorStatorHover, setAxialMotorStatorHover] = useState(false);
+
+  // 根据当前路径判断激活的菜单项
+  const getActiveMenuKey = useCallback((): string | null => {
+    if (!pathname) return null;
+    
+    // 技术中心：路径包含 /tech-center 或主页的特定 section
+    if (pathname.includes('/tech-center') || pathname === '/') {
+      return 'tech-center';
+    }
+    
+    // PCB线圈：路径包含 /pcb-coil
+    if (pathname.includes('/pcb-coil')) {
+      return 'pcb-coil';
+    }
+    
+    // PCB埋嵌
+    if (pathname === '/pcb-embedded' || pathname.includes('/pcb-embedded')) {
+      return 'pcb-embedded';
+    }
+    
+    // 玻璃基板
+    if (pathname === '/glass-substrate' || pathname.includes('/glass-substrate')) {
+      return 'glass-substrate';
+    }
+    
+    return null;
+  }, [pathname]);
+
+  const activeMenuKey = getActiveMenuKey();
 
   const toggleMenu = useCallback((menuKey: string) => {
     setExpandedMenus(prev => ({
@@ -48,6 +74,24 @@ export const Header = () => {
       menuButtonRef.current?.focus();
     }, 100);
   }, []);
+
+
+  const handleTechCenterClick = useCallback(() => {
+    // 导航到首页
+    router.push('/');
+  }, [router]);
+
+  const handlePCBCoilClick = useCallback(() => {
+    // 导航到PCB线圈产品线页面
+    router.push('/pcb-coil-product-lines');
+  }, [router]);
+
+
+  // 预取常用页面，提升跳转速度
+  useEffect(() => {
+    router.prefetch('/');
+    router.prefetch('/pcb-coil-product-lines');
+  }, [router]);
 
   // Esc 键关闭移动端菜单
   useEffect(() => {
@@ -83,69 +127,54 @@ export const Header = () => {
               <NavigationMenuList className="gap-0 lg:gap-0.5 xl:gap-1">
                 {/* 技术中心 */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
+                  <NavigationMenuTrigger 
+                    onClick={(e) => {
+                      // 如果点击的是触发器本身（不是下拉菜单），则跳转
+                      if (e.target === e.currentTarget || (e.target as HTMLElement).textContent === '技术中心') {
+                        handleTechCenterClick();
+                      }
+                    }}
+                    className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
+                      activeMenuKey === 'tech-center' ? 'pcb-active-glow' : ''
+                    }`}>
                     技术中心
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="bg-background/95 backdrop-blur-lg shadow-xl" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
                     <ul className="w-[220px] p-2">
                       <li>
                         <NavigationMenuLink asChild>
-                          <button
-                            onClick={() => router.push('/tech-center/history')}
+                          <Link
+                            href="/#partners"
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            历史发展
-                          </button>
+                            研发方向
+                          </Link>
                         </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <button
-                            onClick={() => router.push('/tech-center/research-structure')}
-                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                          >
-                            研发架构
-                          </button>
-                        </NavigationMenuLink>
-                      </li>
-                      <li 
-                        className="relative"
-                        onMouseEnter={() => setProductInnovationHover(true)}
-                        onMouseLeave={() => setProductInnovationHover(false)}
-                      >
-                        <div
-                          className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors cursor-pointer flex items-center justify-between"
-                        >
-                          <span>产品创新</span>
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${productInnovationHover ? 'rotate-180' : ''}`} />
-                        </div>
-                        {productInnovationHover && (
-                          <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
-                            <li>
-                              <Link
-                                href="/tech-center/product-innovation/incubation-achievements"
-                                className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                onClick={() => setProductInnovationHover(false)}
-                              >
-                                孵化成果
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/tech-center/product-innovation/simulation-design"
-                                className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                onClick={() => setProductInnovationHover(false)}
-                              >
-                                PCB电机定子设计与仿真
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/tech-center/expert-list"
+                            href="/#research-structure"
+                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            研发架构
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/#incubation-achievements"
+                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                          >
+                            产品创新
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/#expert-team"
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             专家列表
@@ -158,7 +187,16 @@ export const Header = () => {
 
                 {/* PCB 线圈 */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 xl:px-4">
+                  <NavigationMenuTrigger 
+                    onClick={(e) => {
+                      // 如果点击的是触发器本身（不是下拉菜单），则跳转
+                      if (e.target === e.currentTarget || (e.target as HTMLElement).textContent === 'PCB线圈') {
+                        handlePCBCoilClick();
+                      }
+                    }}
+                    className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
+                      activeMenuKey === 'pcb-coil' ? 'pcb-active-glow' : ''
+                    }`}>
                     PCB线圈
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="bg-background/95 backdrop-blur-lg shadow-xl" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
@@ -172,74 +210,26 @@ export const Header = () => {
                         <div
                           className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors cursor-pointer flex items-center justify-between"
                         >
-                          <span>五大产品线</span>
+                          <Link
+                            href="/pcb-coil-product-lines#product-lines"
+                            className="flex-1"
+                            onClick={() => setProductLinesHover(false)}
+                          >
+                            五大产品线
+                          </Link>
                           <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${productLinesHover ? 'rotate-180' : ''}`} />
                         </div>
                         {productLinesHover && (
                           <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
-                            <li 
-                              className="relative"
-                              onMouseEnter={() => setAxialMotorStatorHover(true)}
-                              onMouseLeave={() => setAxialMotorStatorHover(false)}
-                            >
-                              <div
-                                className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors cursor-pointer flex items-center justify-between"
-                              >
-                                <span>轴向磁通电机定子</span>
-                                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${axialMotorStatorHover ? 'rotate-180' : ''}`} />
-                              </div>
-                              {axialMotorStatorHover && (
-                                <ul className="absolute left-full top-0 -ml-1 w-[220px] bg-background/95 backdrop-blur-lg shadow-xl rounded-md p-2 z-50" style={{ borderWidth: '0.5px', borderStyle: 'solid', borderColor: 'hsl(210 55% 25% / 0.2)' }}>
-                                  <li>
-                                    <Link
-                                      href="/pcb-coil-axial/pcb-motor-intro"
-                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                      onClick={() => {
-                                        setAxialMotorStatorHover(false);
-                                        setProductLinesHover(false);
-                                      }}
-                                    >
-                                      PCB电机产品介绍
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="/pcb-coil-axial/pcb-motor-advantages"
-                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                      onClick={() => {
-                                        setAxialMotorStatorHover(false);
-                                        setProductLinesHover(false);
-                                      }}
-                                    >
-                                      PCB电机优势
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      href="/pcb-coil-axial/application-scenes"
-                                      className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                      onClick={() => {
-                                        setAxialMotorStatorHover(false);
-                                        setProductLinesHover(false);
-                                      }}
-                                    >
-                                      应用场景
-                                    </Link>
-                                  </li>
                             <li>
-                              <Link
-                                      href="/pcb-coil-axial/case-study"
+                              <button
+                                onClick={() => {
+                                  router.push('/pcb-coil-axial');
+                                }}
                                 className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                      onClick={() => {
-                                        setAxialMotorStatorHover(false);
-                                        setProductLinesHover(false);
-                                      }}
                               >
-                                      PCB电机案例分析
-                              </Link>
-                                  </li>
-                                </ul>
-                              )}
+                                轴向磁通电机定子
+                              </button>
                             </li>
                             <li>
                               <Link
@@ -280,36 +270,25 @@ export const Header = () => {
                           </ul>
                         )}
                       </li>
-                      {/* 生产技术与设备 */}
+                      {/* 生产技术 */}
                       <li>
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/pcb-coil-axial/pcb-motor-advantages#pcb-stator-production-tech"
+                            href="/pcb-coil-product-lines#pcb-stator-production-tech"
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            生产技术与设备
+                            生产技术
                           </Link>
                         </NavigationMenuLink>
                       </li>
-                      {/* 专精市场布局 */}
+                      {/* 生产设备 */}
                       <li>
                         <NavigationMenuLink asChild>
                           <Link
-                            href="/pcb-coil-market-layout"
+                            href="/pcb-coil-product-lines#production-technology"
                             className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            专精市场布局
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      {/* PCB电机产品历程 */}
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href="/pcb-coil-product-journey"
-                            className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                          >
-                            PCB电机产品历程
+                            生产设备
                           </Link>
                         </NavigationMenuLink>
                       </li>
@@ -321,7 +300,9 @@ export const Header = () => {
                 <NavigationMenuItem>
                   <Link 
                     href="/pcb-embedded"
-                    className="text-foreground hover:text-primary transition-colors text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2"
+                    className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
+                      activeMenuKey === 'pcb-embedded' ? 'pcb-active-glow' : ''
+                    }`}
                   >
                     PCB埋嵌
                   </Link>
@@ -331,7 +312,9 @@ export const Header = () => {
                 <NavigationMenuItem>
                   <Link 
                     href="/glass-substrate"
-                    className="text-foreground hover:text-primary transition-colors text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2"
+                    className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
+                      activeMenuKey === 'glass-substrate' ? 'pcb-active-glow' : ''
+                    }`}
                   >
                     玻璃基板
                   </Link>
@@ -373,143 +356,113 @@ export const Header = () => {
                     
                     {/* 技术中心 */}
                     <div className="space-y-1.5">
-                      <button
-                        onClick={() => toggleMenu('tech-center')}
-                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
-                      >
-                        <span className="flex-1 text-left">技术中心</span>
-                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['tech-center'] ? 'rotate-180' : ''}`} />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            handleTechCenterClick();
+                            setMobileMenuOpen(false);
+                          }}
+                          className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
+                            activeMenuKey === 'tech-center' ? 'pcb-active-glow' : ''
+                          }`}
+                        >
+                          技术中心
+                        </button>
+                        <button
+                          onClick={() => toggleMenu('tech-center')}
+                          className="flex-shrink-0 px-2 py-2"
+                          aria-label="展开/收起技术中心菜单"
+                        >
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['tech-center'] ? 'rotate-180' : ''}`} />
+                        </button>
+                      </div>
                       {expandedMenus['tech-center'] && (
                         <div className="space-y-1 pl-2">
-                          <button
-                            onClick={() => {
-                              router.push('/tech-center/history');
-                              setMobileMenuOpen(false);
-                            }}
+                          <Link
+                            href="/#partners"
+                            onClick={() => setMobileMenuOpen(false)}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            历史发展
-                          </button>
-                          <button
-                            onClick={() => {
-                              router.push('/tech-center/research-structure');
-                              setMobileMenuOpen(false);
-                            }}
+                            研发方向
+                          </Link>
+                          <Link
+                            href="/#research-structure"
+                            onClick={() => setMobileMenuOpen(false)}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             研发架构
-                          </button>
-                          <button
-                            onClick={() => toggleMenu('product-innovation')}
-                            className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors px-3 py-1.5"
+                          </Link>
+                          <Link
+                            href="/#incubation-achievements"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            <span className="flex-1 text-left">产品创新</span>
-                            <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['product-innovation'] ? 'rotate-180' : ''}`} />
-                          </button>
-                          {expandedMenus['product-innovation'] && (
-                            <div className="space-y-1 pl-2">
-                              <button
-                                onClick={() => {
-                                  setMobileMenuOpen(false);
-                                  router.push('/tech-center/product-innovation/incubation-achievements');
-                                }}
-                                className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                              >
-                                孵化成果
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setMobileMenuOpen(false);
-                                  router.push('/tech-center/product-innovation/simulation-design');
-                                }}
-                                className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                              >
-                                PCB电机定子设计与仿真
-                              </button>
-                            </div>
-                          )}
-                          <button
-                            onClick={() => {
-                              setMobileMenuOpen(false);
-                              router.push('/tech-center/expert-list');
-                            }}
+                            产品创新
+                          </Link>
+                          <Link
+                            href="/#expert-team"
+                            onClick={() => setMobileMenuOpen(false)}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
                             专家列表
-                          </button>
+                          </Link>
                         </div>
                       )}
                     </div>
 
                     {/* PCB 线圈 */}
                     <div className="space-y-1.5">
-                      <button
-                        onClick={() => toggleMenu('pcb-coil')}
-                        className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors"
-                      >
-                        <span className="flex-1 text-left">PCB线圈</span>
-                        <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['pcb-coil'] ? 'rotate-180' : ''}`} />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            handlePCBCoilClick();
+                            setMobileMenuOpen(false);
+                          }}
+                          className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
+                            activeMenuKey === 'pcb-coil' ? 'pcb-active-glow' : ''
+                          }`}
+                        >
+                          PCB线圈
+                        </button>
+                        <button
+                          onClick={() => toggleMenu('pcb-coil')}
+                          className="flex-shrink-0 px-2 py-2"
+                          aria-label="展开/收起PCB线圈菜单"
+                        >
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['pcb-coil'] ? 'rotate-180' : ''}`} />
+                        </button>
+                      </div>
                       {expandedMenus['pcb-coil'] && (
                         <div className="space-y-1 pl-2">
                           {/* 五大产品线 */}
-                          <button
-                            onClick={() => toggleMenu('product-lines')}
-                            className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors px-3 py-1.5"
-                          >
-                            <span className="flex-1 text-left">五大产品线</span>
-                            <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['product-lines'] ? 'rotate-180' : ''}`} />
-                          </button>
+                          <div className="flex items-center justify-between w-full">
+                            <button
+                              onClick={() => {
+                                setMobileMenuOpen(false);
+                                router.push('/pcb-coil-product-lines#product-lines');
+                              }}
+                              className="flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-colors px-3 py-1.5"
+                            >
+                              五大产品线
+                            </button>
+                            <button
+                              onClick={() => toggleMenu('product-lines')}
+                              className="flex-shrink-0 px-2 py-1.5"
+                            >
+                              <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expandedMenus['product-lines'] ? 'rotate-180' : ''}`} />
+                            </button>
+                          </div>
                           {expandedMenus['product-lines'] && (
                             <div className="space-y-1 pl-2">
                               <button
-                                onClick={() => toggleMenu('axial-motor-stator')}
-                                className="flex items-center justify-between w-full text-sm font-semibold text-foreground hover:text-primary transition-colors px-3 py-1.5"
-                              >
-                                <span className="flex-1 text-left">轴向磁通电机定子</span>
-                                <ChevronDown className={`flex-shrink-0 ml-2 h-4 w-4 transition-transform duration-200 ${expandedMenus['axial-motor-stator'] ? 'rotate-180' : ''}`} />
-                              </button>
-                              {expandedMenus['axial-motor-stator'] && (
-                                <div className="space-y-1 pl-2">
-                                  <button
-                                    onClick={() => {
-                                      setMobileMenuOpen(false);
-                                      router.push('/pcb-coil-axial/pcb-motor-intro');
-                                    }}
-                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                  >
-                                    PCB电机产品介绍
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setMobileMenuOpen(false);
-                                      router.push('/pcb-coil-axial/pcb-motor-advantages');
-                                    }}
-                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                  >
-                                    PCB电机优势
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setMobileMenuOpen(false);
-                                      router.push('/pcb-coil-axial/application-scenes');
-                                    }}
-                                    className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                                  >
-                                    应用场景
-                                  </button>
-                              <button
                                 onClick={() => {
                                   setMobileMenuOpen(false);
-                                      router.push('/pcb-coil-axial/case-study');
+                                  router.push('/pcb-coil-axial');
                                 }}
-                                className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
+                                className="block w-full text-left px-3 py-1.5 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                               >
-                                    PCB电机案例分析
+                                轴向磁通电机定子
                               </button>
-                                </div>
-                              )}
                               <button
                                 onClick={() => {
                                   setMobileMenuOpen(false);
@@ -548,35 +501,25 @@ export const Header = () => {
                               </button>
                             </div>
                           )}
-                          {/* 生产技术与设备 */}
+                          {/* 生产技术 */}
                           <button
                             onClick={() => {
                               setMobileMenuOpen(false);
-                              router.push('/pcb-coil-axial/pcb-motor-advantages#pcb-stator-production-tech');
+                              router.push('/pcb-coil-product-lines#pcb-stator-production-tech');
                             }}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            生产技术与设备
+                            生产技术
                           </button>
-                          {/* 专精市场布局 */}
+                          {/* 生产设备 */}
                           <button
                             onClick={() => {
                               setMobileMenuOpen(false);
-                              router.push('/pcb-coil-market-layout');
+                              router.push('/pcb-coil-product-lines#production-technology');
                             }}
                             className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                           >
-                            专精市场布局
-                          </button>
-                          {/* PCB电机产品历程 */}
-                          <button
-                            onClick={() => {
-                              setMobileMenuOpen(false);
-                              router.push('/pcb-coil-product-journey');
-                            }}
-                            className="block w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
-                          >
-                            PCB电机产品历程
+                            生产设备
                           </button>
                         </div>
                       )}
@@ -589,7 +532,9 @@ export const Header = () => {
                           setMobileMenuOpen(false);
                           router.push('/pcb-embedded');
                         }}
-                        className="text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                        className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
+                          activeMenuKey === 'pcb-embedded' ? 'pcb-active-glow' : ''
+                        }`}
                       >
                         PCB埋嵌
                       </h3>
@@ -600,8 +545,11 @@ export const Header = () => {
                       <h3 
                         onClick={() => {
                           setMobileMenuOpen(false);
+                          router.push('/glass-substrate');
                         }}
-                        className="text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+                        className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
+                          activeMenuKey === 'glass-substrate' ? 'pcb-active-glow' : ''
+                        }`}
                       >
                         玻璃基板
                       </h3>

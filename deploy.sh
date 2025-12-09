@@ -228,11 +228,11 @@ sync_files() {
 set_permissions() {
     echo -e "${YELLOW}设置文件权限...${NC}"
     
-    # 尝试使用常见的 Web 服务器用户，如果不存在则只设置权限
-    # 使用分号分隔命令，避免复杂的转义问题
-    local cmd="chmod -R 755 ${REMOTE_WEB_DIR}; chown -R www-data:www-data ${REMOTE_WEB_DIR} 2>/dev/null || chown -R nginx:nginx ${REMOTE_WEB_DIR} 2>/dev/null || chown -R apache:apache ${REMOTE_WEB_DIR} 2>/dev/null || true; echo '权限设置完成'"
+    # 设置基本权限
+    exec_ssh "chmod -R 755 ${REMOTE_WEB_DIR}"
     
-    exec_ssh "$cmd"
+    # 尝试设置文件所有者（如果用户存在）
+    exec_ssh "chown -R www-data:www-data ${REMOTE_WEB_DIR} 2>/dev/null || chown -R nginx:nginx ${REMOTE_WEB_DIR} 2>/dev/null || chown -R apache:apache ${REMOTE_WEB_DIR} 2>/dev/null || true"
     
     echo -e "${GREEN}✓ 权限设置完成${NC}"
 }

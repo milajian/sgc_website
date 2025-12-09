@@ -1,14 +1,26 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, Upload, Plus, Trash2, Building2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Save, Upload, Plus, Trash2, Building2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { ResearchStructureData } from "@/components/ResearchStructure";
+import { getImageUrl } from "@/lib/image-url";
 
 // 合作单位Logo图片组件（带占位符）
 function PartnerLogoImage({ logo, name }: { logo: string; name: string }) {
@@ -24,7 +36,7 @@ function PartnerLogoImage({ logo, name }: { logo: string; name: string }) {
   
   return (
     <img
-      src={logo}
+      src={getImageUrl(logo)}
       alt={name}
       className="w-full h-full object-contain p-2"
       onError={() => setImageError(true)}
@@ -33,14 +45,40 @@ function PartnerLogoImage({ logo, name }: { logo: string; name: string }) {
 }
 
 export default function ResearchStructureAdminPage() {
+  const router = useRouter();
   const [data, setData] = useState<ResearchStructureData | null>(null);
+  const [initialData, setInitialData] = useState<ResearchStructureData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  // 检测是否有未保存的修改
+  const hasUnsavedChanges = () => {
+    if (!data || !initialData) return false;
+    return JSON.stringify(data) !== JSON.stringify(initialData);
+  };
+
+  // 监听页面关闭
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      const hasChanges = data && initialData && JSON.stringify(data) !== JSON.stringify(initialData);
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = '您有未保存的修改，确定要离开吗？';
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [data, initialData]);
 
   const fetchData = async () => {
     try {
@@ -64,11 +102,16 @@ export default function ResearchStructureAdminPage() {
           const fetchedData = await response.json();
           if (fetchedData && fetchedData.center) {
             setData(fetchedData);
+            setInitialData(JSON.parse(JSON.stringify(fetchedData))); // 深拷贝保存初始数据
           } else {
-            setData(getDefaultData());
+            const defaultData = getDefaultData();
+            setData(defaultData);
+            setInitialData(JSON.parse(JSON.stringify(defaultData)));
           }
         } else {
-          setData(getDefaultData());
+          const defaultData = getDefaultData();
+          setData(defaultData);
+          setInitialData(JSON.parse(JSON.stringify(defaultData)));
         }
       } catch (fetchError: any) {
         clearTimeout(timeoutId);
@@ -77,18 +120,22 @@ export default function ResearchStructureAdminPage() {
         } else {
           console.warn('无法连接到后端服务，使用默认数据');
         }
-        setData(getDefaultData());
+        const defaultData = getDefaultData();
+        setData(defaultData);
+        setInitialData(JSON.parse(JSON.stringify(defaultData)));
       }
     } catch (error) {
       console.warn('获取组织架构数据失败，使用默认数据:', error);
-      setData(getDefaultData());
+      const defaultData = getDefaultData();
+      setData(defaultData);
+      setInitialData(JSON.parse(JSON.stringify(defaultData)));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async () => {
-    if (!data) return;
+  const handleSave = async (): Promise<boolean> => {
+    if (!data) return false;
     
     setSaving(true);
     try {
@@ -104,12 +151,17 @@ export default function ResearchStructureAdminPage() {
 
       if (response.ok) {
         toast.success('组织架构数据保存成功！');
+        // 保存成功后更新初始数据
+        setInitialData(JSON.parse(JSON.stringify(data)));
+        return true;
       } else {
         toast.error('保存失败，请检查后端服务');
+        return false;
       }
     } catch (error) {
       console.error('Failed to save data:', error);
       toast.error('保存失败，请检查网络连接');
+      return false;
     } finally {
       setSaving(false);
     }
@@ -217,6 +269,33 @@ export default function ResearchStructureAdminPage() {
     });
   };
 
+  // 处理返回按钮点击
+  const handleBackClick = () => {
+    if (hasUnsavedChanges()) {
+      setShowConfirmDialog(true);
+    } else {
+      router.push('/admin');
+    }
+  };
+
+  // 处理确认对话框的保存并返回
+  const handleSaveAndBack = async () => {
+    setShowConfirmDialog(false);
+    const saved = await handleSave();
+    if (saved) {
+      router.push('/admin');
+    } else {
+      // 保存失败，重新打开对话框
+      setShowConfirmDialog(true);
+    }
+  };
+
+  // 处理确认对话框的不保存返回
+  const handleDiscardAndBack = () => {
+    setShowConfirmDialog(false);
+    router.push('/admin');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -238,6 +317,16 @@ export default function ResearchStructureAdminPage() {
       <main className="pt-20 pb-20">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
+            <div className="mb-6">
+              <Button 
+                variant="ghost" 
+                className="text-muted-foreground hover:text-foreground"
+                onClick={handleBackClick}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                返回管理后台
+              </Button>
+            </div>
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 研发架构管理
@@ -428,6 +517,33 @@ export default function ResearchStructureAdminPage() {
           </div>
         </div>
       </main>
+
+      {/* 未保存修改确认对话框 */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>有未保存的修改</AlertDialogTitle>
+            <AlertDialogDescription>
+              您有未保存的修改，确定要离开吗？如果离开，未保存的修改将会丢失。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowConfirmDialog(false)}>
+              取消
+            </AlertDialogCancel>
+            <Button
+              variant="outline"
+              onClick={handleDiscardAndBack}
+              className="text-destructive hover:text-destructive"
+            >
+              不保存返回
+            </Button>
+            <AlertDialogAction onClick={handleSaveAndBack}>
+              保存并返回
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

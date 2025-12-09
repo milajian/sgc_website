@@ -1,32 +1,32 @@
 'use client'
 import { Card } from "@/components/ui/card";
 import { getImagePath } from "@/lib/image-path";
-import { Award, DollarSign, Users, Factory as FactoryIcon, Ship } from "lucide-react";
+import { Rocket, Handshake, FileText, TrendingUp, FlaskConical } from "lucide-react";
 const logo = getImagePath("/assets/logo.png");
 const stats = [{
-  icon: FactoryIcon,
-  value: "8",
-  label: "国际基地",
+  icon: Rocket,
+  value: "3",
+  label: "国家重点研发项目",
   suffix: "个"
 }, {
-  icon: DollarSign,
-  value: "15.59",
-  label: "销售收入",
+  icon: Handshake,
+  value: "6",
+  label: "校企联合",
+  suffix: "个"
+}, {
+  icon: FileText,
+  value: "200+",
+  label: "专利",
+  suffix: ""
+}, {
+  icon: TrendingUp,
+  value: "2",
+  label: "产值创造",
   suffix: "亿"
 }, {
-  icon: Users,
-  value: "30+",
-  label: "服务年限",
-  suffix: "年"
-}, {
-  icon: Ship,
-  value: "85",
-  label: "国际市场",
-  suffix: "%"
-}, {
-  icon: Award,
-  value: "ISO",
-  label: "质量认证",
+  icon: FlaskConical,
+  value: "CNAS",
+  label: "中央实验室",
   suffix: ""
 }];
 export const CompanyInfo = () => {
@@ -37,10 +37,10 @@ export const CompanyInfo = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              明阳电路 SGCircuits
+              明阳电路技术中心
             </h2>
             <p className="text-lg md:text-xl text-secondary-foreground/90 max-w-3xl mx-auto leading-relaxed px-4">
-              专注PCB制造30余年，为全球客户提供卓越的PCB解决方案。我们的PCB电机技术代表着电机行业的未来发展方向。
+              PCB工艺基础研究、PCB应用产品研发及半导体领域技术运用
             </p>
           </div>
 
@@ -62,50 +62,77 @@ export const CompanyInfo = () => {
               </Card>)}
           </div>
 
-          <div id="partners" className="mt-12 md:mt-20">
-            <h3 className="text-2xl sm:text-3xl font-bold mb-3 md:mb-4 text-center text-blue-50">全球合作伙伴</h3>
-            <p className="text-center text-secondary-foreground/90 mb-8 md:mb-12 max-w-3xl mx-auto px-4 text-sm sm:text-base">
-              我们与全球领先企业建立长期合作关系，共同推动PCB电机技术的创新与应用
+          <div className="mt-12 md:mt-20 text-center">
+            <h2 id="partners" className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">产品研发方向</h2>
+            <p className="text-lg md:text-xl text-secondary-foreground/90 max-w-3xl mx-auto leading-relaxed px-4 mb-8 md:mb-12">
+              我们专注于多个前沿技术领域的研发，持续推动PCB及相关技术的创新与应用
             </p>
             
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
               {[{
-              name: 'EATON',
-              logo: 'https://logo.clearbit.com/eaton.com'
+              name: 'ATE 探针卡',
+              image: getImagePath('/assets/ate-probe-card.svg')
             }, {
-              name: 'Siemens',
-              logo: 'https://logo.clearbit.com/siemens.com'
+              name: '软硬结合板',
+              image: getImagePath('/assets/rigid-flex-pcb.svg')
             }, {
-              name: 'ABB',
-              logo: 'https://logo.clearbit.com/abb.com'
+              name: '增材制造',
+              image: getImagePath('/assets/additive-manufacturing.svg')
             }, {
-              name: 'Lenze',
-              logo: 'https://logo.clearbit.com/lenze.com'
+              name: 'PCB线圈',
+              image: getImagePath('/assets/pcb-coil.svg')
             }, {
-              name: 'Qualcomm',
-              logo: 'https://logo.clearbit.com/qualcomm.com'
+              name: '玻璃基板',
+              image: getImagePath('/assets/glass-substrate.svg')
             }, {
-              name: 'John Deere',
-              logo: 'https://logo.clearbit.com/deere.com'
+              name: 'SiC埋嵌',
+              image: getImagePath('/assets/sic-embedded.svg')
             }, {
-              name: 'Caterpillar',
-              logo: 'https://logo.clearbit.com/cat.com'
+              name: '铜浆烧结',
+              image: getImagePath('/assets/copper-paste-sintering.svg')
             }, {
-              name: 'Infinitum',
-              logo: 'https://logo.clearbit.com/goinfinitum.com'
-            }].map((partner, index) => <Card key={index} className="p-4 sm:p-6 bg-white/95 backdrop-blur-sm border-white/20 hover:bg-white hover:scale-105 transition-all flex flex-col items-center justify-center group min-h-[120px]">
-                  <div className="h-12 sm:h-16 flex items-center justify-center mb-2 sm:mb-3 w-full">
-                    <img src={partner.logo} alt={`${partner.name} Logo`} className="max-h-10 sm:max-h-12 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all" loading="lazy" onError={e => {
-                  // Fallback to text if logo fails to load
+              name: '陶瓷基板',
+              image: getImagePath('/assets/ceramic-substrate.svg')
+            }].map((product, index) => <Card key={index} className="p-4 sm:p-6 bg-white/95 backdrop-blur-sm border-white/20 hover:bg-white hover:scale-105 hover:shadow-xl hover:shadow-primary/20 transition-all duration-500 flex flex-col items-center justify-center group min-h-[120px] relative overflow-hidden">
+                  {/* Shimmer effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent shimmer-effect" />
+                  </div>
+
+                  {/* Glow effect */}
+                  <div 
+                    className="absolute inset-0 rounded-2xl blur-xl group-hover:scale-110 transition-transform duration-500 opacity-0 group-hover:opacity-100"
+                    style={{
+                      background: 'radial-gradient(circle at center, transparent 0%, transparent 30%, hsl(var(--primary) / 0.12) 50%, hsl(var(--primary) / 0.28) 70%, hsl(var(--primary) / 0.45) 90%, hsl(var(--primary) / 0.65) 100%)'
+                    }}
+                  />
+                  
+                  <div className="h-20 sm:h-24 md:h-28 lg:h-32 flex items-center justify-center mb-2 sm:mb-3 w-full relative z-10">
+                    <img src={product.image} alt={product.name} className="h-full w-full max-h-24 sm:max-h-28 md:max-h-32 lg:max-h-36 max-w-full object-contain transition-all" loading="lazy" onError={e => {
+                  // Fallback to text if image fails to load
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML = `<span class="text-sm sm:text-lg font-bold text-gray-700">${partner.name}</span>`;
+                  e.currentTarget.parentElement!.innerHTML = `<span class="text-sm sm:text-lg font-bold text-gray-700">${product.name}</span>`;
                 }} />
                   </div>
-                  <p className="text-xs sm:text-sm font-medium text-gray-600 text-center">{partner.name}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 text-center relative z-10">{product.name}</p>
                 </Card>)}
             </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        .shimmer-effect {
+          animation: shimmer 3s infinite;
+        }
+      `}</style>
     </section>;
 };

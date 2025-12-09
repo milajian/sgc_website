@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
+import { getImageUrl } from "@/lib/image-url";
 import { GraduationCap, Award, Briefcase, Users } from "lucide-react";
 import { Expert } from "@/lib/types";
 
@@ -12,7 +13,7 @@ interface ExpertTeamProps {
 
 export const ExpertTeam = ({ experts }: ExpertTeamProps) => {
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden">
+    <section id="expert-team" className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden">
       {/* Subtle circuit background pattern */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
@@ -96,7 +97,7 @@ export const ExpertTeam = ({ experts }: ExpertTeamProps) => {
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
                           {expert.image ? (
                             <img 
-                              src={expert.image.startsWith('http') ? expert.image : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}${expert.image}`}
+                              src={getImageUrl(expert.image)}
                               alt={expert.name}
                               className="w-full h-full object-cover"
                               loading="lazy"

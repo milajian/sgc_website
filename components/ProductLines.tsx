@@ -2,11 +2,13 @@
 import { Card } from "@/components/ui/card";
 import { Cog, MoveHorizontal, Layers, LayoutGrid, Circle, Target } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const productLines = [{
   icon: Cog,
   nameCn: "轴向磁通电机定子",
   nameEn: "Axial Flux Motor Stator",
+  path: "/pcb-coil-axial",
   businessModel: "定子设计 + 仿真 + 生产",
   specs: [
     "功率等级：覆盖约 0.5–50 kW 轴向磁通电机平台",
@@ -23,6 +25,7 @@ const productLines = [{
   icon: MoveHorizontal,
   nameCn: "直线电机绕组",
   nameEn: "Linear Motor Winding",
+  path: "/pcb-coil-linear-winding",
   businessModel: "绕组设计 + 仿真 + 生产",
   specs: [
     "推力范围：从几十牛到数千牛的直线电机平台",
@@ -39,6 +42,7 @@ const productLines = [{
   icon: Layers,
   nameCn: "平面变压器",
   nameEn: "Planar Transformer",
+  path: "/pcb-coil-planar-transformer",
   businessModel: "变压器设计 + 仿真 + 生产",
   specs: [
     "功率范围：从几十瓦到数千瓦平面变压器平台",
@@ -55,6 +59,7 @@ const productLines = [{
   icon: LayoutGrid,
   nameCn: "平面电机绕组",
   nameEn: "Planar Motor Winding",
+  path: "/pcb-coil-planar-winding",
   businessModel: "绕组生产",
   specs: [
     "电机类型：适配平面直驱电机、X-Y 平面电机等结构",
@@ -71,6 +76,7 @@ const productLines = [{
   icon: Circle,
   nameCn: "空心杯电机定子",
   nameEn: "Coreless Motor Stator",
+  path: "/pcb-coil-hollow-cup-stator",
   businessModel: "定子生产",
   specs: [
     "适配尺寸：典型外径约 10–60 mm 微型 / 小型电机",
@@ -129,22 +135,25 @@ export const ProductLines = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="p-4 h-full hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-muted/30 border-primary/20 hover:border-accent/40 flex flex-col overflow-hidden relative group">
-                  {/* Gradient background - top to bottom fade */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-primary/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="flex flex-col items-center text-center flex-1 relative z-10">
-                    {/* Icon - 渐变背景 + 阴影光晕 */}
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-3 shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
-                      <Icon className="w-7 h-7 text-white" />
-                    </div>
+                <Link href={product.path} className="block h-full">
+                  <Card className="p-4 h-full hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-muted/30 border-primary/20 hover:border-accent/40 flex flex-col overflow-hidden relative group cursor-pointer">
+                    {/* Gradient background - top to bottom fade */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-primary/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
                     
-                    {/* Title - 固定最小高度确保对齐 */}
-                    <div className="flex flex-col justify-center mb-4 min-h-[3.5rem]">
-                      <h3 className="font-bold text-foreground leading-tight text-xl">
-                        {product.nameCn}
-                      </h3>
-                    </div>
+                    <div className="flex flex-col items-center text-center flex-1 relative z-10">
+                      {/* Icon - 渐变背景 + 阴影光晕 */}
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-3 shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
+                        <Icon className="w-7 h-7 text-white" />
+                      </div>
+                      
+                      {/* Title - 固定最小高度确保对齐 */}
+                      <div className="flex flex-col justify-center mb-4 min-h-[3.5rem] relative">
+                        <h3 className="font-bold text-foreground leading-tight text-xl group-hover:text-accent transition-colors relative inline-block">
+                          {product.nameCn}
+                          {/* 下划线动画 - 从中间向两边展开 */}
+                          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300 ease-out"></span>
+                        </h3>
+                      </div>
                     
                     {/* Business Model - 增强视觉效果 */}
                     <div className="w-full py-2 px-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg mb-3 min-h-[4rem] flex flex-col justify-center border border-primary/10">
@@ -171,6 +180,7 @@ export const ProductLines = () => {
                     </div>
                   </div>
                 </Card>
+                </Link>
               </motion.div>;
           })}
           </div>

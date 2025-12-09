@@ -1,15 +1,17 @@
 'use client'
 
-import { IncubationAchievements } from "@/components/IncubationAchievements";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function IncubationAchievementsPage() {
-  return (
-    <div className="min-h-screen">
-      <main className="pt-20">
-        <IncubationAchievements />
-      </main>
-    </div>
-  );
+  const router = useRouter();
+  
+  useEffect(() => {
+    // 重定向到主页的孵化成果锚点
+    router.replace('/#incubation-achievements');
+  }, [router]);
+  
+  return null;
 }
 
 

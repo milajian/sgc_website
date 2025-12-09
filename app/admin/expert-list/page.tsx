@@ -1,23 +1,61 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Expert } from "@/lib/types";
-import { Save, Upload, Plus, Trash2 } from "lucide-react";
+import { Save, Upload, Plus, Trash2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { getImageUrl } from "@/lib/image-url";
 
 export default function ExpertListAdminPage() {
+  const router = useRouter();
   const [experts, setExperts] = useState<Expert[]>([]);
+  const [initialExperts, setInitialExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
 
   useEffect(() => {
     fetchExperts();
   }, []);
+
+  // 检测是否有未保存的修改
+  const hasUnsavedChanges = () => {
+    return JSON.stringify(experts) !== JSON.stringify(initialExperts);
+  };
+
+  // 监听页面关闭
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      const hasChanges = JSON.stringify(experts) !== JSON.stringify(initialExperts);
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = '您有未保存的修改，确定要离开吗？';
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [experts, initialExperts]);
 
   const fetchExperts = async () => {
     try {
@@ -40,9 +78,13 @@ export default function ExpertListAdminPage() {
         
         if (response.ok) {
           const data = await response.json();
-          setExperts(data.length > 0 ? data : getDefaultExperts());
+          const expertsData = data.length > 0 ? data : getDefaultExperts();
+          setExperts(expertsData);
+          setInitialExperts(JSON.parse(JSON.stringify(expertsData))); // 深拷贝保存初始数据
         } else {
-          setExperts(getDefaultExperts());
+          const defaultData = getDefaultExperts();
+          setExperts(defaultData);
+          setInitialExperts(JSON.parse(JSON.stringify(defaultData)));
         }
       } catch (fetchError: any) {
         clearTimeout(timeoutId);
@@ -51,17 +93,21 @@ export default function ExpertListAdminPage() {
         } else {
           console.warn('无法连接到后端服务，使用默认数据');
         }
-        setExperts(getDefaultExperts());
+        const defaultData = getDefaultExperts();
+        setExperts(defaultData);
+        setInitialExperts(JSON.parse(JSON.stringify(defaultData)));
       }
     } catch (error) {
       console.warn('获取专家数据失败，使用默认数据:', error);
-      setExperts(getDefaultExperts());
+      const defaultData = getDefaultExperts();
+      setExperts(defaultData);
+      setInitialExperts(JSON.parse(JSON.stringify(defaultData)));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<boolean> => {
     setSaving(true);
     try {
       // 使用相对路径，通过 Next.js API 路由代理到后端
@@ -76,12 +122,17 @@ export default function ExpertListAdminPage() {
 
       if (response.ok) {
         toast.success('专家信息保存成功！');
+        // 保存成功后更新初始数据
+        setInitialExperts(JSON.parse(JSON.stringify(experts)));
+        return true;
       } else {
         toast.error('保存失败，请检查后端服务');
+        return false;
       }
     } catch (error) {
       console.error('Failed to save experts:', error);
       toast.error('保存失败，请检查网络连接');
+      return false;
     } finally {
       setSaving(false);
     }
@@ -102,11 +153,12 @@ export default function ExpertListAdminPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setExperts(experts.map(expert => 
+        const updatedExperts = experts.map(expert => 
           expert.id === expertId 
             ? { ...expert, image: data.imageUrl }
             : expert
-        ));
+        );
+        setExperts(updatedExperts);
         toast.success('图片上传成功！');
       } else {
         toast.error('图片上传失败');
@@ -144,6 +196,34 @@ export default function ExpertListAdminPage() {
     ));
   };
 
+  // 处理返回按钮点击
+  const handleBackClick = () => {
+    if (hasUnsavedChanges()) {
+      setPendingNavigation(() => () => router.push('/admin'));
+      setShowConfirmDialog(true);
+    } else {
+      router.push('/admin');
+    }
+  };
+
+  // 处理确认对话框的保存并返回
+  const handleSaveAndBack = async () => {
+    setShowConfirmDialog(false);
+    const saved = await handleSave();
+    if (saved) {
+      router.push('/admin');
+    } else {
+      // 保存失败，重新打开对话框
+      setShowConfirmDialog(true);
+    }
+  };
+
+  // 处理确认对话框的不保存返回
+  const handleDiscardAndBack = () => {
+    setShowConfirmDialog(false);
+    router.push('/admin');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -157,6 +237,16 @@ export default function ExpertListAdminPage() {
       <main className="pt-20 pb-20">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
+            <div className="mb-6">
+              <Button 
+                variant="ghost" 
+                className="text-muted-foreground hover:text-foreground"
+                onClick={handleBackClick}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                返回管理后台
+              </Button>
+            </div>
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 专家列表管理
@@ -195,7 +285,7 @@ export default function ExpertListAdminPage() {
                       <div className="mt-2 flex items-center gap-4">
                         {expert.image && (
                           <img
-                            src={expert.image}
+                            src={getImageUrl(expert.image)}
                             alt={expert.name || 'Expert'}
                             className="w-24 h-24 rounded-lg object-cover border-2 border-primary/20"
                           />
@@ -278,6 +368,33 @@ export default function ExpertListAdminPage() {
           </div>
         </div>
       </main>
+
+      {/* 未保存修改确认对话框 */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>有未保存的修改</AlertDialogTitle>
+            <AlertDialogDescription>
+              您有未保存的修改，确定要离开吗？如果离开，未保存的修改将会丢失。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowConfirmDialog(false)}>
+              取消
+            </AlertDialogCancel>
+            <Button
+              variant="outline"
+              onClick={handleDiscardAndBack}
+              className="text-destructive hover:text-destructive"
+            >
+              不保存返回
+            </Button>
+            <AlertDialogAction onClick={handleSaveAndBack}>
+              保存并返回
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
