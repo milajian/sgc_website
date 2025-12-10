@@ -3,16 +3,25 @@
 import { motion } from "framer-motion";
 import { Square } from "lucide-react";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function GlassSubstratePage() {
   const router = useRouter();
+  const pathname = usePathname();
 
-  // 标准化路径：移除尾部斜杠，避免403错误和路径不一致
+  // 强制路由更新：确保路径正确匹配
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      // 如果路径带尾部斜杠且不是根路径，重定向
+      
+      // 如果 pathname 不正确，强制更新路由
+      if (pathname !== '/glass-substrate' && currentPath === '/glass-substrate') {
+        // 强制触发路由更新
+        router.replace('/glass-substrate');
+        return;
+      }
+      
+      // 标准化路径：移除尾部斜杠，避免403错误和路径不一致
       if (currentPath !== '/glass-substrate' && currentPath.endsWith('/')) {
         const normalizedPath = currentPath.replace(/\/$/, '');
         if (normalizedPath === '/glass-substrate') {
@@ -23,7 +32,7 @@ export default function GlassSubstratePage() {
         }
       }
     }
-  }, [router]);
+  }, [router, pathname]);
 
   return (
     <div className="min-h-screen">

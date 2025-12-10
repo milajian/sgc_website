@@ -72,6 +72,6 @@ export BACKUP_RETENTION_DAYS=7
 export SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # 是否使用 SSH 密钥（如果设置为 true，将优先使用密钥认证）
-export USE_SSH_KEY=false
+export USE_SSH_KEY=true
 export SSH_KEY_PATH="$HOME/.ssh/id_rsa_sgc"
 

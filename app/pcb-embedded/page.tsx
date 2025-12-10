@@ -4,18 +4,27 @@ import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { Layers, ImageIcon } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 // 图片组件，带错误处理和占位符
 function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   const [imgError, setImgError] = useState(false);
   const [imgLoading, setImgLoading] = useState(true);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // 检查图片是否已经加载完成（比如从缓存中加载）
+    if (imgRef.current?.complete) {
+      setImgLoading(false);
+    }
+  }, [src]);
 
   return (
     <>
       {!imgError ? (
         <img 
+          ref={imgRef}
           src={src} 
           alt={alt} 
           className="w-full h-full object-contain"
@@ -35,7 +44,7 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
         </div>
       )}
       {imgLoading && !imgError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-background/50 pointer-events-none">
           <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
         </div>
       )}
@@ -73,12 +82,21 @@ const embeddedProcessItems = [
 
 export default function PCBEmbeddedPage() {
   const router = useRouter();
+  const pathname = usePathname();
 
-  // 标准化路径：移除尾部斜杠，避免403错误和路径不一致
+  // 强制路由更新：确保路径正确匹配
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      // 如果路径带尾部斜杠且不是根路径，重定向
+      
+      // 如果 pathname 不正确，强制更新路由
+      if (pathname !== '/pcb-embedded' && currentPath === '/pcb-embedded') {
+        // 强制触发路由更新
+        router.replace('/pcb-embedded');
+        return;
+      }
+      
+      // 标准化路径：移除尾部斜杠，避免403错误和路径不一致
       if (currentPath !== '/pcb-embedded' && currentPath.endsWith('/')) {
         const normalizedPath = currentPath.replace(/\/$/, '');
         if (normalizedPath === '/pcb-embedded') {
@@ -89,7 +107,7 @@ export default function PCBEmbeddedPage() {
         }
       }
     }
-  }, [router]);
+  }, [router, pathname]);
 
   return (
     <div className="min-h-screen">

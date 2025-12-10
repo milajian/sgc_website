@@ -73,19 +73,54 @@ server {
         add_header Cache-Control "public, immutable";
     }
     
+    # API 反向代理到后端服务
+    location /api/ {
+        proxy_pass http://localhost:3001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # 增加超时时间，用于文件上传
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+        
+        # 支持大文件上传
+        client_max_body_size 10M;
+    }
+    
+    # 禁用目录索引，避免403错误
+    autoindex off;
+    
     # 处理尾部斜杠：重定向到不带斜杠的路径（除了根路径）
+    # 使用精确匹配的 location，优先级高于 location /
     location ~ ^(.+)/$ {
-        return 301 $1;
+        # 排除 API 路径
+        if ($1 !~ ^/api) {
+            return 301 $1;
+        }
     }
     
     # 主页面 - 改进路径处理，避免403错误
     location / {
-        # 尝试文件，如果不存在则返回 index.html（用于客户端路由）
-        try_files $uri $uri.html /index.html;
+        # 如果请求路径是目录，直接尝试对应的 HTML 文件，避免自动添加斜杠
+        if (-d $request_filename) {
+            try_files $uri.html =404;
+        }
+        # 直接尝试 HTML 文件，避免匹配到目录导致403错误
+        # 顺序：$uri.html（HTML文件） -> $uri（文件） -> /index.html（默认）
+        try_files $uri.html $uri /index.html;
     }
     
-    # 处理 HTML 文件
+    # 处理 HTML 文件 - 确保不会干扰主 location，只添加缓存头
     location ~ \.html$ {
+        # 确保文件存在，如果不存在返回404而不是继续处理
+        try_files $uri =404;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
     

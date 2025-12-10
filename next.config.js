@@ -14,6 +14,20 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: process.env.BASE_PATH !== undefined ? process.env.BASE_PATH : (process.env.NODE_ENV === 'production' ? '/sgc_website' : ''),
   },
+  // 禁用生产环境的 source map，避免使用 eval（CSP 不允许 eval）
+  // 静态导出不需要 source map，禁用它可以提高安全性并避免 CSP 问题
+  productionBrowserSourceMaps: false,
+  
+  // Next.js 16 使用 Turbopack，配置 Turbopack 以避免使用 eval
+  // 注意：Turbopack 在生产构建中默认不使用 eval，所以主要禁用 source map 即可
+  experimental: {
+    // 确保不使用 eval 相关的功能
+  },
+  
+  // Turbopack 配置（Next.js 16 默认使用 Turbopack）
+  turbopack: {
+    // Turbopack 在生产构建中默认不使用 eval，无需额外配置
+  },
 }
 
 export default nextConfig

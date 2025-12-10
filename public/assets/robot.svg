@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'>
+    <!-- 机器人头部 -->
+    <circle cx="200" cy="120" r="50" fill="none" stroke="#2AA19B" stroke-width="6"/>
+    <circle cx="200" cy="120" r="30" fill="#2AA19B" opacity="0.3"/>
+    <!-- 机器人身体 -->
+    <rect x="120" y="180" width="160" height="140" fill="none" stroke="#2AA19B" stroke-width="6" rx="8"/>
+    <rect x="140" y="200" width="120" height="100" fill="#2AA19B" opacity="0.2"/>
+    <!-- 机器人关节/连接点 -->
+    <circle cx="120" cy="200" r="12" fill="#2AA19B" opacity="0.6"/>
+    <circle cx="280" cy="200" r="12" fill="#2AA19B" opacity="0.6"/>
+    <circle cx="120" cy="280" r="12" fill="#2AA19B" opacity="0.6"/>
+    <circle cx="280" cy="280" r="12" fill="#2AA19B" opacity="0.6"/>
+    <!-- 连接线 -->
+    <line x1="200" y1="170" x2="200" y2="180" stroke="#2AA19B" stroke-width="4"/>
+</svg>
+

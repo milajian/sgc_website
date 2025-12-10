@@ -340,10 +340,10 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
     {/* 技术中心孵化成果 */}
     <IncubationAchievements />
     
-    {/* PCB电机团队架构 */}
-    {!loadingExperts && experts.length > 0 && (
+    {/* PCB电机团队架构 - 已隐藏 */}
+    {/* {!loadingExperts && experts.length > 0 && (
       <ExpertTeam experts={experts} />
-    )}
+    )} */}
     </Fragment>
   );
 };

@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { RouteLoadingIndicator } from "@/components/RouteLoadingIndicator";
+import { RouteLoadingProvider } from "@/lib/route-loading-context";
 import "./globals.css";
 import { useState, useEffect } from "react";
 
@@ -48,11 +50,19 @@ export default function RootLayout({
     }
   }, []);
 
+  // 注意：移除了路由错误检查 useEffect，因为：
+  // 1. 使用客户端路由后，不再需要检查路由是否正确初始化
+  // 2. 1.5 秒延迟检查会影响页面加载性能
+  // 3. Next.js 的路由系统会自动处理路由匹配
+
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* Favicon 和图标 */}
+        <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+        <link rel="apple-touch-icon" href="/assets/logo.jpg" />
         {/* 内联脚本：在页面加载前处理路径，避免403错误 */}
         <script
           dangerouslySetInnerHTML={{
@@ -68,20 +78,29 @@ export default function RootLayout({
             `,
           }}
         />
-        <title>明阳电路 PCB电机 | SGCircuits PCB Motor Technology</title>
+        <title>明阳电路技术中心 | SGCircuits Technology Center</title>
         <meta name="description" content="明阳电路PCB电机采用创新PCB定子技术，更轻、更高效、更可靠。效率提升10-15%，重量减轻30-60%，引领新一代电机技术革命。" />
         <meta name="author" content="SGCircuits" />
         <meta name="keywords" content="PCB电机, PCB定子, 电机技术, 节能电机, 明阳电路, SGCircuits, PCB Motor, PCB Stator" />
 
-        <meta property="og:title" content="明阳电路 PCB电机 | SGCircuits PCB Motor Technology" />
-        <meta property="og:description" content="创新PCB定子技术，更轻、更高效、更可靠。效率提升10-15%，重量减轻30-60%。" />
+        <meta property="og:title" content="明阳电路技术中心 | SGCircuits Technology Center" />
+        <meta property="og:description" content="PCB工艺基础研究、PCB应用产品研发及半导体领域技术运用" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+        <meta property="og:url" content="//47.106.73.160/" />
+        <meta property="og:image" content="https://raw.githubusercontent.com/milajian/sgc_website/main/public/assets/showimage.png?v=3" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:site_name" content="SGCircuits 明阳电路" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@Lovable" />
-        <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-      </head>
+        <meta name="twitter:title" content="明阳电路技术中心 | SGCircuits Technology Center" />
+        <meta name="twitter:description" content="PCB工艺基础研究、PCB应用产品研发及半导体领域技术运用" />
+        <meta name="twitter:image" content="https://raw.githubusercontent.com/milajian/sgc_website/main/public/assets/showimage.png?v=3" />
+        
+        {/* Content Security Policy 由 Nginx 配置，避免与 HTML meta 标签冲突 */}
+        {/* CSP 配置在 nginx-main-server.conf 中统一管理 */}
+        </head>
       <body suppressHydrationWarning>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider 
@@ -91,13 +110,16 @@ export default function RootLayout({
             disableTransitionOnChange={false}
             storageKey="sgc-theme"
           >
-            <TooltipProvider>
-              <Header />
-              {children}
-              <Footer />
-              <Toaster />
-              <Sonner />
-            </TooltipProvider>
+            <RouteLoadingProvider>
+              <TooltipProvider>
+                <RouteLoadingIndicator />
+                <Header />
+                {children}
+                <Footer />
+                <Toaster />
+                <Sonner />
+              </TooltipProvider>
+            </RouteLoadingProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </body>

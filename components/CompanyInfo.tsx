@@ -73,14 +73,14 @@ export const CompanyInfo = () => {
               name: 'ATE 探针卡',
               image: getImagePath('/assets/ate-probe-card.svg')
             }, {
-              name: '软硬结合板',
-              image: getImagePath('/assets/rigid-flex-pcb.svg')
+              name: 'PCB线圈',
+              image: getImagePath('/assets/pcb-coil.svg')
             }, {
               name: '增材制造',
               image: getImagePath('/assets/additive-manufacturing.svg')
             }, {
-              name: 'PCB线圈',
-              image: getImagePath('/assets/pcb-coil.svg')
+              name: '软硬结合板',
+              image: getImagePath('/assets/rigid-flex-pcb.svg')
             }, {
               name: '玻璃基板',
               image: getImagePath('/assets/glass-substrate.svg')
@@ -91,8 +91,8 @@ export const CompanyInfo = () => {
               name: '铜浆烧结',
               image: getImagePath('/assets/copper-paste-sintering.svg')
             }, {
-              name: '陶瓷基板',
-              image: getImagePath('/assets/ceramic-substrate.svg')
+              name: '机器人',
+              image: getImagePath('/assets/robot.svg')
             }].map((product, index) => <Card key={index} className="p-4 sm:p-6 bg-white/95 backdrop-blur-sm border-white/20 hover:bg-white hover:scale-105 hover:shadow-xl hover:shadow-primary/20 transition-all duration-500 flex flex-col items-center justify-center group min-h-[120px] relative overflow-hidden">
                   {/* Shimmer effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
