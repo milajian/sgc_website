@@ -33,19 +33,25 @@ check_dependencies() {
         exit 1
     fi
     
+    # 如果使用SSH密钥且密钥存在，则不需要sshpass或expect
+    if [ "$USE_SSH_KEY" = true ] && [ -f "$SSH_KEY_PATH" ]; then
+        echo -e "${YELLOW}使用 SSH 密钥认证，跳过 sshpass/expect 检查${NC}"
+        USE_SSHPASS=false
+        USE_EXPECT=false
     # 检查 sshpass 或 expect
-    if command -v sshpass &> /dev/null; then
+    elif command -v sshpass &> /dev/null; then
         USE_SSHPASS=true
         echo -e "${GREEN}✓ 使用 sshpass 进行认证${NC}"
     elif command -v expect &> /dev/null; then
         USE_EXPECT=true
         echo -e "${GREEN}✓ 使用 expect 进行认证${NC}"
     else
-        echo -e "${RED}错误: 未安装 sshpass 或 expect${NC}"
+        echo -e "${RED}错误: 未安装 sshpass 或 expect，且未配置 SSH 密钥${NC}"
         echo "请安装其中一个工具:"
         echo "  macOS: brew install hudochenkov/sshpass/sshpass"
         echo "  Ubuntu/Debian: sudo apt-get install sshpass"
         echo "  或 expect (macOS 通常已预装)"
+        echo "  或配置 SSH 密钥认证"
         exit 1
     fi
     

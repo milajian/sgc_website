@@ -60,7 +60,10 @@ check_dependencies() {
     
     local missing_tools=()
     
-    if ! command -v sshpass &> /dev/null; then
+    # 如果使用SSH密钥且密钥存在，则不需要sshpass
+    if [ "$USE_SSH_KEY" = true ] && [ -f "$SSH_KEY_PATH" ]; then
+        echo -e "${YELLOW}使用 SSH 密钥认证，跳过 sshpass 检查${NC}"
+    elif ! command -v sshpass &> /dev/null; then
         missing_tools+=("sshpass")
     fi
     
