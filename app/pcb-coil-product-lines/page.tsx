@@ -4,6 +4,7 @@ import { Hero } from "@/components/Hero";
 import { ProductLines } from "@/components/ProductLines";
 import { PCBStatorProductionTech } from "@/components/PCBStatorProductionTech";
 import { ProductionTechnologySlider } from "@/components/ProductionTechnologySlider";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -45,6 +46,7 @@ export default function ProductLinesPage() {
         <PCBStatorProductionTech />
         <ProductionTechnologySlider />
       </main>
+      <ScrollToTopButton />
     </div>
   );
 }

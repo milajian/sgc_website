@@ -1,12 +1,26 @@
 'use client'
 
 import { motion } from "framer-motion";
-import { Circle } from "lucide-react";
+import { Circle, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HollowCupStatorPage() {
   return (
     <div className="min-h-screen">
       <main className="pt-20">
+        {/* 返回按钮 */}
+        <div className="container mx-auto px-4 md:px-6 pt-6 pb-4">
+          <Link href="/pcb-coil-product-lines#product-lines">
+            <Button 
+              variant="ghost" 
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回五大产品线
+            </Button>
+          </Link>
+        </div>
         <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5 relative overflow-hidden">
           {/* Subtle circuit background pattern */}
           <div className="absolute inset-0 opacity-[0.03]">

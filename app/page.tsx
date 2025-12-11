@@ -2,6 +2,7 @@
 
 import { CompanyInfo } from "@/components/CompanyInfo";
 import { ResearchStructure, ResearchStructureData } from "@/components/ResearchStructure";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { jumpToSection } from "@/lib/scroll";
@@ -161,6 +162,7 @@ export default function Home() {
           <ResearchStructure data={researchData} />
         )}
       </main>
+      <ScrollToTopButton />
     </div>
   );
 }

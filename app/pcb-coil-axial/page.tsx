@@ -8,9 +8,12 @@ import { ProductJourney } from "@/components/ProductJourney";
 import { SimulationTestSlider } from "@/components/SimulationTestSlider";
 import { ProtectionThermalSlider } from "@/components/ProtectionThermalSlider";
 import { Button } from "@/components/ui/button";
+import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { scrollToSection } from "@/lib/scroll";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const navigationItems = [
   { id: 'pcb-motor-intro', label: 'PCB电机产品介绍' },
@@ -106,6 +109,18 @@ export default function AxialMotorStatorPage() {
   return (
     <div className="min-h-screen">
       <main className="pt-20">
+        {/* 返回按钮 */}
+        <div className="container mx-auto px-4 md:px-6 pt-6 pb-1">
+          <Link href="/pcb-coil-product-lines#product-lines">
+            <Button 
+              variant="ghost" 
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回五大产品线
+            </Button>
+          </Link>
+        </div>
         {/* 导航按钮组 */}
         <section className="sticky top-20 z-40 bg-background/95 backdrop-blur-lg border-b border-primary/20 shadow-lg shadow-primary/5 py-4">
           <div className="container mx-auto px-4 md:px-6">
@@ -144,6 +159,7 @@ export default function AxialMotorStatorPage() {
         <ProtectionThermalSlider />
         <SimulationTestSlider />
       </main>
+      <ScrollToTopButton />
     </div>
   );
 }
