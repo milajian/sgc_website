@@ -40,7 +40,7 @@ export const Header = () => {
   const [isNavigating, setIsNavigating] = useState(false);
   
   // 获取路由加载状态管理
-  const { startLoading, stopLoading } = useRouteLoading();
+  const { isLoading, startLoading, stopLoading } = useRouteLoading();
   
   // Next.js 路由
   const router = useRouter();
@@ -425,7 +425,7 @@ export const Header = () => {
                       }
                     }}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
-                      activeMenuKey === 'tech-center' ? 'pcb-active-glow' : ''
+                      activeMenuKey === 'tech-center' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}>
                     技术中心
                   </NavigationMenuTrigger>
@@ -478,7 +478,7 @@ export const Header = () => {
                       }
                     }}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
-                      activeMenuKey === 'pcb-coil' ? 'pcb-active-glow' : ''
+                      activeMenuKey === 'pcb-coil' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}>
                     PCB线圈
                   </NavigationMenuTrigger>
@@ -617,7 +617,7 @@ export const Header = () => {
                       handleNavigation('/pcb-embedded', e);
                     }}
                     className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
-                      activeMenuKey === 'pcb-embedded' ? 'pcb-active-glow' : ''
+                      activeMenuKey === 'pcb-embedded' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}
                   >
                     PCB埋嵌
@@ -633,7 +633,7 @@ export const Header = () => {
                       handleNavigation('/glass-substrate', e);
                     }}
                     className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
-                      activeMenuKey === 'glass-substrate' ? 'pcb-active-glow' : ''
+                      activeMenuKey === 'glass-substrate' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}
                   >
                     玻璃基板
@@ -685,7 +685,7 @@ export const Header = () => {
                             setMobileMenuOpen(false);
                           }}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
-                            activeMenuKey === 'tech-center' ? 'pcb-active-glow' : ''
+                            activeMenuKey === 'tech-center' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}
                         >
                           技术中心
@@ -736,7 +736,7 @@ export const Header = () => {
                             setMobileMenuOpen(false);
                           }}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
-                            activeMenuKey === 'pcb-coil' ? 'pcb-active-glow' : ''
+                            activeMenuKey === 'pcb-coil' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}
                         >
                           PCB线圈
@@ -849,9 +849,9 @@ export const Header = () => {
                           setMobileMenuOpen(false);
                           handleNavigation('/pcb-embedded', e);
                         }}
-                        className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
-                          activeMenuKey === 'pcb-embedded' ? 'pcb-active-glow' : ''
-                        }`}
+                          className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
+                            activeMenuKey === 'pcb-embedded' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
+                          }`}
                       >
                         PCB埋嵌
                       </h3>
@@ -864,9 +864,9 @@ export const Header = () => {
                           setMobileMenuOpen(false);
                           handleNavigation('/glass-substrate', e);
                         }}
-                        className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
-                          activeMenuKey === 'glass-substrate' ? 'pcb-active-glow' : ''
-                        }`}
+                          className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
+                            activeMenuKey === 'glass-substrate' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
+                          }`}
                       >
                         玻璃基板
                       </h3>

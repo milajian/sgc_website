@@ -355,6 +355,117 @@ All colors MUST be HSL.
     position: relative;
     z-index: 10;
   }
+
+  /* 页面加载时的菜单选中框加载效果 */
+  .pcb-active-glow.pcb-loading {
+    animation: pcb-loading-pulse 1.2s ease-in-out infinite;
+    /* 添加外发光效果，增强可见性 */
+    box-shadow: 
+      0 0 8px hsl(var(--accent) / 0.4),
+      0 0 16px hsl(var(--accent) / 0.2);
+  }
+
+  .pcb-active-glow.pcb-loading::before {
+    animation: pcb-loading-current 0.8s ease-in-out infinite;
+  }
+
+  .pcb-active-glow.pcb-loading::after {
+    /* 重置为光点效果 */
+    inset: auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.5) 0%, hsl(var(--accent) / 0.35) 30%, hsl(var(--accent) / 0.2) 60%, transparent 80%);
+    box-shadow: 
+      0 0 6px hsl(var(--accent) / 0.4),
+      0 0 12px hsl(var(--accent) / 0.25),
+      0 0 18px hsl(var(--accent) / 0.15);
+    /* 光点沿着边框流动的动画 */
+    animation: pcb-loading-light-flow 2s linear infinite;
+    z-index: 1;
+  }
+
+  /* 加载时的脉冲动画 */
+  @keyframes pcb-loading-pulse {
+    0%, 100% {
+      border-color: hsl(var(--accent) / 0.6);
+      transform: scale(1);
+    }
+    50% {
+      border-color: hsl(var(--accent) / 1);
+      transform: scale(1.02);
+    }
+  }
+
+  /* 加载时的电流流动动画（更快） */
+  @keyframes pcb-loading-current {
+    0%, 100% {
+      opacity: 0.9;
+      filter: brightness(1.2);
+    }
+    50% {
+      opacity: 1;
+      filter: brightness(2);
+    }
+  }
+
+  /* 加载时的发光动画 */
+  @keyframes pcb-loading-glow {
+    0%, 100% {
+      box-shadow: inset 0 0 20px hsl(var(--accent) / 0.15);
+    }
+    50% {
+      box-shadow: inset 0 0 30px hsl(var(--accent) / 0.4);
+    }
+  }
+
+  /* 光点沿着边框流动的动画 */
+  @keyframes pcb-loading-light-flow {
+    /* 顶部：从左到右 (0% - 25%) */
+    0% {
+      top: -5px;
+      left: 0%;
+      transform: translate(-50%, -50%);
+    }
+    25% {
+      top: -5px;
+      left: 100%;
+      transform: translate(-50%, -50%);
+    }
+    /* 右侧：从上到下 (25% - 50%) */
+    25.01% {
+      top: 0%;
+      left: calc(100% + 5px);
+      transform: translate(-50%, -50%);
+    }
+    50% {
+      top: 100%;
+      left: calc(100% + 5px);
+      transform: translate(-50%, -50%);
+    }
+    /* 底部：从右到左 (50% - 75%) */
+    50.01% {
+      top: calc(100% + 5px);
+      left: 100%;
+      transform: translate(-50%, -50%);
+    }
+    75% {
+      top: calc(100% + 5px);
+      left: 0%;
+      transform: translate(-50%, -50%);
+    }
+    /* 左侧：从下到上 (75% - 100%) */
+    75.01% {
+      top: 100%;
+      left: -5px;
+      transform: translate(-50%, -50%);
+    }
+    100% {
+      top: 0%;
+      left: -5px;
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 
 @keyframes float-tech {

@@ -11,7 +11,9 @@
     "lint": "next lint",
     "deploy": "./deploy.sh",
     "deploy:setup-ssh": "./setup-ssh-key.sh",
-    "deploy:test": "bash -c 'source ./deploy.config.sh && sshpass -p \"$DEPLOY_PASSWORD\" ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST \"echo 连接成功\"'"
+    "deploy:test": "bash -c 'source ./deploy.config.sh && sshpass -p \"$DEPLOY_PASSWORD\" ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST \"echo 连接成功\"'",
+    "deploy:server": "./build-and-deploy-server.sh",
+    "server:deploy": "./build-and-deploy-server.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
