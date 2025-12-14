@@ -52,3 +52,6 @@ exec_ssh "systemctl status nginx | head -3"
 echo ""
 echo "完成！"
 
+
+
+

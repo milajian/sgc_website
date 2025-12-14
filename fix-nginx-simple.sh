@@ -48,3 +48,6 @@ exec_ssh "systemctl status nginx | head -5"
 echo ""
 echo "完成！请测试访问: http://${DEPLOY_HOST}"
 
+
+
+

@@ -72,3 +72,6 @@ expect eof
 puts "\n✅ 依赖安装完成！"
 puts "下一步: 运行 ./setup-step3-start-service.sh\n"
 
+
+
+

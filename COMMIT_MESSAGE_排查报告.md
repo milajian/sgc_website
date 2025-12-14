@@ -125,3 +125,6 @@ git commit -m "chore: 移除构建文件 from Git tracking"
 3. **如果仍然不行**：检查 Cursor 设置和网络连接
 
 
+
+
+

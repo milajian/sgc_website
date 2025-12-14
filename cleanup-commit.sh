@@ -32,3 +32,6 @@ echo "💡 现在可以尝试使用 Cursor 的 'Generate Commit Message' 功能�
 echo "   或者手动提交：git commit -m '你的提交信息'"
 
 
+
+
+

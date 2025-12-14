@@ -97,3 +97,6 @@ echo ""
 echo -e "网站地址: http://${DEPLOY_HOST}"
 echo -e "配置路径: /etc/nginx/sites-available/sgc_website"
 
+
+
+
