@@ -47,7 +47,6 @@ export function preloadImages(
   options?: { maxConcurrent?: number }
 ): Promise<void[]> {
   const maxConcurrent = options?.maxConcurrent ?? 3;
-  const results: Promise<void>[] = [];
   const queue: string[] = [...srcs];
   let running = 0;
 
@@ -55,9 +54,13 @@ export function preloadImages(
     const allResults: Promise<void>[] = [];
 
     const processNext = () => {
-      // 如果队列为空且没有正在运行的请求，完成
+      // 如果队列为空且没有正在运行的请求，等待所有 Promise 完成后 resolve
       if (queue.length === 0 && running === 0) {
-        resolve(allResults);
+        Promise.all(allResults).then(() => {
+          resolve([]);
+        }).catch(() => {
+          resolve([]);
+        });
         return;
       }
 
