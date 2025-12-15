@@ -109,3 +109,61 @@ export function clearPreloadCache(): void {
 export function isPreloaded(src: string): boolean {
   return preloadedImages.has(src);
 }
+
+/**
+ * 使用 requestIdleCallback 延迟批量预加载图片
+ * 适用于非关键图片，避免影响关键资源加载
+ * @param srcs 图片路径数组
+ * @param options 配置选项
+ * @param options.maxConcurrent 最大并发数，默认 3
+ * @param options.timeout requestIdleCallback 超时时间（毫秒），默认 2000
+ * @returns 清理函数，用于取消预加载
+ */
+export function preloadImagesIdle(
+  srcs: string[],
+  options?: { maxConcurrent?: number; timeout?: number }
+): () => void {
+  if (typeof window === 'undefined') {
+    // 服务端环境，返回空清理函数
+    return () => {};
+  }
+
+  const maxConcurrent = options?.maxConcurrent ?? 3;
+  const timeout = options?.timeout ?? 2000;
+
+  let cancelled = false;
+  let idleCallbackId: number | null = null;
+  let timeoutId: NodeJS.Timeout | null = null;
+
+  const preloadTask = () => {
+    if (cancelled) return;
+
+    // 过滤已预加载的图片
+    const pendingSrcs = srcs.filter(src => !preloadedImages.has(src));
+    
+    if (pendingSrcs.length > 0) {
+      preloadImages(pendingSrcs, { maxConcurrent }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  };
+
+  // 使用 requestIdleCallback 延迟加载
+  if ('requestIdleCallback' in window) {
+    idleCallbackId = (window as any).requestIdleCallback(preloadTask, { timeout });
+  } else {
+    // 降级方案：使用 setTimeout
+    timeoutId = setTimeout(preloadTask, timeout);
+  }
+
+  // 返回清理函数
+  return () => {
+    cancelled = true;
+    if (idleCallbackId !== null && 'cancelIdleCallback' in window) {
+      (window as any).cancelIdleCallback(idleCallbackId);
+    }
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+  };
+}

@@ -1,12 +1,6 @@
 'use client'
 
 import { PCBMotorSlider } from "@/components/PCBMotorSlider";
-import { PCBMotorAdvantages } from "@/components/PCBMotorAdvantages";
-import { ApplicationScenes } from "@/components/ApplicationScenes";
-import { CaseStudySlider } from "@/components/CaseStudySlider";
-import { ProductJourney } from "@/components/ProductJourney";
-import { SimulationTestSlider } from "@/components/SimulationTestSlider";
-import { ProtectionThermalSlider } from "@/components/ProtectionThermalSlider";
 import { Button } from "@/components/ui/button";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { scrollToSection } from "@/lib/scroll";
@@ -14,6 +8,65 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// 加载占位符组件
+const LoadingPlaceholder = () => (
+  <div className="py-20 bg-background min-h-[400px]">
+    <div className="container mx-auto px-4 text-center">
+      <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin mx-auto" />
+    </div>
+  </div>
+);
+
+// 动态导入非首屏组件，实现代码分割和懒加载
+const PCBMotorAdvantages = dynamic(
+  () => import("@/components/PCBMotorAdvantages").then(mod => ({ default: mod.PCBMotorAdvantages })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true  // 静态导出模式下，保持 SSR 以确保内容在构建时生成
+  }
+);
+
+const ApplicationScenes = dynamic(
+  () => import("@/components/ApplicationScenes").then(mod => ({ default: mod.ApplicationScenes })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
+
+const CaseStudySlider = dynamic(
+  () => import("@/components/CaseStudySlider").then(mod => ({ default: mod.CaseStudySlider })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
+
+const ProductJourney = dynamic(
+  () => import("@/components/ProductJourney").then(mod => ({ default: mod.ProductJourney })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
+
+const ProtectionThermalSlider = dynamic(
+  () => import("@/components/ProtectionThermalSlider").then(mod => ({ default: mod.ProtectionThermalSlider })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
+
+const SimulationTestSlider = dynamic(
+  () => import("@/components/SimulationTestSlider").then(mod => ({ default: mod.SimulationTestSlider })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
 
 const navigationItems = [
   { id: 'pcb-motor-intro', label: 'PCB电机产品介绍' },
@@ -79,10 +132,10 @@ export default function AxialMotorStatorPage() {
       });
     };
 
-    // 等待DOM渲染完成
+    // 等待DOM渲染完成，由于组件现在是懒加载的，需要增加延迟确保动态组件已加载
     const timeoutId = setTimeout(() => {
       initObserver();
-    }, 100);
+    }, 300);
 
     // 初始化时检查URL hash
     if (typeof window !== 'undefined') {

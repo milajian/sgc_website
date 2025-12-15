@@ -73,6 +73,53 @@ export default function RootLayout({
     }
   }, []);
 
+  // 延迟预加载合作伙伴 logo（使用 requestIdleCallback）
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const links: HTMLLinkElement[] = [];
+      
+      const preloadPartnerLogos = () => {
+        const partnerLogos = [
+          getImagePath("/assets/南方科技.png"),
+          getImagePath("/assets/科学院.png")
+        ];
+        
+        partnerLogos.forEach((src) => {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = src;
+          // 使用低优先级，避免影响关键资源
+          document.head.appendChild(link);
+          links.push(link);
+        });
+      };
+      
+      // 使用 requestIdleCallback 延迟加载
+      let idleCallbackId: number | null = null;
+      let timeoutId: NodeJS.Timeout | null = null;
+      
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = (window as any).requestIdleCallback(preloadPartnerLogos, { timeout: 2000 });
+      } else {
+        // 降级方案：延迟 2 秒
+        timeoutId = setTimeout(preloadPartnerLogos, 2000);
+      }
+      
+      return () => {
+        // 清理：取消 idle callback 或 timeout
+        if (idleCallbackId !== null && 'cancelIdleCallback' in window) {
+          (window as any).cancelIdleCallback(idleCallbackId);
+        }
+        if (timeoutId !== null) {
+          clearTimeout(timeoutId);
+        }
+        // 清理：移除预加载链接
+        links.forEach(link => link.remove());
+      };
+    }
+  }, []);
+
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>

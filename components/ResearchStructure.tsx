@@ -142,7 +142,8 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
     // 批量预加载（去重）
     const uniquePaths = Array.from(new Set(logoPaths));
     if (uniquePaths.length > 0) {
-      preloadImages(uniquePaths, { maxConcurrent: 3 }).catch(() => {
+      // 增加并发数到 4，充分利用浏览器连接池
+      preloadImages(uniquePaths, { maxConcurrent: 4 }).catch(() => {
         // 预加载失败不影响正常显示，静默处理
       });
     }
@@ -351,6 +352,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
                       priority={false}
                       objectFit="contain"
                       useImagePath={true}
+                      preloadDistance={800}
                       errorPlaceholder={<div className="text-xs text-muted-foreground">{name}</div>}
                     />
                   );
