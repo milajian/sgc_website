@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Feather, Zap, Droplet, DollarSign, Award } f
 import { motion } from "framer-motion";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
+import { preloadImages } from "@/lib/image-preload";
 
 interface Advantage {
   title: string;
@@ -84,6 +85,46 @@ export const PCBMotorAdvantages = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % advantages.length;
+    const prevIndex = (currentIndex - 1 + advantages.length) % advantages.length;
+    
+    // 每个 advantage 对应的图片映射
+    const advantageImages: Record<number, string[]> = {
+      0: [getImagePath("/assets/qinglianghua1.png"), getImagePath("/assets/qinglianghua2.png")],
+      1: [getImagePath("/assets/gonglvmidu.png")],
+      2: [getImagePath("/assets/waterproof-demonstration.png")],
+      3: [getImagePath("/assets/yasa.png"), getImagePath("/assets/zhouxiang.png")],
+    };
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前 advantage 的所有图片
+    if (advantageImages[currentIndex]) {
+      imagesToPreload.push(...advantageImages[currentIndex]);
+    }
+    
+    // 下一张和上一张的所有图片
+    if (advantageImages[nextIndex]) {
+      imagesToPreload.push(...advantageImages[nextIndex]);
+    }
+    if (advantageImages[prevIndex]) {
+      imagesToPreload.push(...advantageImages[prevIndex]);
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {

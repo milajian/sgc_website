@@ -8,6 +8,7 @@ import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { preloadImages } from "@/lib/image-preload";
 const slides = [
   {
     title: "PCB定子轴向电机",
@@ -79,6 +80,59 @@ export const PCBMotorSlider = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % slides.length;
+    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前 slide 的所有图片
+    const currentSlide = slides[currentIndex];
+    if (currentSlide.newLayoutImages) {
+      imagesToPreload.push(...currentSlide.newLayoutImages);
+    }
+    if (currentSlide.images) {
+      imagesToPreload.push(...currentSlide.images);
+    }
+    if (currentSlide.image) {
+      imagesToPreload.push(currentSlide.image);
+    }
+    
+    // 下一张和上一张的主要图片
+    if (slides[nextIndex]?.image) {
+      imagesToPreload.push(slides[nextIndex].image);
+    }
+    if (slides[prevIndex]?.image) {
+      imagesToPreload.push(slides[prevIndex].image);
+    }
+    
+    // 下一张和上一张的其他图片
+    if (slides[nextIndex]?.newLayoutImages) {
+      imagesToPreload.push(...slides[nextIndex].newLayoutImages);
+    }
+    if (slides[nextIndex]?.images) {
+      imagesToPreload.push(...slides[nextIndex].images);
+    }
+    if (slides[prevIndex]?.newLayoutImages) {
+      imagesToPreload.push(...slides[prevIndex].newLayoutImages);
+    }
+    if (slides[prevIndex]?.images) {
+      imagesToPreload.push(...slides[prevIndex].images);
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {

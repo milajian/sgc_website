@@ -8,6 +8,7 @@ import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { preloadImages } from "@/lib/image-preload";
 
 interface CaseStudy {
   title: string;
@@ -137,6 +138,38 @@ export const CaseStudySlider = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % caseStudies.length;
+    const prevIndex = (currentIndex - 1 + caseStudies.length) % caseStudies.length;
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前图片
+    if (caseStudies[currentIndex]?.image) {
+      imagesToPreload.push(caseStudies[currentIndex].image);
+    }
+    
+    // 下一张和上一张图片
+    if (caseStudies[nextIndex]?.image) {
+      imagesToPreload.push(caseStudies[nextIndex].image);
+    }
+    if (caseStudies[prevIndex]?.image) {
+      imagesToPreload.push(caseStudies[prevIndex].image);
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {

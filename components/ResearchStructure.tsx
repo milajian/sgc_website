@@ -9,6 +9,7 @@ import { Expert } from "@/lib/types";
 import { getImageUrl } from "@/lib/image-url";
 import { getImagePath } from "@/lib/image-path";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { preloadImages } from "@/lib/image-preload";
 
 export interface ResearchStructureData {
   center: {
@@ -41,6 +42,29 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   squares: LayoutGrid,
   flask: FlaskConical,
 };
+
+const PARTNERS: ResearchStructureData['partners'] = [
+  {
+    id: "1",
+    name: "南方科技大学",
+    logo: "/assets/南方科技.png"
+  },
+  {
+    id: "2",
+    name: "中国科学院深圳先进技术研究院",
+    logo: "/assets/科学院.png"
+  },
+  {
+    id: "3",
+    name: "中原工学院",
+    logo: "/assets/中原.png"
+  },
+  {
+    id: "4",
+    name: "桂林航天工業學院",
+    logo: "/assets/桂林.png"
+  }
+];
 
 export const ResearchStructure = ({ data }: ResearchStructureProps) => {
   const [experts, setExperts] = useState<Expert[]>([]);
@@ -107,6 +131,22 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
 
     fetchExperts();
   }, []);
+
+  // 预加载合作伙伴 logo 图片，优化加载速度
+  useEffect(() => {
+    const logoPaths = PARTNERS
+      .map(partner => partner.logo)
+      .filter(logo => logo && logo.trim() !== '') // 过滤空路径
+      .map(logo => getImagePath(logo)); // 使用 getImagePath 处理路径，确保与 OptimizedImage 一致
+      
+    // 批量预加载（去重）
+    const uniquePaths = Array.from(new Set(logoPaths));
+    if (uniquePaths.length > 0) {
+      preloadImages(uniquePaths, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, []); // 空依赖数组，因为 PARTNERS 是常量
 
   const getIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName] || Network;
@@ -291,7 +331,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
               产学研合作单位
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {data.partners.map((partner) => {
+              {PARTNERS.map((partner) => {
                 const PartnerLogo = ({ logo, name }: { logo: string; name: string }) => {
                   const [imageError, setImageError] = useState(false);
                   

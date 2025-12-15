@@ -8,6 +8,7 @@ import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { preloadImages } from "@/lib/image-preload";
 interface ProtectionThermalSlide {
   title: string;
   subtitle: string;
@@ -99,6 +100,51 @@ export const ProtectionThermalSlider = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % slides.length;
+    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前 slide 的所有图片
+    const currentSlide = slides[currentIndex];
+    if (currentSlide?.methods) {
+      currentSlide.methods.forEach(method => {
+        if (method.image) {
+          imagesToPreload.push(method.image);
+        }
+      });
+    }
+    
+    // 下一张和上一张的所有图片
+    if (slides[nextIndex]?.methods) {
+      slides[nextIndex].methods.forEach(method => {
+        if (method.image) {
+          imagesToPreload.push(method.image);
+        }
+      });
+    }
+    if (slides[prevIndex]?.methods) {
+      slides[prevIndex].methods.forEach(method => {
+        if (method.image) {
+          imagesToPreload.push(method.image);
+        }
+      });
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { ImageIcon } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { getImageUrl } from "@/lib/image-url";
+import { preloadImage } from "@/lib/image-preload";
 
 /**
  * 优化图片组件的 Props 接口
@@ -29,6 +30,8 @@ export interface OptimizedImageProps {
   showLoadingIndicator?: boolean;
   /** 自定义错误占位符 */
   errorPlaceholder?: React.ReactNode;
+  /** 预加载距离（px），图片距离视口多少像素时开始预加载，默认 200px */
+  preloadDistance?: number;
 }
 
 /**
@@ -65,10 +68,12 @@ export function OptimizedImage({
   useImagePath = false,
   showLoadingIndicator = true,
   errorPlaceholder,
+  preloadDistance = 200,
 }: OptimizedImageProps) {
   const [imgError, setImgError] = useState(false);
   const [imgLoading, setImgLoading] = useState(true);
   const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // 处理图片路径
   const imageSrc = useImagePath ? getImagePath(src) : getImageUrl(src);
@@ -80,12 +85,58 @@ export function OptimizedImage({
     }
   }, [imageSrc]);
 
+  // Intersection Observer 预加载逻辑
+  useEffect(() => {
+    // 如果 priority 为 true，直接加载，不需要 observer
+    if (priority) {
+      return;
+    }
+
+    // 如果图片已经加载或出错，不需要 observer
+    if (imgRef.current?.complete || imgError) {
+      return;
+    }
+
+    // 检查浏览器是否支持 Intersection Observer
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 图片进入预加载区域，提前预加载到缓存
+            preloadImage(imageSrc).catch(() => {
+              // 预加载失败不影响正常显示，静默处理
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: `${preloadDistance}px`,
+        threshold: 0.01,
+      }
+    );
+
+    // 观察容器元素（如果存在）或图片元素本身
+    const targetElement = containerRef.current || imgRef.current;
+    if (targetElement) {
+      observer.observe(targetElement);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [imageSrc, priority, preloadDistance, imgError]);
+
   // 构建样式类名
   const objectFitClass = objectFit === 'cover' ? 'object-cover' : 'object-contain';
   const finalClassName = className || `w-full h-full ${objectFitClass}`;
 
   return (
-    <>
+    <div ref={containerRef} className="relative">
       {!imgError ? (
         <img 
           ref={imgRef}
@@ -117,6 +168,6 @@ export function OptimizedImage({
           <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
         </div>
       )}
-    </>
+    </div>
   );
 }

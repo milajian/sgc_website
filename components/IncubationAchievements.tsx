@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
+import { preloadImages } from "@/lib/image-preload";
 const achievements = [{
   name: "芯片嵌入式PCB解决方案",
   description: "集成SiC芯片的先进PCB嵌入技术",
@@ -34,6 +35,38 @@ export const IncubationAchievements = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % achievements.length;
+    const prevIndex = (currentIndex - 1 + achievements.length) % achievements.length;
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前图片
+    if (achievements[currentIndex]?.image) {
+      imagesToPreload.push(achievements[currentIndex].image);
+    }
+    
+    // 下一张和上一张图片
+    if (achievements[nextIndex]?.image) {
+      imagesToPreload.push(achievements[nextIndex].image);
+    }
+    if (achievements[prevIndex]?.image) {
+      imagesToPreload.push(achievements[prevIndex].image);
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {
@@ -215,7 +248,7 @@ export const IncubationAchievements = () => {
                                 src={achievement.image} 
                                 alt={achievement.name} 
                                 className="w-full h-full"
-                                priority={false}
+                                priority={index === 0}
                                 objectFit="contain"
                                 useImagePath={true}
                               />
@@ -327,7 +360,7 @@ export const IncubationAchievements = () => {
                               src={achievement.image} 
                               alt={achievement.name} 
                               className="w-full h-full"
-                              priority={false}
+                              priority={index === 0}
                               objectFit="contain"
                               useImagePath={true}
                             />

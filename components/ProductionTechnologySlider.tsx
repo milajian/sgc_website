@@ -184,7 +184,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 左上角：填孔1 */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <OptimizedImage src={getImagePath("/assets/填孔1.png")} alt="填孔1" className="w-full h-full" priority={index === 0} objectFit="contain" useImagePath={true} />
+                                    <OptimizedImage src={getImagePath("/assets/填孔1.png")} alt="填孔1" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">0.3mm叠孔图（用0.1mm小孔叠）</p>
                                 </div>

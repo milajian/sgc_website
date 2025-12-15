@@ -119,6 +119,7 @@ export const ApplicationScenes = () => {
                             priority={false}
                             objectFit="cover"
                             useImagePath={true}
+                            preloadDistance={300}
                           />
                         </div>
                       </div>

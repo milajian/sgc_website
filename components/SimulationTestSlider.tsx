@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Microscope } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
+import { preloadImages } from "@/lib/image-preload";
 
 interface SimulationSlide {
   title: string;
@@ -48,6 +49,39 @@ export const SimulationTestSlider = () => {
   });
 
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 预加载轮播图相邻图片
+  useEffect(() => {
+    const currentIndex = current;
+    
+    // 预加载下一张和上一张
+    const nextIndex = (currentIndex + 1) % simulationSlides.length;
+    const prevIndex = (currentIndex - 1 + simulationSlides.length) % simulationSlides.length;
+    
+    const imagesToPreload: string[] = [];
+    
+    // 当前 slide 的所有图片
+    const currentSlide = simulationSlides[currentIndex];
+    if (currentSlide?.images) {
+      imagesToPreload.push(...currentSlide.images);
+    }
+    
+    // 下一张和上一张的所有图片
+    if (simulationSlides[nextIndex]?.images) {
+      imagesToPreload.push(...simulationSlides[nextIndex].images);
+    }
+    if (simulationSlides[prevIndex]?.images) {
+      imagesToPreload.push(...simulationSlides[prevIndex].images);
+    }
+    
+    // 批量预加载（去重）
+    const uniqueImages = Array.from(new Set(imagesToPreload));
+    if (uniqueImages.length > 0) {
+      preloadImages(uniqueImages, { maxConcurrent: 3 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [current]);
 
   useEffect(() => {
     const updateHeights = () => {
