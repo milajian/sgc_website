@@ -287,9 +287,23 @@ export const Header = () => {
     // 立即显示加载状态
     startLoading();
     
-    // 使用 Next.js 客户端路由
+    // 构建目标 URL
     const targetUrl = normalizedPath + (hash ? `#${hash}` : '');
-    router.push(targetUrl);
+    
+    // 在静态导出模式下，使用 window.location 立即切换，不等待资源加载
+    // 这样可以避免图片加载阻塞路由切换
+    if (process.env.NODE_ENV === 'production') {
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      // 拼接 basePath 和 targetUrl
+      // basePath 通常以 / 开头但不以 / 结尾（如 '/sgc_website'）
+      // targetUrl 以 / 开头（如 '/' 或 '/pcb-coil-product-lines'）
+      // 直接拼接即可，不会产生双斜杠问题
+      const finalUrl = basePath + targetUrl;
+      window.location.href = finalUrl;
+    } else {
+      // 开发模式下使用 Next.js 客户端路由
+      router.push(targetUrl);
+    }
     
     // 如果带 hash，在路由完成后滚动（通过 useEffect 监听路由变化处理）
   }, [startLoading, router, pathname, calculateMenuKeyFromPath]);
