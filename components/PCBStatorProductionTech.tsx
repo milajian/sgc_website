@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { Factory } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { OptimizedImage } from "@/components/OptimizedImage";
 const processSteps = [
   {
     title: "线路蚀刻",
@@ -126,7 +127,14 @@ export const PCBStatorProductionTech = () => {
                           </ul>
                         </div>
                         <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-primary/20">
-                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                          <OptimizedImage 
+                            src={item.image} 
+                            alt={item.title} 
+                            className="w-full h-full" 
+                            priority={false}
+                            objectFit="cover"
+                            useImagePath={true}
+                          />
                         </div>
                       </div>
                     </Card>
@@ -211,7 +219,14 @@ export const PCBStatorProductionTech = () => {
                           </ul>
                         </div>
                         <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-primary/20">
-                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                          <OptimizedImage 
+                            src={item.image} 
+                            alt={item.title} 
+                            className="w-full h-full" 
+                            priority={false}
+                            objectFit="cover"
+                            useImagePath={true}
+                          />
                         </div>
                       </div>
                     </Card>

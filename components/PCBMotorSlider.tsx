@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 const slides = [
   {
     title: "PCB定子轴向电机",
@@ -217,11 +218,13 @@ export const PCBMotorSlider = () => {
                               
                               {/* Image container */}
                               <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-4">
-                                <img 
+                                <OptimizedImage 
                                   src={slide.image} 
                                   alt={slide.title}
-                                  className="w-full h-auto object-contain"
-                                  loading="lazy"
+                                  className="w-full h-auto"
+                                  priority={index === 0}
+                                  objectFit="contain"
+                                  useImagePath={true}
                                 />
                               </div>
 
@@ -301,11 +304,13 @@ export const PCBMotorSlider = () => {
                                 {/* First image centered with label */}
                                 <div className="relative flex justify-center">
                                   <div className="relative inline-block">
-                                    <img 
+                                    <OptimizedImage 
                                       src={slide.newLayoutImages[0]} 
                                       alt="PCB定子轴向磁通电机爆炸图"
-                                      className="w-full max-w-lg h-auto object-contain"
-                                      loading="lazy"
+                                      className="w-full max-w-lg h-auto"
+                                      priority={index === 0}
+                                      objectFit="contain"
+                                      useImagePath={true}
                                     />
                                     {/* Label at bottom-right of image */}
                                     <span className="absolute bottom-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md font-medium shadow-lg">
@@ -327,11 +332,13 @@ export const PCBMotorSlider = () => {
                                 {/* Left column */}
                                 <div className="flex flex-col items-center text-center space-y-3">
                                   <div className="w-full flex justify-center">
-                                    <img 
+                                    <OptimizedImage 
                                       src={slide.newLayoutImages[1]} 
                                       alt="PCB定子实物"
-                                      className="w-full max-w-[200px] h-auto object-contain"
-                                      loading="lazy"
+                                      className="w-full max-w-[200px] h-auto"
+                                      priority={false}
+                                      objectFit="contain"
+                                      useImagePath={true}
                                     />
                                   </div>
                                   <p className="text-sm md:text-base font-medium text-foreground">
@@ -342,11 +349,13 @@ export const PCBMotorSlider = () => {
                                 {/* Right column */}
                                 <div className="flex flex-col items-center text-center space-y-3">
                                   <div className="w-full flex justify-center">
-                                    <img 
+                                    <OptimizedImage 
                                       src={slide.newLayoutImages[2]} 
                                       alt="PCB定子截面"
-                                      className="w-full max-w-[200px] h-auto object-contain"
-                                      loading="lazy"
+                                      className="w-full max-w-[200px] h-auto"
+                                      priority={false}
+                                      objectFit="contain"
+                                      useImagePath={true}
                                     />
                                   </div>
                                   <p className="text-sm md:text-base font-medium text-foreground">
@@ -377,11 +386,13 @@ export const PCBMotorSlider = () => {
                               
                               {/* Exploded view image */}
                               <div className="flex justify-center mb-4">
-                                <img 
+                                <OptimizedImage 
                                   src={slide.images[0]} 
                                   alt="PCB定子轴向电机结构"
-                                  className="w-full max-w-lg h-auto object-contain"
-                                  loading="lazy"
+                                  className="w-full max-w-lg h-auto"
+                                  priority={index === 0}
+                                  objectFit="contain"
+                                  useImagePath={true}
                                 />
                               </div>
                               
@@ -393,11 +404,13 @@ export const PCBMotorSlider = () => {
                                     {slide.textLabels.leftTitle}
                                   </h5>
                                   <div className="w-full flex justify-center">
-                                    <img 
+                                    <OptimizedImage 
                                       src={slide.images[1]} 
                                       alt="有铁芯结构"
-                                      className="w-full max-w-[200px] h-auto object-contain"
-                                      loading="lazy"
+                                      className="w-full max-w-[200px] h-auto"
+                                      priority={false}
+                                      objectFit="contain"
+                                      useImagePath={true}
                                     />
                                   </div>
                                   <p className="text-sm text-muted-foreground">
@@ -411,11 +424,13 @@ export const PCBMotorSlider = () => {
                                     {slide.textLabels.rightTitle}
                                   </h5>
                                   <div className="w-full flex justify-center">
-                                    <img 
+                                    <OptimizedImage 
                                       src={slide.images[2]} 
                                       alt="无铁芯结构"
-                                      className="w-full max-w-[160px] h-auto object-contain"
-                                      loading="lazy"
+                                      className="w-full max-w-[160px] h-auto"
+                                      priority={false}
+                                      objectFit="contain"
+                                      useImagePath={true}
                                     />
                                   </div>
                                   <p className="text-sm text-muted-foreground">
@@ -437,10 +452,13 @@ export const PCBMotorSlider = () => {
                             
                             {/* Image container */}
                             <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 pt-8 pb-4 px-4">
-                              <img 
+                              <OptimizedImage 
                                 src={slide.image} 
                                 alt={slide.title}
-                                className="w-full h-auto object-contain"
+                                className="w-full h-auto"
+                                priority={index === 0}
+                                objectFit="contain"
+                                useImagePath={true}
                               />
                               
                               {/* Labels overlay - positioned for both left and right halves of comparison image */}
@@ -485,10 +503,13 @@ export const PCBMotorSlider = () => {
                             
                             {/* Image container */}
                             <div className="relative rounded-2xl overflow-hidden border border-primary/20 backdrop-blur-sm bg-background/20 p-4">
-                              <img 
+                              <OptimizedImage 
                                 src={slide.image} 
                                 alt={slide.title}
-                                className="w-full h-auto object-contain"
+                                className="w-full h-auto"
+                                priority={index === 0}
+                                objectFit="contain"
+                                useImagePath={true}
                               />
                             </div>
 

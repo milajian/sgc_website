@@ -1,5 +1,6 @@
 'use client'
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Settings } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -183,7 +184,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 左上角：填孔1 */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <img src={getImagePath("/assets/填孔1.png")} alt="填孔1" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/填孔1.png")} alt="填孔1" className="w-full h-full" priority={index === 0} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">0.3mm叠孔图（用0.1mm小孔叠）</p>
                                 </div>
@@ -191,7 +192,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 右上角：填孔2 */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <img src={getImagePath("/assets/填孔2.png")} alt="填孔2" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/填孔2.png")} alt="填孔2" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">三菱激光钻孔机</p>
                                 </div>
@@ -199,7 +200,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 左下角：填孔3 */}
                                 <div className="flex flex-col items-center gap-0 px-1 -mt-2 sm:-mt-3 md:-mt-4">
                                   <div className="w-full aspect-[5/3] flex-shrink-0 -mb-3 md:-mb-4">
-                                    <img src={getImagePath("/assets/填孔3.png")} alt="填孔3" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/填孔3.png")} alt="填孔3" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-5 md:-mt-6 leading-tight break-words px-0.5">0.35mm叠孔图（用0.1mm小孔叠）</p>
                                 </div>
@@ -207,7 +208,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 右下角：填孔4 */}
                                 <div className="flex flex-col items-center gap-0 px-1 -mt-2 sm:-mt-3 md:-mt-4">
                                   <div className="w-full aspect-[5/3] flex-shrink-0 -mb-3 md:-mb-4">
-                                    <img src={getImagePath("/assets/填孔4.png")} alt="填孔4" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/填孔4.png")} alt="填孔4" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-5 md:-mt-6 leading-tight break-words px-0.5">厚铜激光钻孔图示</p>
                                 </div>
@@ -249,7 +250,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 左上角：水平沉铜线 */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <img src={getImagePath("/assets/水平1.png")} alt="水平沉铜线" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/水平1.png")} alt="水平沉铜线" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">水平沉铜线</p>
                                 </div>
@@ -265,7 +266,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 左下角：厚铜激光盲孔电镀填孔（两个显微镜图片） */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <img src={getImagePath("/assets/水平2.png")} alt="厚铜激光盲孔电镀填孔" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/水平2.png")} alt="厚铜激光盲孔电镀填孔" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <div className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">
                                     <p className="mb-0">厚铜激光盲孔电镀填孔</p>
@@ -276,7 +277,7 @@ export const ProductionTechnologySlider = () => {
                                 {/* 右下角：VCP填孔线 */}
                                 <div className="flex flex-col items-center gap-0 px-1">
                                   <div className="w-full aspect-[5/3] flex-shrink-0">
-                                    <img src={getImagePath("/assets/水平3.png")} alt="VCP填孔线" className="w-full h-full object-contain" loading="lazy" />
+                                    <OptimizedImage src={getImagePath("/assets/水平3.png")} alt="VCP填孔线" className="w-full h-full" priority={false} objectFit="contain" useImagePath={true} />
                                   </div>
                                   <p className="font-bold text-primary text-[10px] xs:text-xs sm:text-sm md:text-base text-center -mt-2 md:-mt-3 leading-tight break-words px-0.5">VCP填孔线</p>
                                 </div>
@@ -314,7 +315,7 @@ export const ProductionTechnologySlider = () => {
                         }}>
                           <div className="relative rounded-lg overflow-visible bg-transparent p-2">
                             {/* Image */}
-                            <img src={slide.content[0]?.image} alt={slide.title} className="relative w-full h-auto object-contain rounded-lg transition-transform duration-500 group-hover:scale-105 drop-shadow-xl" loading="lazy" />
+                            <OptimizedImage src={slide.content[0]?.image} alt={slide.title} className="relative w-full h-auto rounded-lg transition-transform duration-500 group-hover:scale-105 drop-shadow-xl" priority={index === 0} objectFit="contain" useImagePath={true} />
                             
                             {/* Equipment Description Text - Bottom Left (Responsive) */}
                             {index === 0 && (

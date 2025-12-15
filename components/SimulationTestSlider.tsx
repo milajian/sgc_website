@@ -1,5 +1,6 @@
 'use client'
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -189,22 +190,26 @@ export const SimulationTestSlider = () => {
                           >
                             {index === 0 ? (
                               <div className={`relative rounded-xl overflow-hidden transition-all duration-500 flex items-center justify-center h-[190px]`}>
-                                <img 
+                                <OptimizedImage 
                                   src={image} 
                                   alt={`${slide.title} 图${imgIdx + 1}`}
-                                  className="w-full h-full object-contain transition-transform duration-500"
-                                  loading="lazy"
+                                  className="w-full h-full transition-transform duration-500"
+                                  priority={imgIdx === 0}
+                                  objectFit="contain"
+                                  useImagePath={true}
                                 />
                               </div>
                             ) : (
                               <div className={`relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex items-center justify-center h-[160px]`}>
                                 {/* Gradient background */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-                                <img 
+                                <OptimizedImage 
                                   src={image} 
                                   alt={`${slide.title} 图${imgIdx + 1}`}
-                                  className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10"
-                                  loading="lazy"
+                                  className="w-full h-full hover:scale-[1.03] transition-transform duration-500 relative z-10"
+                                  priority={false}
+                                  objectFit="contain"
+                                  useImagePath={true}
                                 />
                                 {/* Glow effect */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -232,11 +237,13 @@ export const SimulationTestSlider = () => {
                             slide.images.slice(2, 4).map((image, imgIdx) => (
                               <div key={imgIdx + 2} className="flex flex-col gap-3">
                                 <div className="relative rounded-xl overflow-hidden transition-all duration-500 flex items-center justify-center h-[190px]">
-                                  <img 
+                                  <OptimizedImage 
                                     src={image} 
                                     alt={`${slide.title} 图${imgIdx + 3}`}
-                                    className="w-full h-full object-contain transition-transform duration-500"
-                                    loading="lazy"
+                                    className="w-full h-full transition-transform duration-500"
+                                    priority={false}
+                                    objectFit="contain"
+                                    useImagePath={true}
                                   />
                                 </div>
                                 <p className="text-sm font-semibold text-foreground text-center">
@@ -250,11 +257,13 @@ export const SimulationTestSlider = () => {
                               <div className={`flex flex-col gap-3 ${index === 0 ? '' : 'max-w-[220px]'} ${index === 1 ? 'ml-16' : ''}`}>
                                 <div className={`relative rounded-xl overflow-hidden border border-border/50 bg-card/40 backdrop-blur-md group hover:shadow-xl transition-all duration-500 flex items-center justify-center ${index === 0 ? 'h-[190px]' : 'h-[160px]'}`}>
                                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-                                  <img 
+                                  <OptimizedImage 
                                     src={slide.images[3]} 
                                     alt={`${slide.title} 图4`}
-                                    className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10"
-                                    loading="lazy"
+                                    className="w-full h-full hover:scale-[1.03] transition-transform duration-500 relative z-10"
+                                    priority={false}
+                                    objectFit="contain"
+                                    useImagePath={true}
                                   />
                                   <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 </div>

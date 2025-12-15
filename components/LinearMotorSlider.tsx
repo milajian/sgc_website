@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
 
@@ -247,11 +248,13 @@ export const LinearMotorSlider = () => {
                       {/* Right: Image */}
                       <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500 -mb-2 md:-mb-3">
                         {study.image ? (
-                          <img 
-                            src={study.image} 
+                          <OptimizedImage
+                            src={study.image}
                             alt={study.title}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
+                            className="w-full h-full"
+                            priority={index === 0}
+                            objectFit="contain"
+                            useImagePath={true}
                           />
                         ) : (
                           <div className="text-center p-8">

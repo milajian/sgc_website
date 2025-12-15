@@ -1,5 +1,6 @@
 'use client'
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
@@ -268,11 +269,13 @@ export const PCBMotorAdvantages = () => {
                                   {/* 顶部：组合图片 */}
                                   <div className="relative w-full">
                                     <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
-                                      <img 
+                                      <OptimizedImage 
                                         src={getImagePath("/assets/gonglvmidu.png")} 
                                         alt="功率密度对比图" 
-                                        className="w-full h-auto object-contain"
-                                        loading="lazy"
+                                        className="w-full h-auto"
+                                        priority={false}
+                                        objectFit="contain"
+                                        useImagePath={true}
                                       />
                                     </div>
                                   </div>
@@ -435,11 +438,13 @@ export const PCBMotorAdvantages = () => {
                                         <div className="relative flex-1 flex flex-col items-center justify-between">
                                           {/* 电机图片 */}
                                           <div className="relative w-full flex-1 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden flex items-center justify-center min-h-0 p-4">
-                                            <img 
+                                            <OptimizedImage 
                                               src={getImagePath("/assets/qinglianghua1.png")} 
                                               alt="径向电机" 
-                                              className="w-full h-full object-contain"
-                                              loading="lazy"
+                                              className="w-full h-full"
+                                              priority={false}
+                                              objectFit="contain"
+                                              useImagePath={true}
                                             />
                                           </div>
                                           
@@ -481,11 +486,13 @@ export const PCBMotorAdvantages = () => {
                                         <div className="relative flex-1 flex flex-col items-center justify-between">
                                           {/* 电机图片 */}
                                           <div className="relative w-full flex-1 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden flex items-center justify-center min-h-0 p-4">
-                                            <img 
+                                            <OptimizedImage 
                                               src={getImagePath("/assets/qinglianghua2.png")} 
                                               alt="PCB电机" 
-                                              className="w-full h-full object-contain"
-                                              loading="lazy"
+                                              className="w-full h-full"
+                                              priority={false}
+                                              objectFit="contain"
+                                              useImagePath={true}
                                             />
                                           </div>
                                           
@@ -524,11 +531,13 @@ export const PCBMotorAdvantages = () => {
                                         </div>
                                       </div>
                                     ) : index === 2 ? (
-                                      <img 
+                                      <OptimizedImage 
                                         src={getImagePath("/assets/waterproof-demonstration.png")} 
                                         alt="PCB定子防水性展示" 
-                                        className="w-full h-full object-contain"
-                                        loading="lazy"
+                                        className="w-full h-full"
+                                        priority={false}
+                                        objectFit="contain"
+                                        useImagePath={true}
                                       />
                                     ) : index === 3 ? (
                                       /* 加工成本低 - 两个图片左右布局 */
@@ -536,11 +545,13 @@ export const PCBMotorAdvantages = () => {
                                         {/* 第一个图片：Yasa */}
                                         <div className="relative flex-1 flex flex-col items-center">
                                           <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
-                                            <img 
+                                            <OptimizedImage 
                                               src={getImagePath("/assets/yasa.png")} 
                                               alt="Yasa自动化生产线" 
-                                              className="w-full h-auto object-contain"
-                                              loading="lazy"
+                                              className="w-full h-auto"
+                                              priority={false}
+                                              objectFit="contain"
+                                              useImagePath={true}
                                             />
                                           </div>
                                           <motion.div
@@ -557,11 +568,13 @@ export const PCBMotorAdvantages = () => {
                                         {/* 第二个图片：轴向电机铁芯压铸工艺 */}
                                         <div className="relative flex-1 flex flex-col items-center">
                                           <div className="relative w-full rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm overflow-hidden">
-                                            <img 
+                                            <OptimizedImage 
                                               src={getImagePath("/assets/zhouxiang.png")} 
                                               alt="轴向电机铁芯压铸工艺" 
-                                              className="w-full h-auto object-contain"
-                                              loading="lazy"
+                                              className="w-full h-auto"
+                                              priority={false}
+                                              objectFit="contain"
+                                              useImagePath={true}
                                             />
                                           </div>
                                           <motion.div

@@ -1,6 +1,7 @@
 'use client'
 import { Card } from "@/components/ui/card";
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { motion } from "framer-motion";
 import { Layers } from "lucide-react";
 interface ApplicationItem {
@@ -111,11 +112,13 @@ export const ApplicationScenes = () => {
                       <div className="relative w-24 h-24 flex-shrink-0">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl blur-xl" />
                         <div className="relative w-full h-full rounded-xl overflow-hidden border border-primary/20 bg-background/20">
-                          <img 
-                            src={app.image} 
+                          <OptimizedImage
+                            src={app.image}
                             alt={app.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            loading="lazy"
+                            className="w-full h-full transition-transform duration-500 group-hover:scale-110"
+                            priority={false}
+                            objectFit="cover"
+                            useImagePath={true}
                           />
                         </div>
                       </div>

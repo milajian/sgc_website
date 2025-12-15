@@ -2,11 +2,36 @@
 
 import { Hero } from "@/components/Hero";
 import { ProductLines } from "@/components/ProductLines";
-import { PCBStatorProductionTech } from "@/components/PCBStatorProductionTech";
-import { ProductionTechnologySlider } from "@/components/ProductionTechnologySlider";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
+
+// 加载占位符组件
+const LoadingPlaceholder = () => (
+  <div className="py-20 bg-background">
+    <div className="container mx-auto px-4 text-center">
+      <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin mx-auto" />
+    </div>
+  </div>
+);
+
+// 动态导入非首屏组件，实现代码分割和懒加载
+const PCBStatorProductionTech = dynamic(
+  () => import("@/components/PCBStatorProductionTech").then(mod => ({ default: mod.PCBStatorProductionTech })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true  // 静态导出模式下，保持 SSR 以确保内容在构建时生成
+  }
+);
+
+const ProductionTechnologySlider = dynamic(
+  () => import("@/components/ProductionTechnologySlider").then(mod => ({ default: mod.ProductionTechnologySlider })),
+  { 
+    loading: () => <LoadingPlaceholder />,
+    ssr: true
+  }
+);
 
 export default function ProductLinesPage() {
   const router = useRouter();

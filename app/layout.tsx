@@ -9,6 +9,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RouteLoadingIndicator } from "@/components/RouteLoadingIndicator";
 import { RouteLoadingProvider } from "@/lib/route-loading-context";
+import { getImagePath } from "@/lib/image-path";
 import "./globals.css";
 import { useState, useEffect } from "react";
 
@@ -54,6 +55,23 @@ export default function RootLayout({
   // 1. 使用客户端路由后，不再需要检查路由是否正确初始化
   // 2. 1.5 秒延迟检查会影响页面加载性能
   // 3. Next.js 的路由系统会自动处理路由匹配
+
+  // 预加载关键图片（Hero 图片）
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const heroImageSrc = getImagePath("/assets/hero-motor-header.png");
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = heroImageSrc;
+      document.head.appendChild(link);
+
+      return () => {
+        // 清理：移除预加载链接
+        link.remove();
+      };
+    }
+  }, []);
 
   return (
     <html lang="zh-CN" suppressHydrationWarning>

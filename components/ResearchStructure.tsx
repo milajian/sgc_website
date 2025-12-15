@@ -8,6 +8,7 @@ import { ExpertTeam } from "@/components/ExpertTeam";
 import { Expert } from "@/lib/types";
 import { getImageUrl } from "@/lib/image-url";
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export interface ResearchStructureData {
   center: {
@@ -303,11 +304,14 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
                   }
                   
                   return (
-                    <img 
-                      src={getImageUrl(logo)} 
+                    <OptimizedImage 
+                      src={logo} 
                       alt={name}
-                      className="max-h-20 max-w-full object-contain"
-                      onError={() => setImageError(true)}
+                      className="max-h-20 max-w-full"
+                      priority={false}
+                      objectFit="contain"
+                      useImagePath={true}
+                      errorPlaceholder={<div className="text-xs text-muted-foreground">{name}</div>}
                     />
                   );
                 };

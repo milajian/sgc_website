@@ -119,7 +119,8 @@ export default function PCBEmbeddedPage() {
         link.rel = 'preload';
         link.as = 'image';
         link.href = src;
-        link.setAttribute('fetchPriority', 'high');
+        // 注意：fetchPriority 属性不适用于 <link> 元素，只适用于 <img>, <script>, <iframe>
+        // <link rel="preload"> 本身已经是高优先级的资源加载方式
         document.head.appendChild(link);
         links.push(link);
       });

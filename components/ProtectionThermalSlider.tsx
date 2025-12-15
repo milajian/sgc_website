@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 interface ProtectionThermalSlide {
   title: string;
   subtitle: string;
@@ -278,7 +279,7 @@ export const ProtectionThermalSlider = () => {
                                     {/* Protection slide: top-bottom layout with image */}
                                     <div className="relative h-[160px] flex items-center justify-center overflow-hidden bg-background/50">
                                       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-                                      {method.image && <img src={method.image} alt={method.name} className="w-full h-full object-contain hover:scale-[1.03] transition-transform duration-500 relative z-10" loading="lazy" />}
+                                      {method.image && <OptimizedImage src={method.image} alt={method.name} className="w-full h-full hover:scale-[1.03] transition-transform duration-500 relative z-10" priority={index === 0} objectFit="contain" useImagePath={true} />}
                                       <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     </div>
                                     

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
 import { useCarouselAutoPlay } from "@/hooks/useCarouselAutoPlay";
 import { useRef, useEffect } from "react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface CaseStudy {
   title: string;
@@ -312,11 +313,13 @@ export const CaseStudySlider = () => {
                       {/* Right: Image */}
                       <div className="relative aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-500 -mb-2 md:-mb-3">
                         {study.image ? (
-                          <img 
+                          <OptimizedImage 
                             src={study.image} 
                             alt={study.title}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
+                            className="w-full h-full"
+                            priority={index === 0}
+                            objectFit="contain"
+                            useImagePath={true}
                           />
                         ) : (
                           <div className="text-center p-8">

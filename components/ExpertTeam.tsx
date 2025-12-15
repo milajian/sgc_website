@@ -6,6 +6,7 @@ import { getImagePath } from "@/lib/image-path";
 import { getImageUrl } from "@/lib/image-url";
 import { GraduationCap, Award, Briefcase, Users } from "lucide-react";
 import { Expert } from "@/lib/types";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface ExpertTeamProps {
   experts: Expert[];
@@ -96,21 +97,18 @@ export const ExpertTeam = ({ experts }: ExpertTeamProps) => {
                       <div className="flex-shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
                           {expert.image && expert.image.trim() !== '' ? (
-                            <img 
-                              src={getImageUrl(expert.image)}
+                            <OptimizedImage 
+                              src={expert.image}
                               alt={expert.name}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                              onError={(e) => {
-                                // 如果图片加载失败，显示占位符
-                                console.warn(`专家 ${expert.name} 的图片加载失败:`, expert.image);
-                                const target = e.target as HTMLImageElement;
-                                target.style.display = 'none';
-                                const parent = target.parentElement;
-                                if (parent) {
-                                  parent.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20"><svg class="w-12 h-12 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>';
-                                }
-                              }}
+                              className="w-full h-full"
+                              priority={index < 4}
+                              objectFit="cover"
+                              useImagePath={false}
+                              errorPlaceholder={
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+                                  <Briefcase className="w-12 h-12 text-primary/50" />
+                                </div>
+                              }
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">

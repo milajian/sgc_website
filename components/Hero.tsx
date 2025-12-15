@@ -1,6 +1,9 @@
 'use client'
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { getImagePath } from "@/lib/image-path";
+
 const heroMotorHeader = getImagePath("/assets/hero-motor-header.png");
+
 export const Hero = () => {
   return <section className="relative pt-20 pb-20 bg-gradient-hero overflow-x-hidden">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9nPjwvc3ZnPg==')] opacity-10" />
@@ -25,11 +28,13 @@ export const Hero = () => {
             className="relative flex items-center justify-center w-full md:w-[48%] lg:w-[50%] flex-shrink-0"
             style={{ animationDelay: "0.4s" }}
           >
-            <img 
-              src={heroMotorHeader} 
+            <OptimizedImage 
+              src={heroMotorHeader}
               alt="PCB电机" 
-              className="w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px] lg:max-w-[550px] xl:max-w-[600px] h-auto object-contain animate-float-tech animate-fade-in-up" 
-              loading="eager"
+              priority={true}
+              className="w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px] lg:max-w-[550px] xl:max-w-[600px] h-auto animate-float-tech animate-fade-in-up"
+              useImagePath={true}
+              objectFit="contain"
             />
           </div>
         </div>

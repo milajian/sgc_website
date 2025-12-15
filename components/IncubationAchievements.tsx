@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useEffect } from "react";
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight, FlaskConical } from "lucide-react";
@@ -210,12 +211,13 @@ export const IncubationAchievements = () => {
                             
                             {/* Image container with overlay labels */}
                             <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
-                              <img 
+                              <OptimizedImage 
                                 src={achievement.image} 
                                 alt={achievement.name} 
-                                className="w-full h-full object-contain"
-                                style={{ imageRendering: 'crisp-edges' }}
-                                loading="lazy"
+                                className="w-full h-full"
+                                priority={false}
+                                objectFit="contain"
+                                useImagePath={true}
                               />
                               
                               {/* Overlay text labels */}
@@ -321,12 +323,13 @@ export const IncubationAchievements = () => {
                           
                           {/* Image container */}
                           <div className="relative w-full h-full rounded-3xl border-2 border-accent/40 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-8 group-hover:border-accent/60 transition-all duration-500 group-hover:scale-105 overflow-hidden shadow-lg shadow-accent/20">
-                            <img 
+                            <OptimizedImage 
                               src={achievement.image} 
                               alt={achievement.name} 
-                              className="w-full h-full object-contain"
-                              style={{ imageRendering: 'crisp-edges' }}
-                              loading="lazy"
+                              className="w-full h-full"
+                              priority={false}
+                              objectFit="contain"
+                              useImagePath={true}
                             />
                           </div>
                         </div>

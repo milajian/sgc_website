@@ -1,6 +1,7 @@
 'use client'
 import { Card } from "@/components/ui/card";
 import { getImagePath } from "@/lib/image-path";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Rocket, Handshake, FileText, TrendingUp, FlaskConical } from "lucide-react";
 const logo = getImagePath("/assets/logo.png");
 const stats = [{
@@ -108,11 +109,15 @@ export const CompanyInfo = () => {
                   />
                   
                   <div className="h-20 sm:h-24 md:h-28 lg:h-32 flex items-center justify-center mb-2 sm:mb-3 w-full relative z-10">
-                    <img src={product.image} alt={product.name} className="h-full w-full max-h-24 sm:max-h-28 md:max-h-32 lg:max-h-36 max-w-full object-contain transition-all" loading="lazy" onError={e => {
-                  // Fallback to text if image fails to load
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML = `<span class="text-sm sm:text-lg font-bold text-gray-700">${product.name}</span>`;
-                }} />
+                    <OptimizedImage 
+                      src={product.image} 
+                      alt={product.name} 
+                      className="h-full w-full max-h-24 sm:max-h-28 md:max-h-32 lg:max-h-36 max-w-full transition-all" 
+                      priority={false}
+                      objectFit="contain"
+                      useImagePath={false}
+                      errorPlaceholder={<span className="text-sm sm:text-lg font-bold text-gray-700">{product.name}</span>}
+                    />
                   </div>
                   <p className="text-xs sm:text-sm font-medium text-gray-600 text-center relative z-10">{product.name}</p>
                 </Card>)}
