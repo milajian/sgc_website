@@ -8,7 +8,15 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 // 图片组件，带错误处理和占位符
-function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
+interface ImageWithFallbackProps {
+  src: string;
+  alt: string;
+  isPriority?: boolean;
+  width?: number;
+  height?: number;
+}
+
+function ImageWithFallback({ src, alt, isPriority = false, width, height }: ImageWithFallbackProps) {
   const [imgError, setImgError] = useState(false);
   const [imgLoading, setImgLoading] = useState(true);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -29,7 +37,11 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
           alt={alt} 
           className="w-full h-full object-contain"
           style={{ imageRendering: 'crisp-edges' }}
-          loading="lazy"
+          width={width}
+          height={height}
+          loading={isPriority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={isPriority ? "high" : "auto"}
           onError={() => {
             setImgError(true);
             setImgLoading(false);
@@ -52,37 +64,71 @@ function ImageWithFallback({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-// 埋嵌工艺产品图片和文字数据
+// 埋嵌工艺产品图片和文字数据（包含压缩后的尺寸信息）
 const embeddedProcessItems = [
   {
     image: getImagePath("/assets/maiqian1.png"),
-    label: "埋嵌SiC功率芯片"
+    label: "埋嵌SiC功率芯片",
+    width: 1200,
+    height: 572
   },
   {
     image: getImagePath("/assets/maiqian2.png"),
-    label: "埋嵌分立式电容"
+    label: "埋嵌分立式电容",
+    width: 1200,
+    height: 714
   },
   {
     image: getImagePath("/assets/maiqian3.png"),
-    label: "埋嵌分立式电阻"
+    label: "埋嵌分立式电阻",
+    width: 1200,
+    height: 608
   },
   {
     image: getImagePath("/assets/maiqian4.png"),
-    label: "散热铜排"
+    label: "散热铜排",
+    width: 1199,
+    height: 644
   },
   {
     image: getImagePath("/assets/maiqian5.png"),
-    label: "埋嵌薄膜式电容"
+    label: "埋嵌薄膜式电容",
+    width: 1200,
+    height: 540
   },
   {
     image: getImagePath("/assets/maiqian6.png"),
-    label: "埋嵌薄膜式电阻"
+    label: "埋嵌薄膜式电阻",
+    width: 1200,
+    height: 494
   }
 ];
 
 export default function PCBEmbeddedPage() {
   const router = useRouter();
   const pathname = usePathname();
+
+  // 预加载首屏图片（前3张）
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const priorityImages = embeddedProcessItems.slice(0, 3).map(item => item.image);
+      const links: HTMLLinkElement[] = [];
+      
+      priorityImages.forEach((src) => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = src;
+        link.setAttribute('fetchPriority', 'high');
+        document.head.appendChild(link);
+        links.push(link);
+      });
+
+      return () => {
+        links.forEach(link => link.remove());
+      };
+    }
+  }, []);
 
   // 强制路由更新：确保路径正确匹配
   useEffect(() => {
@@ -193,6 +239,9 @@ export default function PCBEmbeddedPage() {
                             <ImageWithFallback 
                               src={item.image} 
                               alt={item.label}
+                              isPriority={index < 3}
+                              width={item.width}
+                              height={item.height}
                             />
                           </div>
                         </div>
