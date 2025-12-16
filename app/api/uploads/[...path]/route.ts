@@ -35,7 +35,22 @@ export async function GET(
     
     // 获取图片内容和类型
     const imageBuffer = await response.arrayBuffer();
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    let contentType = response.headers.get('content-type') || 'image/jpeg';
+    
+    // 根据文件扩展名确定 Content-Type（支持 WebP）
+    const imagePath = resolvedParams.path.join('/');
+    const lowerPath = imagePath.toLowerCase();
+    if (lowerPath.endsWith('.webp')) {
+      contentType = 'image/webp';
+    } else if (lowerPath.endsWith('.png')) {
+      contentType = 'image/png';
+    } else if (lowerPath.endsWith('.gif')) {
+      contentType = 'image/gif';
+    } else if (lowerPath.endsWith('.svg')) {
+      contentType = 'image/svg+xml';
+    } else if (lowerPath.endsWith('.jpg') || lowerPath.endsWith('.jpeg')) {
+      contentType = 'image/jpeg';
+    }
     
     // 返回图片，设置正确的Content-Type
     return new NextResponse(imageBuffer, {

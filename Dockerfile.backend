@@ -1,0 +1,20 @@
+# 使用国内镜像加速（如果网络允许，可以改回 node:20-alpine）
+FROM node:20-alpine
+
+WORKDIR /app
+
+# 复制 package 文件
+COPY server/package*.json ./
+
+# 安装依赖
+RUN npm ci --only=production
+
+# 复制后端代码
+COPY server/ .
+
+# 创建必要的目录
+RUN mkdir -p data uploads
+
+EXPOSE 3001
+
+CMD ["node", "server.js"]

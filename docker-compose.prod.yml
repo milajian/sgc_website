@@ -1,0 +1,40 @@
+version: '3.8'
+
+# 生产环境 Docker Compose 配置
+# 使用阿里云容器镜像服务的镜像
+
+services:
+  frontend:
+    image: ${ALIYUN_REGISTRY:-registry.cn-shenzhen.aliyuncs.com}/${ALIYUN_NAMESPACE:-sgc-website}/sgc-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - BASE_PATH=${BASE_PATH:-}
+      - NEXT_PUBLIC_API_URL=http://backend:3001
+    restart: unless-stopped
+    networks:
+      - sgc-network
+
+  backend:
+    image: ${ALIYUN_REGISTRY:-registry.cn-shenzhen.aliyuncs.com}/${ALIYUN_NAMESPACE:-sgc-website}/sgc-backend:latest
+    ports:
+      - "3001:3001"
+    volumes:
+      - backend-data:/app/data
+      - backend-uploads:/app/uploads
+    environment:
+      - PORT=3001
+      - HOST=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - sgc-network
+
+networks:
+  sgc-network:
+    driver: bridge
+
+volumes:
+  backend-data:
+  backend-uploads:

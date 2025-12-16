@@ -3,66 +3,11 @@
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { getImagePath } from "@/lib/image-path";
-import { Layers, ImageIcon } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { Layers } from "lucide-react";
+import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-
-// 图片组件，带错误处理和占位符
-interface ImageWithFallbackProps {
-  src: string;
-  alt: string;
-  isPriority?: boolean;
-  width?: number;
-  height?: number;
-}
-
-function ImageWithFallback({ src, alt, isPriority = false, width, height }: ImageWithFallbackProps) {
-  const [imgError, setImgError] = useState(false);
-  const [imgLoading, setImgLoading] = useState(true);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    // 检查图片是否已经加载完成（比如从缓存中加载）
-    if (imgRef.current?.complete) {
-      setImgLoading(false);
-    }
-  }, [src]);
-
-  return (
-    <>
-      {!imgError ? (
-        <img 
-          ref={imgRef}
-          src={src} 
-          alt={alt} 
-          className="w-full h-full object-contain"
-          style={{ imageRendering: 'crisp-edges' }}
-          width={width}
-          height={height}
-          loading={isPriority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={isPriority ? "high" : "auto"}
-          onError={() => {
-            setImgError(true);
-            setImgLoading(false);
-          }}
-          onLoad={() => setImgLoading(false)}
-        />
-      ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
-          <ImageIcon className="w-12 h-12 mb-2 opacity-50" />
-          <p className="text-xs text-center px-2">{alt}</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">图片未找到</p>
-        </div>
-      )}
-      {imgLoading && !imgError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/50 pointer-events-none">
-          <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-        </div>
-      )}
-    </>
-  );
-}
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { getWebpPath } from "@/lib/image-webp";
 
 // 埋嵌工艺产品图片和文字数据（包含压缩后的尺寸信息）
 const embeddedProcessItems = [
@@ -108,21 +53,30 @@ export default function PCBEmbeddedPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // 预加载首屏图片（前3张）
+  // 预加载首屏图片（前3张）- 支持 WebP
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const priorityImages = embeddedProcessItems.slice(0, 3).map(item => item.image);
       const links: HTMLLinkElement[] = [];
       
       priorityImages.forEach((src) => {
+        // 预加载 WebP 版本（如果支持）
+        const webpSrc = getWebpPath(src);
         const link = document.createElement('link');
         link.rel = 'preload';
         link.as = 'image';
-        link.href = src;
-        // 注意：fetchPriority 属性不适用于 <link> 元素，只适用于 <img>, <script>, <iframe>
-        // <link rel="preload"> 本身已经是高优先级的资源加载方式
+        link.href = webpSrc;
+        link.type = 'image/webp';
         document.head.appendChild(link);
         links.push(link);
+        
+        // 预加载原始版本作为降级
+        const fallbackLink = document.createElement('link');
+        fallbackLink.rel = 'preload';
+        fallbackLink.as = 'image';
+        fallbackLink.href = src;
+        document.head.appendChild(fallbackLink);
+        links.push(fallbackLink);
       });
 
       return () => {
@@ -237,12 +191,15 @@ export default function PCBEmbeddedPage() {
                           
                           {/* Image container */}
                           <div className="relative w-full h-full rounded-2xl border border-accent/30 bg-gradient-to-br from-card/50 to-background/30 backdrop-blur-sm flex items-center justify-center p-4 group-hover:border-accent/50 transition-all duration-300 group-hover:scale-105 overflow-hidden shadow-md shadow-accent/10">
-                            <ImageWithFallback 
+                            <OptimizedImage 
                               src={item.image} 
                               alt={item.label}
-                              isPriority={index < 3}
+                              priority={index < 3}
                               width={item.width}
                               height={item.height}
+                              useImagePath={true}
+                              objectFit="contain"
+                              className="w-full h-full"
                             />
                           </div>
                         </div>

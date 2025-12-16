@@ -3,75 +3,15 @@
 import { CompanyInfo } from "@/components/CompanyInfo";
 import { ResearchStructure, ResearchStructureData } from "@/components/ResearchStructure";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { jumpToSection } from "@/lib/scroll";
 
 export default function Home() {
-  const [researchData, setResearchData] = useState<ResearchStructureData | null>(null);
-  const [loadingResearch, setLoadingResearch] = useState(true);
+  // 直接使用默认数据，所有内容都是前端静态数据
+  const researchData = getDefaultData();
   const pathname = usePathname();
   const mainRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    // 从后端API获取数据
-    const fetchData = async () => {
-      try {
-        // 优先使用环境变量配置的API URL，否则使用相对路径通过Next.js API代理访问
-        // 如果设置了 NEXT_PUBLIC_API_URL，直接访问后端；否则使用相对路径
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const apiPath = apiUrl ? `${apiUrl}/api/research-structure` : '/api/research-structure';
-        
-        // 添加超时控制
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
-        
-        try {
-          const response = await fetch(apiPath, {
-            signal: controller.signal,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          clearTimeout(timeoutId);
-          
-          if (response.ok) {
-            const fetchedData = await response.json();
-            if (fetchedData && fetchedData.center) {
-              console.log('使用后端返回的研发架构数据:', fetchedData);
-              setResearchData(fetchedData);
-            } else {
-              // 如果返回数据格式不正确，使用默认数据
-              console.warn('后端返回数据格式不正确，使用默认数据');
-              setResearchData(getDefaultData());
-            }
-          } else {
-            // 如果API返回错误，使用默认数据
-            console.warn('API返回错误，使用默认数据');
-            setResearchData(getDefaultData());
-          }
-        } catch (fetchError: any) {
-          clearTimeout(timeoutId);
-          // 如果是超时或网络错误，使用默认数据
-          if (fetchError.name === 'AbortError') {
-            console.warn('API请求超时，使用默认数据');
-          } else {
-            console.warn('无法连接到后端服务，使用默认数据');
-          }
-          setResearchData(getDefaultData());
-        }
-      } catch (error) {
-        // 其他错误，使用默认数据
-        console.warn('获取组织架构数据失败，使用默认数据:', error);
-        setResearchData(getDefaultData());
-      } finally {
-        setLoadingResearch(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   // 立即检查hash并隐藏内容（避免显示顶部内容）
   useEffect(() => {
@@ -126,48 +66,38 @@ export default function Home() {
       }
     };
 
-    // 添加超时保护：即使 loadingResearch 一直为 true，也要在合理时间后显示内容
+    // 添加超时保护：即使元素未找到，也要在合理时间后显示内容
     const timeoutId = setTimeout(() => {
       if (mainRef.current && mainRef.current.style.visibility === 'hidden') {
         console.warn('超时保护：强制显示页面内容');
         mainRef.current.style.visibility = 'visible';
       }
-    }, 5000); // 5秒后强制显示
+    }, 2000); // 2秒后强制显示（减少等待时间）
 
-    // 等待页面内容加载完成
-    if (!loadingResearch) {
-      // 初始检查
-      handleHashNavigation();
+    // 立即执行 hash 导航检查，不等待任何状态
+    handleHashNavigation();
 
-      // 监听 hashchange 事件（用于浏览器前进/后退）
-      window.addEventListener('hashchange', handleHashNavigation);
+    // 监听 hashchange 事件（用于浏览器前进/后退）
+    window.addEventListener('hashchange', handleHashNavigation);
 
-      return () => {
-        clearTimeout(timeoutId);
-        window.removeEventListener('hashchange', handleHashNavigation);
-      };
-    }
-
-    // 即使 loadingResearch 为 true，也要清理超时器
     return () => {
       clearTimeout(timeoutId);
+      window.removeEventListener('hashchange', handleHashNavigation);
     };
-  }, [loadingResearch, pathname]);
+  }, [pathname]); // 移除 loadingResearch 依赖
 
   return (
     <div className="min-h-screen">
       <main ref={mainRef} className="pt-20">
         <CompanyInfo />
-        {!loadingResearch && researchData && (
-          <ResearchStructure data={researchData} />
-        )}
+        <ResearchStructure data={researchData} />
       </main>
       <ScrollToTopButton />
     </div>
   );
 }
 
-// 默认数据（当后端不可用时使用）
+// 默认数据（所有内容都是前端静态数据）
 function getDefaultData(): ResearchStructureData {
   return {
     center: {
@@ -226,22 +156,22 @@ function getDefaultData(): ResearchStructureData {
       {
         id: "1",
         name: "南方科技大学",
-        logo: ""
+        logo: "/assets/南方科技.png"
       },
       {
         id: "2",
         name: "中国科学院深圳先进技术研究院",
-        logo: ""
+        logo: "/assets/科学院.png"
       },
       {
         id: "3",
         name: "中原工学院",
-        logo: ""
+        logo: "/assets/中原.png"
       },
       {
         id: "4",
         name: "桂林航天工業學院",
-        logo: ""
+        logo: "/assets/桂林.png"
       }
     ]
   };

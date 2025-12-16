@@ -4,9 +4,6 @@ import { useState, Fragment, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Network, Settings, LayoutGrid, FlaskConical, Building2 } from "lucide-react";
 import { IncubationAchievements } from "@/components/IncubationAchievements";
-import { ExpertTeam } from "@/components/ExpertTeam";
-import { Expert } from "@/lib/types";
-import { getImageUrl } from "@/lib/image-url";
 import { getImagePath } from "@/lib/image-path";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { preloadImages } from "@/lib/image-preload";
@@ -43,98 +40,10 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   flask: FlaskConical,
 };
 
-const PARTNERS: ResearchStructureData['partners'] = [
-  {
-    id: "1",
-    name: "南方科技大学",
-    logo: "/assets/南方科技.png"
-  },
-  {
-    id: "2",
-    name: "中国科学院深圳先进技术研究院",
-    logo: "/assets/科学院.png"
-  },
-  {
-    id: "3",
-    name: "中原工学院",
-    logo: "/assets/中原.png"
-  },
-  {
-    id: "4",
-    name: "桂林航天工業學院",
-    logo: "/assets/桂林.png"
-  }
-];
-
 export const ResearchStructure = ({ data }: ResearchStructureProps) => {
-  const [experts, setExperts] = useState<Expert[]>([]);
-  const [loadingExperts, setLoadingExperts] = useState(true);
-
-  useEffect(() => {
-    // 从后端API获取专家数据
-    const fetchExperts = async () => {
-      try {
-        // 使用相对路径，通过Next.js API代理访问
-        // 优先使用环境变量配置的API URL，否则使用相对路径
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const apiPath = apiUrl ? `${apiUrl}/api/experts` : '/api/experts';
-        
-        // 添加超时控制
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3秒超时
-        
-        try {
-          const response = await fetch(apiPath, {
-            signal: controller.signal,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          clearTimeout(timeoutId);
-          
-          if (response.ok) {
-            const fetchedData = await response.json();
-            if (Array.isArray(fetchedData) && fetchedData.length > 0) {
-              // 优先使用后端返回的数据，即使 image 字段为空也使用
-              // 这样可以确保使用后端上传的图片
-              console.log('使用后端返回的专家数据:', fetchedData);
-              setExperts(fetchedData);
-            } else {
-              // 如果返回空数组，使用默认数据
-              console.warn('后端返回空数组，使用默认数据');
-              setExperts(getDefaultExperts());
-            }
-          } else {
-            // 如果API返回错误，使用默认数据
-            console.warn('API返回错误，使用默认数据');
-            setExperts(getDefaultExperts());
-          }
-        } catch (fetchError: any) {
-          clearTimeout(timeoutId);
-          // 如果是超时或网络错误，使用默认数据
-          if (fetchError.name === 'AbortError') {
-            console.warn('API请求超时，使用默认数据');
-          } else {
-            console.warn('无法连接到后端服务，使用默认数据');
-          }
-          setExperts(getDefaultExperts());
-        }
-      } catch (error) {
-        // 其他错误，使用默认数据
-        console.warn('获取专家数据失败，使用默认数据:', error);
-        setExperts(getDefaultExperts());
-      } finally {
-        setLoadingExperts(false);
-      }
-    };
-
-    fetchExperts();
-  }, []);
-
   // 预加载合作伙伴 logo 图片，优化加载速度
   useEffect(() => {
-    const logoPaths = PARTNERS
+    const logoPaths = data.partners
       .map(partner => partner.logo)
       .filter(logo => logo && logo.trim() !== '') // 过滤空路径
       .map(logo => getImagePath(logo)); // 使用 getImagePath 处理路径，确保与 OptimizedImage 一致
@@ -147,7 +56,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
         // 预加载失败不影响正常显示，静默处理
       });
     }
-  }, []); // 空依赖数组，因为 PARTNERS 是常量
+  }, [data.partners]); // 依赖 data.partners
 
   const getIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName] || Network;
@@ -332,7 +241,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
               产学研合作单位
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {PARTNERS.map((partner) => {
+              {data.partners.map((partner) => {
                 const PartnerLogo = ({ logo, name }: { logo: string; name: string }) => {
                   const [imageError, setImageError] = useState(false);
                   
@@ -385,54 +294,7 @@ export const ResearchStructure = ({ data }: ResearchStructureProps) => {
     
     {/* 技术中心孵化成果 */}
     <IncubationAchievements />
-    
-    {/* PCB电机团队架构 - 已隐藏 */}
-    {/* {!loadingExperts && experts.length > 0 && (
-      <ExpertTeam experts={experts} />
-    )} */}
     </Fragment>
   );
 };
-
-// 默认专家数据（当后端不可用时使用）
-function getDefaultExperts(): Expert[] {
-  return [
-    {
-      id: '1',
-      name: '回思樾',
-      role: '定子设计、生产制造工程师',
-      roleTitle: '定子设计 工程师',
-      education: '桂林电子科技大学 硕士',
-      achievements: '发表专利4篇,其中发明专利3篇,实用新型专利1篇',
-      image: '' // 改为空字符串，显示占位符而不是错误的logo
-    },
-    {
-      id: '2',
-      name: '颜嘉豪',
-      role: '仿真工程师、生产制造工程师',
-      roleTitle: '热仿真 工程师',
-      education: '陕西科技大学 硕士',
-      achievements: '发表论文1篇,专利1篇',
-      image: '' // 改为空字符串
-    },
-    {
-      id: '3',
-      name: '段李权',
-      role: 'NPI主管,负责难度板跟进及交付',
-      roleTitle: '制造 主管',
-      education: '电子科技大学 本科',
-      achievements: '具有15年厚铜生产经验,发表专利10余篇',
-      image: '' // 改为空字符串
-    },
-    {
-      id: '4',
-      name: '刘伟',
-      role: '电机专家,电机电磁仿真,结构设计',
-      roleTitle: '电磁仿真 技术专家',
-      education: '长沙理工大学 本科',
-      achievements: '13年电机研发经验,实用新型专利4篇',
-      image: '' // 改为空字符串
-    }
-  ];
-}
 

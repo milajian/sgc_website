@@ -5,6 +5,7 @@ import { ImageIcon } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { getImageUrl } from "@/lib/image-url";
 import { preloadImage } from "@/lib/image-preload";
+import { getImageSources, checkWebpSupport } from "@/lib/image-webp";
 
 /**
  * 优化图片组件的 Props 接口
@@ -32,12 +33,15 @@ export interface OptimizedImageProps {
   errorPlaceholder?: React.ReactNode;
   /** 预加载距离（px），图片距离视口多少像素时开始预加载，默认 200px */
   preloadDistance?: number;
+  /** 是否启用 WebP 支持（默认 true） */
+  enableWebp?: boolean;
 }
 
 /**
  * 优化图片组件
  * 
  * 功能特性：
+ * - WebP 格式支持（自动降级到原始格式）
  * - 错误处理和占位符显示
  * - 加载状态指示器
  * - 优先级控制（priority prop）
@@ -69,14 +73,26 @@ export function OptimizedImage({
   showLoadingIndicator = true,
   errorPlaceholder,
   preloadDistance = 200,
+  enableWebp = true,
 }: OptimizedImageProps) {
   const [imgError, setImgError] = useState(false);
   const [imgLoading, setImgLoading] = useState(true);
+  const [webpSupported, setWebpSupported] = useState<boolean | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 处理图片路径
-  const imageSrc = useImagePath ? getImagePath(src) : getImageUrl(src);
+  // 检查 WebP 支持
+  useEffect(() => {
+    if (enableWebp && typeof window !== 'undefined') {
+      checkWebpSupport().then(setWebpSupported);
+    } else {
+      setWebpSupported(false);
+    }
+  }, [enableWebp]);
+
+  // 获取图片源
+  const { webpSrc, fallbackSrc } = getImageSources(src, useImagePath);
+  const imageSrc = enableWebp && webpSupported ? webpSrc : fallbackSrc;
 
   useEffect(() => {
     // 检查图片是否已经加载完成（比如从缓存中加载）
@@ -107,7 +123,9 @@ export function OptimizedImage({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             // 图片进入预加载区域，提前预加载到缓存
-            preloadImage(imageSrc).catch(() => {
+            // 如果支持 WebP，优先预加载 WebP 版本
+            const preloadSrc = enableWebp && webpSupported ? webpSrc : fallbackSrc;
+            preloadImage(preloadSrc).catch(() => {
               // 预加载失败不影响正常显示，静默处理
             });
             observer.disconnect();
@@ -129,31 +147,60 @@ export function OptimizedImage({
     return () => {
       observer.disconnect();
     };
-  }, [imageSrc, priority, preloadDistance, imgError]);
+  }, [imageSrc, priority, preloadDistance, imgError, enableWebp, webpSupported, webpSrc, fallbackSrc]);
 
   // 构建样式类名
   const objectFitClass = objectFit === 'cover' ? 'object-cover' : 'object-contain';
   const finalClassName = className || `w-full h-full ${objectFitClass}`;
 
+  // 处理图片加载错误（如果 WebP 失败，尝试降级到原始格式）
+  const handleError = () => {
+    // 如果当前使用的是 WebP 且失败，尝试降级到原始格式
+    if (enableWebp && webpSupported && imageSrc === webpSrc) {
+      // 切换到原始格式
+      if (imgRef.current) {
+        imgRef.current.src = fallbackSrc;
+        return; // 不设置错误状态，等待原始格式加载
+      }
+    }
+    setImgError(true);
+    setImgLoading(false);
+  };
+
+  // 如果 WebP 支持状态未知，等待检测完成
+  if (enableWebp && webpSupported === null) {
+    return (
+      <div ref={containerRef} className="relative">
+        {showLoadingIndicator && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/50 pointer-events-none">
+            <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div ref={containerRef} className="relative">
       {!imgError ? (
-        <img 
-          ref={imgRef}
-          src={imageSrc} 
-          alt={alt} 
-          className={finalClassName}
-          width={width}
-          height={height}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
-          onError={() => {
-            setImgError(true);
-            setImgLoading(false);
-          }}
-          onLoad={() => setImgLoading(false)}
-        />
+        <picture>
+          {enableWebp && webpSupported && (
+            <source srcSet={webpSrc} type="image/webp" />
+          )}
+          <img 
+            ref={imgRef}
+            src={fallbackSrc}
+            alt={alt} 
+            className={finalClassName}
+            width={width}
+            height={height}
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={priority ? "high" : "auto"}
+            onError={handleError}
+            onLoad={() => setImgLoading(false)}
+          />
+        </picture>
       ) : (
         errorPlaceholder || (
           <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">

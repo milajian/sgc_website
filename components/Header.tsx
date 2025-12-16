@@ -17,6 +17,7 @@ import { Menu, ChevronDown } from "lucide-react";
 import { getImagePath } from "@/lib/image-path";
 import { scrollToSection, jumpToSection } from "@/lib/scroll";
 import { useRouteLoading } from "@/lib/route-loading-context";
+import { preloadImages } from "@/lib/image-preload";
 const logo = getImagePath("/assets/logo.png");
 
 export const Header = () => {
@@ -29,6 +30,30 @@ export const Header = () => {
     'product-lines': false,
   });
   const [productLinesHover, setProductLinesHover] = useState(false);
+
+  // 预取状态跟踪
+  const prefetchedPaths = useRef<Set<string>>(new Set());
+  const prefetchedImages = useRef<Set<string>>(new Set());
+  
+  // 轴向磁通电机定子页面的首屏关键图片
+  const axialMotorCriticalImages = [
+    '/assets/pcbdingzi1.png',
+    '/assets/pcbdingzi2.png',
+    '/assets/pcbdingzi3.png',
+    '/assets/pcb-motor-intro.png'
+  ].map(path => getImagePath(path));
+
+  // PCB埋嵌页面的首屏关键图片
+  const pcbEmbeddedCriticalImages = [
+    '/assets/maiqian1.png',
+    '/assets/maiqian2.png',
+    '/assets/maiqian3.png'
+  ].map(path => getImagePath(path));
+
+  // 首页（技术中心）的关键图片
+  const homePageCriticalImages = [
+    '/assets/hero-motor-header.png'
+  ].map(path => getImagePath(path));
 
   // 获取当前路径（兼容静态导出模式）
   const [pathUpdateTrigger, setPathUpdateTrigger] = useState(0);
@@ -316,6 +341,130 @@ export const Header = () => {
     handleNavigation('/pcb-coil-product-lines', e);
   }, [handleNavigation]);
 
+  // 预取页面函数
+  const prefetchPage = useCallback((path: string) => {
+    if (typeof window === 'undefined' || prefetchedPaths.current.has(path)) {
+      return;
+    }
+    
+    try {
+      router.prefetch(path);
+    } catch (e) {
+      // 静态导出模式下可能不支持，静默处理
+    }
+    
+    // 使用 link prefetch（兼容静态导出模式）
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const targetPath = basePath + path;
+    const fullUrl = `${window.location.origin}${targetPath}`;
+    
+    // 检查是否已经存在 prefetch link
+    const existingLink = document.querySelector(`link[rel="prefetch"][href="${fullUrl}"]`);
+    if (existingLink) {
+      prefetchedPaths.current.add(path);
+      return;
+    }
+    
+    // 创建 prefetch link
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = fullUrl;
+    link.as = 'document';
+    document.head.appendChild(link);
+    
+    prefetchedPaths.current.add(path);
+  }, [router]);
+  
+  // 预取轴向磁通电机定子页面和图片的统一函数
+  const prefetchAxialMotorPage = useCallback(() => {
+    if (prefetchedPaths.current.has('/pcb-coil-axial')) {
+      return;
+    }
+    
+    prefetchPage('/pcb-coil-axial');
+    
+    // 预加载关键图片
+    const imagesToPreload = axialMotorCriticalImages.filter(
+      img => !prefetchedImages.current.has(img)
+    );
+    if (imagesToPreload.length > 0) {
+      imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+      preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [prefetchPage]);
+
+  // 预取玻璃基板页面的函数
+  const prefetchGlassSubstratePage = useCallback(() => {
+    if (prefetchedPaths.current.has('/glass-substrate')) {
+      return;
+    }
+    prefetchPage('/glass-substrate');
+    // 注意：glass-substrate 页面目前没有关键图片需要预加载
+    // 如果将来添加了图片，可以在这里预加载
+  }, [prefetchPage]);
+
+  // 预取PCB埋嵌页面的函数
+  const prefetchPCBEmbeddedPage = useCallback(() => {
+    if (prefetchedPaths.current.has('/pcb-embedded')) {
+      return;
+    }
+    
+    prefetchPage('/pcb-embedded');
+    
+    // 预加载关键图片
+    const imagesToPreload = pcbEmbeddedCriticalImages.filter(
+      img => !prefetchedImages.current.has(img)
+    );
+    if (imagesToPreload.length > 0) {
+      imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+      preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [prefetchPage]);
+
+  // 预取技术中心页面（首页）的函数
+  const prefetchTechCenterPage = useCallback(() => {
+    // 如果已经在首页，不需要预加载
+    if (prefetchedPaths.current.has('/')) {
+      return;
+    }
+    
+    prefetchPage('/');
+    
+    // 预加载关键图片（Hero 图片）
+    const imagesToPreload = homePageCriticalImages.filter(
+      img => !prefetchedImages.current.has(img)
+    );
+    if (imagesToPreload.length > 0) {
+      imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+      preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [prefetchPage]);
+
+  // 预取PCB线圈页面的函数
+  const prefetchPCBCoilPage = useCallback(() => {
+    if (prefetchedPaths.current.has('/pcb-coil-product-lines')) {
+      return;
+    }
+    
+    prefetchPage('/pcb-coil-product-lines');
+    
+    // 预加载关键图片（Hero 图片，与首页相同）
+    const imagesToPreload = homePageCriticalImages.filter(
+      img => !prefetchedImages.current.has(img)
+    );
+    if (imagesToPreload.length > 0) {
+      imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+      preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+        // 预加载失败不影响正常显示，静默处理
+      });
+    }
+  }, [prefetchPage]);
 
   // Esc 键关闭移动端菜单
   useEffect(() => {
@@ -328,6 +477,21 @@ export const Header = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mobileMenuOpen]);
+
+  // 组件挂载时延迟预取轴向磁通电机定子页面
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
+    const timeoutId = setTimeout(() => {
+      prefetchAxialMotorPage();
+    }, 200);
+    
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [prefetchAxialMotorPage]);
 
   // 根据当前路径自动展开移动端菜单
   useEffect(() => {
@@ -438,6 +602,7 @@ export const Header = () => {
                         handleTechCenterClick(e);
                       }
                     }}
+                    onMouseEnter={prefetchTechCenterPage}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
                       activeMenuKey === 'tech-center' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}>
@@ -491,6 +656,7 @@ export const Header = () => {
                         handlePCBCoilClick(e);
                       }
                     }}
+                    onMouseEnter={prefetchPCBCoilPage}
                     className={`text-foreground hover:text-primary hover:bg-transparent bg-transparent text-xs lg:text-sm font-medium transition-all duration-300 px-2 lg:px-3 xl:px-4 cursor-pointer ${
                       activeMenuKey === 'pcb-coil' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}>
@@ -528,6 +694,7 @@ export const Header = () => {
                                 onClick={(e) => {
                                   handleNavigation('/pcb-coil-axial', e);
                                 }}
+                                onMouseEnter={prefetchAxialMotorPage}
                                 className="block w-full text-left px-4 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                               >
                                 轴向磁通电机定子
@@ -630,6 +797,7 @@ export const Header = () => {
                       e.preventDefault();
                       handleNavigation('/pcb-embedded', e);
                     }}
+                    onMouseEnter={prefetchPCBEmbeddedPage}
                     className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
                       activeMenuKey === 'pcb-embedded' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}
@@ -646,6 +814,7 @@ export const Header = () => {
                       e.preventDefault();
                       handleNavigation('/glass-substrate', e);
                     }}
+                    onMouseEnter={prefetchGlassSubstratePage}
                     className={`text-foreground hover:text-primary transition-all duration-300 text-xs lg:text-sm font-medium px-2 lg:px-3 xl:px-4 py-2 ${
                       activeMenuKey === 'glass-substrate' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                     }`}
@@ -698,6 +867,7 @@ export const Header = () => {
                             handleTechCenterClick(e);
                             setMobileMenuOpen(false);
                           }}
+                          onMouseEnter={prefetchTechCenterPage}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
                             activeMenuKey === 'tech-center' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}
@@ -749,6 +919,7 @@ export const Header = () => {
                             handlePCBCoilClick(e);
                             setMobileMenuOpen(false);
                           }}
+                          onMouseEnter={prefetchPCBCoilPage}
                           className={`flex-1 text-left text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 px-3 py-2 ${
                             activeMenuKey === 'pcb-coil' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}
@@ -790,6 +961,7 @@ export const Header = () => {
                                   setMobileMenuOpen(false);
                                   handleNavigation('/pcb-coil-axial', e);
                                 }}
+                                onMouseEnter={prefetchAxialMotorPage}
                                 className="block w-full text-left px-3 py-1.5 text-sm font-semibold text-foreground hover:bg-primary/10 hover:text-primary rounded-md transition-colors"
                               >
                                 轴向磁通电机定子
@@ -863,6 +1035,7 @@ export const Header = () => {
                           setMobileMenuOpen(false);
                           handleNavigation('/pcb-embedded', e);
                         }}
+                        onMouseEnter={prefetchPCBEmbeddedPage}
                           className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
                             activeMenuKey === 'pcb-embedded' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}
@@ -878,6 +1051,7 @@ export const Header = () => {
                           setMobileMenuOpen(false);
                           handleNavigation('/glass-substrate', e);
                         }}
+                        onMouseEnter={prefetchGlassSubstratePage}
                           className={`text-sm font-semibold text-foreground hover:text-primary transition-all duration-300 cursor-pointer px-3 py-2 ${
                             activeMenuKey === 'glass-substrate' ? `pcb-active-glow${isLoading ? ' pcb-loading' : ''}` : ''
                           }`}

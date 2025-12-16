@@ -3,6 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Cog, MoveHorizontal, Layers, LayoutGrid, Circle, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { getImagePath } from "@/lib/image-path";
+import { preloadImages } from "@/lib/image-preload";
 
 const productLines = [{
   icon: Cog,
@@ -90,7 +94,246 @@ const productLines = [{
   ],
   applications: "医疗设备、精密泵浦、无人机云台、光学调节机构、智能锁与微型执行器等"
 }];
+
 export const ProductLines = () => {
+  const router = useRouter();
+  const prefetchedPaths = useRef<Set<string>>(new Set());
+  const prefetchedImages = useRef<Set<string>>(new Set());
+  const firstCardRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  // 第一张卡片（轴向磁通电机定子）目标页面的首屏关键图片
+  const firstCardCriticalImages = [
+    "/assets/pcbdingzi1.png",
+    "/assets/pcbdingzi2.png",
+    "/assets/pcbdingzi3.png",
+    "/assets/pcb-motor-intro.png"
+  ].map(path => getImagePath(path));
+
+  // 每张卡片的关键资源
+  const cardCriticalResources: Record<string, { images?: string[] }> = {
+    '/pcb-coil-linear-winding': {
+      images: [
+        '/assets/磁悬浮.png',
+        '/assets/医疗.png',
+        '/assets/平面电机.png'
+      ]
+    }
+  };
+
+  // 预取页面资源的辅助函数
+  const prefetchPage = (path: string) => {
+    if (typeof window === 'undefined' || prefetchedPaths.current.has(path)) {
+      return;
+    }
+
+    try {
+      // 尝试使用 Next.js router.prefetch（开发环境可能有效）
+      router.prefetch(path);
+    } catch (e) {
+      // 静态导出模式下可能不支持，使用 fallback
+    }
+
+    // 使用 link prefetch（兼容静态导出模式）
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const targetPath = basePath + path;
+    const fullUrl = `${window.location.origin}${targetPath}`;
+    
+    // 检查是否已经存在 prefetch link
+    const existingLink = document.querySelector(`link[rel="prefetch"][href="${fullUrl}"]`);
+    if (existingLink) {
+      prefetchedPaths.current.add(path);
+      return;
+    }
+    
+    // 创建 prefetch link
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = fullUrl;
+    link.as = 'document';
+    document.head.appendChild(link);
+    
+    prefetchedPaths.current.add(path);
+  };
+
+  // 预取页面和图片的统一函数
+  const prefetchPageWithImages = (path: string, index: number) => {
+    // 如果已经预取过，跳过
+    if (prefetchedPaths.current.has(path)) {
+      return;
+    }
+    
+    // 预取页面 HTML
+    prefetchPage(path);
+    
+    // 预加载关键图片（如果有）
+    const resources = cardCriticalResources[path];
+    if (resources?.images) {
+      const imagesToPreload = resources.images
+        .map(img => getImagePath(img))
+        .filter(img => !prefetchedImages.current.has(img));
+      
+      if (imagesToPreload.length > 0) {
+        imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+        preloadImages(imagesToPreload, { maxConcurrent: 3 }).catch(() => {
+          // 预加载失败不影响正常显示，静默处理
+        });
+      }
+    }
+  };
+
+  // Intersection Observer：只在第一张卡片进入视口时预取
+  useEffect(() => {
+    if (typeof window === 'undefined' || !firstCardRef.current) {
+      return;
+    }
+
+    // 检查浏览器是否支持 Intersection Observer
+    if (!('IntersectionObserver' in window)) {
+      // 不支持 Intersection Observer，直接预取
+      const firstCard = productLines[0];
+      if (firstCard) {
+        prefetchPage(firstCard.path);
+      }
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 第一张卡片进入视口，预取页面和图片
+            const firstCard = productLines[0];
+            if (firstCard && !prefetchedPaths.current.has(firstCard.path)) {
+              prefetchPage(firstCard.path);
+              
+              // 预加载首屏关键图片
+              const imagesToPreload = firstCardCriticalImages.filter(
+                img => !prefetchedImages.current.has(img)
+              );
+              if (imagesToPreload.length > 0) {
+                imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+                preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+                  // 预加载失败不影响正常显示，静默处理
+                });
+              }
+              
+              // 预取完成后断开观察
+              observer.disconnect();
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '50px', // 提前 50px 开始预取
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(firstCardRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // 组件挂载时延迟预取第一张卡片（作为 Intersection Observer 的补充）
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const firstCard = productLines[0];
+    if (!firstCard) {
+      return;
+    }
+
+    // 延迟 100ms 执行，避免阻塞首屏渲染
+    const timeoutId = setTimeout(() => {
+      // 如果 Intersection Observer 还没有触发预取，则在这里预取
+      if (!prefetchedPaths.current.has(firstCard.path)) {
+        prefetchPage(firstCard.path);
+        
+        // 预加载首屏关键图片
+        const imagesToPreload = firstCardCriticalImages.filter(
+          img => !prefetchedImages.current.has(img)
+        );
+        if (imagesToPreload.length > 0) {
+          imagesToPreload.forEach(img => prefetchedImages.current.add(img));
+          preloadImages(imagesToPreload, { maxConcurrent: 4 }).catch(() => {
+            // 预加载失败不影响正常显示，静默处理
+          });
+        }
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // 统一的 Intersection Observer：观察所有卡片（除第一张）
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    // 检查浏览器是否支持 Intersection Observer
+    if (!('IntersectionObserver' in window)) {
+      // 不支持 Intersection Observer，降级处理
+      // 第一张卡片已有延迟预取逻辑，其他卡片依赖鼠标悬停
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 找到对应的卡片索引
+            const cardIndex = cardRefs.current.findIndex(ref => ref === entry.target);
+            if (cardIndex === -1) return;
+            
+            const product = productLines[cardIndex];
+            if (!product) return;
+            
+            // 第一张卡片：使用现有逻辑（已有专门的预取逻辑）
+            if (cardIndex === 0) {
+              // 第一张卡片的预取逻辑已在其他 useEffect 中处理
+              return;
+            }
+            
+            // 其他卡片：预取页面和图片
+            if (!prefetchedPaths.current.has(product.path)) {
+              prefetchPageWithImages(product.path, cardIndex);
+            }
+            
+            // 预取完成后断开该卡片的观察（避免重复预取）
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: '50px', // 提前 50px 开始预取
+        threshold: 0.1,
+      }
+    );
+
+    // 延迟观察，确保所有 ref 都已设置
+    const timeoutId = setTimeout(() => {
+      // 观察所有卡片（除了第一张，第一张已有专门的 observer）
+      cardRefs.current.forEach((ref, index) => {
+        if (ref && index > 0) {
+          observer.observe(ref);
+        }
+      });
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
+  }, []);
+
   return <section id="product-lines" className="py-20 bg-background section-fade-bottom">
       <div className="container mx-auto px-6">
         <div className="max-w-7xl mx-auto">
@@ -128,14 +371,31 @@ export const ProductLines = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {productLines.map((product, index) => {
             const Icon = product.icon;
+            const isFirstCard = index === 0;
             return <motion.div
                 key={index}
+                ref={(el) => {
+                  if (isFirstCard) {
+                    firstCardRef.current = el;
+                  }
+                  cardRefs.current[index] = el;
+                }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Link href={product.path} className="block h-full">
+                <Link 
+                  href={product.path} 
+                  className="block h-full"
+                  prefetch={isFirstCard ? true : undefined}
+                  onMouseEnter={() => {
+                    // 鼠标悬停时预取页面资源（非第一张卡片）
+                    if (!isFirstCard) {
+                      prefetchPageWithImages(product.path, index);
+                    }
+                  }}
+                >
                   <Card className="p-4 h-full hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-muted/30 border-primary/20 hover:border-accent/40 flex flex-col overflow-hidden relative group cursor-pointer">
                     {/* Gradient background - top to bottom fade */}
                     <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-primary/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
