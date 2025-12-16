@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { RouteLoadingIndicator } from "@/components/RouteLoadingIndicator";
 import { RouteLoadingProvider } from "@/lib/route-loading-context";
 import { getImagePath } from "@/lib/image-path";
 import "./globals.css";
@@ -177,7 +176,6 @@ export default function RootLayout({
           >
             <RouteLoadingProvider>
               <TooltipProvider>
-                <RouteLoadingIndicator />
                 <Header />
                 {children}
                 <Footer />
