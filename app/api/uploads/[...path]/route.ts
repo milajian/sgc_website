@@ -38,7 +38,6 @@ export async function GET(
     let contentType = response.headers.get('content-type') || 'image/jpeg';
     
     // 根据文件扩展名确定 Content-Type（支持 WebP）
-    const imagePath = resolvedParams.path.join('/');
     const lowerPath = imagePath.toLowerCase();
     if (lowerPath.endsWith('.webp')) {
       contentType = 'image/webp';
