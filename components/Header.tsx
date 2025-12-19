@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -478,20 +478,42 @@ export const Header = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [mobileMenuOpen]);
 
+  // 确保 pathname 始终是字符串，避免依赖数组大小变化
+  const stablePathname = useMemo(() => pathname ?? '', [pathname]);
+
   // 组件挂载时延迟预取轴向磁通电机定子页面
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
     
+    // 检查当前路径，避免在目标页面预取
+    const currentPath = pathname || window.location.pathname;
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    let normalizedPath = currentPath;
+    
+    // 移除 basePath 前缀
+    if (basePath && normalizedPath.startsWith(basePath)) {
+      normalizedPath = normalizedPath.slice(basePath.length) || '/';
+    }
+    
+    // 标准化路径：移除尾部斜杠（除了根路径）
+    normalizedPath = normalizedPath === '/' ? '/' : normalizedPath.replace(/\/$/, '');
+    
+    // 如果当前路径是 /pcb-coil-axial 或其子路径，跳过预取
+    if (normalizedPath === '/pcb-coil-axial' || normalizedPath.startsWith('/pcb-coil-axial/')) {
+      return;
+    }
+    
+    // 延迟 100ms 执行，避免阻塞首屏渲染（与 ProductLines 保持一致）
     const timeoutId = setTimeout(() => {
       prefetchAxialMotorPage();
-    }, 200);
+    }, 100);
     
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [prefetchAxialMotorPage]);
+  }, [prefetchAxialMotorPage, stablePathname]);
 
   // 根据当前路径自动展开移动端菜单
   useEffect(() => {
